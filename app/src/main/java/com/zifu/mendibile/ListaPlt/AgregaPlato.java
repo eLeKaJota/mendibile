@@ -1,6 +1,7 @@
 package com.zifu.mendibile.ListaPlt;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -81,7 +82,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         }
         if(item.getItemId() == R.id.itmAgregaPlatoIng){
             Intent i = new Intent(this, AgregaIngrediente.class);
-            startActivity(i);
+            startActivityForResult(i,1);
             return true;
         }
         if(item.getItemId() == android.R.id.home){
@@ -95,30 +96,18 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
     //----------------------------------------------------
 
 
+    //-----------------SI AÑADES UN NUEVO INGREDIENTE DESDE ESTA ACTIVITY, SE ACTUALIZA EN LA LISTA
     @Override
-    protected void onResume() {
-        super.onResume();
-        //TODO actualizar correctamente sin repetir elementos
-
-        if(modifica == 0){
-//            if(!ingredientes.isEmpty()){
-//                ingredientes.clear();
-//            }
-//            if(!ingAgregados.isEmpty()){
-//                ingAgregados.clear();
-//            }
-            actualizaListaAgrega();
-        }
-        else {
-//            if(!ingredientes.isEmpty()){
-//                ingredientes.clear();
-//            }
-//            if(!ingAgregados.isEmpty()){
-//                ingAgregados.clear();
-//            }
-            modificaListaAgrega();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1){
+            if(resultCode == AppCompatActivity.RESULT_OK){
+                int idIng = Integer.parseInt(data.getStringExtra("idIng"));
+                if (idIng != 0) ingredientes.add(actualizaIngrediente(idIng));
+            }
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +133,11 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         btnMostrarIngAgrega = (Button)  findViewById(R.id.btnMostrar);
         if (modifica != 0) btnAgregar.setText("Modificar plato");
         if (modifica != 0) txtNombre.setText(datos.getString("nombrePlato"));
+
+
+        //--------------ACTUALIZA LOS RECYCLERVIEW
+        if (modifica == 0) actualizaListaAgrega();
+        if (modifica != 0) modificaListaAgrega();
 
 
         //--------------CONFIGURA LOS DOS RECYCLERVIEW
@@ -234,6 +228,8 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
 
     }
+
+
     public void agregaPlato(){
         String[] ingArray = new String[ingAgregados.size()];
         long nuevaId;
@@ -247,8 +243,6 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         //----------------AGREGA EL PLATO
         ContentValues values = new ContentValues();
         values.put(TablaPlato.NOMBRE_COLUMNA_2,txtNombre.getText().toString());
-        //values.put(TablaPlato.NOMBRE_COLUMNA_4, TextUtils.join(",",ingArray));
-        //values.put(TablaPlato.NOMBRE_COLUMNA_6,txtElaboracion.getText().toString());
 
         if (modifica == 0) {
             nuevaId = db.insert(TablaPlato.NOMBRE_TABLA,null,values);
@@ -258,7 +252,6 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             nuevaId = db.update(TablaPlato.NOMBRE_TABLA,values,selection,selectionArgs);
             db.delete(TablaPlatoIngredientePeso.NOMBRE_TABLA,TablaPlatoIngredientePeso.NOMBRE_COLUMNA_2 + " LIKE ?",selectionArgs);
         }
-        System.out.println("ID PLATO: " + nuevaId);
 
         //----------------AGREGA EL INGPESO
 
@@ -292,6 +285,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         finish();
     }
 
+    //----------------------SI EL PLATO ES NUEVO
     public void actualizaListaAgrega(){
         SQLiteDatabase db = this.helper.getReadableDatabase();
 
@@ -316,7 +310,6 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             String proveedor = cursor.getString(4);
 
             Ingrediente ing = new Ingrediente(id,nombre,formato,proveedor,precio);
-            System.out.println("OOOOH");
             ingredientes.add(ing);
         }
         cursor.close();
@@ -324,6 +317,29 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         listaAgrega.setAdapter(adaptadorAgrega);
     }
 
+
+    //-----------------------SI SE AÑADE UN NUEVO INGREDIENTE
+    public Ingrediente actualizaIngrediente(int idIng){
+        Ingrediente ing;
+        SQLiteDatabase db = this.helper.getReadableDatabase();
+        String selection = TablaIngrediente.NOMBRE_COLUMNA_1 + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(idIng)};
+
+        Cursor cursor = db.query(TablaIngrediente.NOMBRE_TABLA,null,selection,selectionArgs,null,null,null);
+        cursor.moveToFirst();
+        int id = cursor.getInt(0);
+        String nombre = cursor.getString(1);
+        Double precio = cursor.getDouble(2);
+        String formato = cursor.getString(3);
+        String proveedor = cursor.getString(4);
+
+        ing = new Ingrediente(id,nombre,formato,proveedor,precio);
+        cursor.close();
+        return ing;
+    }
+
+
+    //----------------------SI YA EXISTE EL PLATO
     public void modificaListaAgrega(){
         SQLiteDatabase db = this.helper.getReadableDatabase();
 
@@ -363,11 +379,9 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             for(IngPeso p : this.ing){
                 if(p.getIdIng() == i.getId()){
                     ingAgregados.add(i);
-                    System.out.println("Agregados: " + i.getNombre());
                     x = 1;
                 }
             }
-            System.out.println("Agregar: " + i.getNombre());
             if(x==0) ingredientes.add(i);
 
 
