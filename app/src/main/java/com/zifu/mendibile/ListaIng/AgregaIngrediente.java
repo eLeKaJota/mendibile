@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -86,9 +87,9 @@ public class AgregaIngrediente extends AppCompatActivity implements DialogInterf
 
         long nuevaId = db.insert(TablaIngrediente.NOMBRE_TABLA,null,values);
         //Toast.makeText(getApplicationContext(),"Registro añadido correctamente: id[" + nuevaId + "]",Toast.LENGTH_LONG).show();
-//                Intent i = new Intent();
-//                i.putExtra("correcto","Ingrediente ["+txtNombre.getText().toString()+"] añadido correctamente.");
-//                setResult(2,i);
+        Intent i = new Intent();
+        i.putExtra("idIng",String.valueOf(nuevaId));
+        setResult(Activity.RESULT_OK,i);
         finish();
     }
 
