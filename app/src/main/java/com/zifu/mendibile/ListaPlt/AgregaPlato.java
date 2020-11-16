@@ -83,6 +83,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         }
         if(item.getItemId() == R.id.itmAgregaPlatoIng){
             Intent i = new Intent(this, AgregaIngrediente.class);
+            i.putExtra("modifica",0);
             startActivityForResult(i,1);
             return true;
         }

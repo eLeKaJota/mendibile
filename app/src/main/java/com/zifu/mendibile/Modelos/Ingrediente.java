@@ -2,7 +2,7 @@ package com.zifu.mendibile.Modelos;
 
 import java.io.Serializable;
 
-public class Ingrediente {
+public class Ingrediente implements Serializable {
     private int id;
     private String nombre,formato;
     private String proveedor;

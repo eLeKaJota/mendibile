@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zifu.mendibile.BBDDHelper;
+import com.zifu.mendibile.ListaPlt.AgregaPlato;
 import com.zifu.mendibile.Modelos.Ingrediente;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
@@ -48,6 +49,7 @@ public class ListaIngredientes extends AppCompatActivity implements AdaptadorLis
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.itmAgregaIng){
             Intent i = new Intent(getApplicationContext(),AgregaIngrediente.class);
+            i.putExtra("modifica",0);
             startActivity(i);
         }
         if(item.getItemId() == android.R.id.home){
@@ -84,6 +86,7 @@ public class ListaIngredientes extends AppCompatActivity implements AdaptadorLis
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(),AgregaIngrediente.class);
+                i.putExtra("modifica",0);
                 startActivity(i);
             }
         });
@@ -110,24 +113,16 @@ public class ListaIngredientes extends AppCompatActivity implements AdaptadorLis
         actualizaLista();
     }
 
+    //----------------CLICK AL INGREDIENTE PARA MODIFICARLO
     @Override
     public void onListItemClick(int clickedItem) {
-        if(mToast!= null){
-            mToast.cancel();
-        }
+        Intent i = new Intent(this, AgregaIngrediente.class);
+        i.putExtra("modifica",ingredientes.get(clickedItem).getId());
+        i.putExtra("ing",ingredientes.get(clickedItem));
 
-        mToast = mToast.makeText(this, "Elemento pulsado: " + clickedItem, Toast.LENGTH_SHORT);
-        mToast.show();
+        startActivity(i);
     }
 
-    public void borrarIngrediente(String columna, String argumentos, String tabla){
-
-        SQLiteDatabase db = helper.getWritableDatabase();
-        String selection = columna + " LIKE ?";
-        String[] selectionArgs = { argumentos };
-        int deletedRows = db.delete(tabla, selection, selectionArgs);
-        actualizaLista();
-    }
 
     public void actualizaLista(){
 

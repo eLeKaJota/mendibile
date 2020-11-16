@@ -79,6 +79,13 @@
             android:layout_height="wrap_content"
             android:text="Añadir" />
 
+        <Button
+            android:id="@+id/btnEliminarIng"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Eliminar ingrediente"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 <!--    <EditText-->
