@@ -2,36 +2,42 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:weightSum="100">
+        android:orientation="horizontal"
+        android:weightSum="0">
+
         <LinearLayout
-            android:layout_weight="92"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="8dp"
+            android:background="@drawable/fondo_borde_listas"
+            android:elevation="7dp"
+            android:orientation="vertical"
+            android:padding="8dp">
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/tvListaPlatoNombre"
-                android:textSize="22sp"
-                android:fontFamily="@font/ubuntur"
-                android:padding="10dp"/>
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/ubuntur"
-                android:id="@+id/tvListaPlatoCoste"/>
+                android:padding="10dp"
+                android:textSize="22sp" />
 
             <TextView
+                android:id="@+id/tvListaPlatoCoste"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ubuntur" />
+
+            <TextView
+                android:id="@+id/tvListaPlatoId"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:visibility="invisible"
-                android:id="@+id/tvListaPlatoId"/>
+                android:visibility="invisible" />
 
         </LinearLayout>
 

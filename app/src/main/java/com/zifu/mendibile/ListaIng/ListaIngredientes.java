@@ -70,7 +70,7 @@ public class ListaIngredientes extends AppCompatActivity implements AdaptadorLis
 
         listaIng.setHasFixedSize(true);
 
-        listaIng.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        //listaIng.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
         layoutManager = new LinearLayoutManager(this);
         listaIng.setLayoutManager(layoutManager);

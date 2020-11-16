@@ -92,7 +92,7 @@ public class ListaPlatos extends AppCompatActivity implements AdaptadorListaPlt.
 
         listaPlato.setHasFixedSize(true);
 
-        listaPlato.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        //listaPlato.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
 
         layoutManager = new LinearLayoutManager(this);
         listaPlato.setLayoutManager(layoutManager);
