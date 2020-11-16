@@ -2,65 +2,163 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ListaIng.AgregaIngrediente">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="top"
-        android:orientation="vertical"
-        android:weightSum="10">
+        android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/tlbAgregaPlato"
-            layout="@layout/tool_bar"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:orientation="vertical" >
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtPltNombre"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nombre del plato" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:orientation="vertical"
+                android:weightSum="10">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listaAgregaIngPlato"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:visibility="gone" />
+                <include
+                    android:id="@+id/tlbAgregaPlato"
+                    layout="@layout/tool_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-        <Button
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txtPltNombre"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nombre del plato" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/fondo_borde"
+                    android:orientation="vertical">
+
+                    <com.github.florent37.expansionpanel.ExpansionHeader
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        app:expansion_headerIndicator="@id/headerIndicatorAgrega"
+                        app:expansion_layout="@id/expansionAgrega"
+                        app:expansion_toggleOnClick="true">
+
+                        <!-- HEADER -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Añadir ingredientes" />
+                        ...
+                        <!-- HEADER INDICATOR -->
+                        <ImageView
+                            android:id="@+id/headerIndicatorAgrega"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginLeft="16dp"
+                            android:adjustViewBounds="true"
+                            app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+
+
+                    </com.github.florent37.expansionpanel.ExpansionHeader>
+
+                    <com.github.florent37.expansionpanel.ExpansionLayout
+                        android:id="@+id/expansionAgrega"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <!-- CONTENT -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/listaAgregaIngPlato"
+                            android:layout_width="match_parent"
+                            android:layout_height="250dp" />
+
+                    </com.github.florent37.expansionpanel.ExpansionLayout>
+
+                </LinearLayout>
+
+
+                <!-- <Button
             android:id="@+id/btnMostrar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mostrar/Ocultar ingredientes" />
+            android:text="Mostrar/Ocultar ingredientes" />-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listaAgregadoIngPlato"
-            android:layout_width="400dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="10" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/fondo_borde"
+                    android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnPltAgregar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Añadir"/>
+                    <com.github.florent37.expansionpanel.ExpansionHeader
+                        android:layout_width="match_parent"
+                        android:layout_height="35dp"
+                        app:expansion_headerIndicator="@id/headerIndicatorAgregados"
+                        app:expansion_layout="@id/expansionAgregados"
+                        app:expansion_toggleOnClick="true">
 
-        <EditText
+                        <!-- HEADER -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Ingredientes añadidos" />
+                        ...
+                        <!-- HEADER INDICATOR -->
+                        <ImageView
+                            android:id="@+id/headerIndicatorAgregados"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginLeft="16dp"
+                            android:adjustViewBounds="true"
+                            app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+
+
+                    </com.github.florent37.expansionpanel.ExpansionHeader>
+
+                    <com.github.florent37.expansionpanel.ExpansionLayout
+                        android:id="@+id/expansionAgregados"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:expansion_expanded="true">
+
+                        <!-- CONTENT -->
+                        <!-- TODO porque coño no se redimensiona? -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/listaAgregadoIngPlato"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </com.github.florent37.expansionpanel.ExpansionLayout>
+
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/btnPltAgregar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Añadir" />
+
+                <!-- <EditText
 
             android:id="@+id/txtPltNombres"
             android:layout_width="wrap_content"
@@ -78,8 +176,10 @@
             android:ems="10"
             android:hint="Elaboracion"
             android:inputType="textPersonName"
-            android:visibility="gone" />
+            android:visibility="gone" /> -->
 
-    </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

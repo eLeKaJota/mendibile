@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Si creas esta clase, te voy a robar el coche gilipollas.
+ */
 public class Plato implements Serializable {
 
     private int id;

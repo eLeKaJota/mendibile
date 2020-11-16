@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -55,7 +56,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
     private Toolbar tlb;
     EditText txtNombre, txtIngredientes, txtElaboracion;
     Button btnAgregar;
-    Button btnMostrarIngAgrega;
+    //Button btnMostrarIngAgrega;
     int modifica;
     ArrayList<IngPeso> ing;
 
@@ -96,17 +97,20 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
     //----------------------------------------------------
 
 
+
     //-----------------SI AÑADES UN NUEVO INGREDIENTE DESDE ESTA ACTIVITY, SE ACTUALIZA EN LA LISTA
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1){
+            CharSequence hola = "hola";
             if(resultCode == AppCompatActivity.RESULT_OK){
                 int idIng = Integer.parseInt(data.getStringExtra("idIng"));
                 if (idIng != 0) ingredientes.add(actualizaIngrediente(idIng));
             }
         }
     }
+
 
 
     @Override
@@ -126,11 +130,11 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
         //----------------BINDEOS
         txtNombre = (EditText) findViewById(R.id.txtPltNombre);
-        txtElaboracion = (EditText) findViewById(R.id.txtPltElaboracion);
+        //txtElaboracion = (EditText) findViewById(R.id.txtPltElaboracion);
         btnAgregar = (Button) findViewById(R.id.btnPltAgregar);
         listaAgrega = (RecyclerView) findViewById(R.id.listaAgregaIngPlato);
         listaAgregado = (RecyclerView) findViewById(R.id.listaAgregadoIngPlato);
-        btnMostrarIngAgrega = (Button)  findViewById(R.id.btnMostrar);
+        //btnMostrarIngAgrega = (Button)  findViewById(R.id.btnMostrar);
         if (modifica != 0) btnAgregar.setText("Modificar plato");
         if (modifica != 0) txtNombre.setText(datos.getString("nombrePlato"));
 
@@ -142,22 +146,22 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
         //--------------CONFIGURA LOS DOS RECYCLERVIEW
         layoutManagerAgrega = new GridLayoutManager(this,4);
-        layoutManagerAgregado = new LinearLayoutManager(this);
+        layoutManagerAgregado = new GridLayoutManager(this,1);
         listaAgrega.setHasFixedSize(true);
         listaAgrega.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         listaAgrega.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL));
         listaAgrega.setLayoutManager(layoutManagerAgrega);
-        listaAgregado.setHasFixedSize(true);
+        //listaAgregado.setHasFixedSize(true);
         listaAgregado.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         listaAgregado.setLayoutManager(layoutManagerAgregado);
 
         //---------------MOSTRAR U OCULTAR LISTA DE INGREDIENTES
-        btnMostrarIngAgrega.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mostrarAgrega();
-            }
-        });
+//        btnMostrarIngAgrega.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mostrarAgrega();
+//            }
+//        });
 
 
         //---------------ADAPTADOR AGREGADOS
@@ -290,14 +294,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         SQLiteDatabase db = this.helper.getReadableDatabase();
 
         Cursor cursor = db.query(
-                TablaIngrediente.NOMBRE_TABLA,   // The table to query
-                null,             // The array of columns to return (pass null to get all)
-                null,              // The columns for the WHERE clause
-                null,          // The values for the WHERE clause
-                null,                   // don't group the rows
-                null,                   // don't filter by row groups
-                null               // The sort order
-        );
+                TablaIngrediente.NOMBRE_TABLA,null,null,null,null,null,null);
 
 
         //ingredientes = new ArrayList<Ingrediente>();
@@ -356,9 +353,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         );
 
 
-        //ingredientes = new ArrayList<Ingrediente>();
         ArrayList<Ingrediente> temp = new ArrayList<>();
-        //cursor.moveToFirst();
         while(cursor.moveToNext()){
             int id = cursor.getInt(0);
             String nombre = cursor.getString(1);

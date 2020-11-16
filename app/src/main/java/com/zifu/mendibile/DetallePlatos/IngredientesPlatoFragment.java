@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ *
  * A simple {@link Fragment} subclass.
-
  */
 public class IngredientesPlatoFragment extends Fragment implements AdaptadorListaDetalleIng.ListItemClick {
 
@@ -112,8 +112,6 @@ public class IngredientesPlatoFragment extends Fragment implements AdaptadorList
             ings.add(ing);
 
             cursor.close();
-
-
 
         }
         adaptador = new AdaptadorListaDetalleIng(ings, this,helper,detalle);
