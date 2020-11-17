@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println(checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE"));
+        shouldShowRequestPermissionRationale("android.permission.WRITE_EXTERNAL_STORAGE");
+
 
         context = getApplicationContext();
         helper = new BBDDHelper(MainActivity.context);

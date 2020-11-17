@@ -18,7 +18,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="top"
+                android:gravity="center_horizontal|top"
                 android:orientation="vertical"
                 android:weightSum="10">
 
@@ -27,6 +27,20 @@
                     layout="@layout/tool_bar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/ivFotoPlato"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    app:srcCompat="@drawable/alifu" />
+
+                <Button
+                    android:id="@+id/btnFotoPlato"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Foto / Imagen del plato" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout"
@@ -140,7 +154,6 @@
                         app:expansion_expanded="true">
 
                         <!-- CONTENT -->
-                        <!-- TODO porque coño no se redimensiona? -->
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/listaAgregadoIngPlato"
                             android:layout_width="match_parent"

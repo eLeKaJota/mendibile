@@ -67,6 +67,7 @@ public class DetallePlatos extends AppCompatActivity {
             i.putExtra("modifica",plato.getId());
             i.putExtra("ing",plato.getIngPeso());
             i.putExtra("nombrePlato",plato.getNombre());
+            i.putExtra("fotoPlato",plato.getFoto());
 
             startActivity(i);
         }

@@ -4,9 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
@@ -15,27 +15,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.material.tabs.TabLayout;
 import com.zifu.mendibile.BBDDHelper;
-import com.zifu.mendibile.DetallePlatos.DetallePlatos;
-import com.zifu.mendibile.ListaIng.AdaptadorListaIng;
 import com.zifu.mendibile.ListaIng.AgregaIngrediente;
-import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.IngPeso;
 import com.zifu.mendibile.Modelos.Ingrediente;
 import com.zifu.mendibile.R;
@@ -43,7 +37,11 @@ import com.zifu.mendibile.tablas.TablaIngrediente;
 import com.zifu.mendibile.tablas.TablaPlato;
 import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgrega.ListItemClick {
 
@@ -55,10 +53,14 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
     ArrayList<Ingrediente> ingAgregados;
     private Toolbar tlb;
     EditText txtNombre, txtIngredientes, txtElaboracion;
-    Button btnAgregar;
+    Button btnAgregar,btnFoto;
     //Button btnMostrarIngAgrega;
     int modifica;
     ArrayList<IngPeso> ing;
+    ImageView fotoPlato;
+    Uri fotoUriTemp;
+    Uri fotoUriOld;
+    Uri fotoUri;
 
 
     //------------------MOSTRAR LISTA DE INGREDIENTES
@@ -67,6 +69,53 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         else listaAgrega.setVisibility(View.GONE);
     }
 
+    //--------------METODO PARA USAR LA CAMARA
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int DEVUELVE_NUEVO_INGREDIENTE = 28;
+    static final int REQUEST_TAKE_PHOTO = 27;
+
+
+    private void hacerFoto() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    String pathFotoPlato;
+
+    private File crearArchivoImagen() throws IOException{
+        String fecha = new SimpleDateFormat("ddMMyyyy_HHmmss").format(new Date());
+        String nombreFichero = "PLATO_" + fecha + "_";
+        File directorio = getFilesDir();
+        File foto = File.createTempFile(nombreFichero,".jpg",directorio);
+        pathFotoPlato = foto.getAbsolutePath();
+        return foto;
+    }
+    private void hacerFotoIntent(){
+        Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if ( i.resolveActivity(getPackageManager()) != null){
+            File archivoFoto = null;
+            try{
+                archivoFoto = crearArchivoImagen();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(archivoFoto != null){
+                fotoUriOld = fotoUriTemp;
+                fotoUriTemp = FileProvider.getUriForFile(this,"com.zifu.mendibile",archivoFoto);
+                i.putExtra(MediaStore.EXTRA_OUTPUT, fotoUriTemp);
+                startActivityForResult(i,REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    private void borrarFoto(Uri uri) throws IOException {
+        File foto = new File(uri.getPath());
+        foto.setWritable(true);
+
+        deleteFile(foto.getName());
+    }
 
     //-------------------TOOLBAR
     @Override
@@ -84,7 +133,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         if(item.getItemId() == R.id.itmAgregaPlatoIng){
             Intent i = new Intent(this, AgregaIngrediente.class);
             i.putExtra("modifica",0);
-            startActivityForResult(i,1);
+            startActivityForResult(i,DEVUELVE_NUEVO_INGREDIENTE);
             return true;
         }
         if(item.getItemId() == android.R.id.home){
@@ -103,12 +152,33 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1){
-            CharSequence hola = "hola";
+        if(requestCode == DEVUELVE_NUEVO_INGREDIENTE){
             if(resultCode == AppCompatActivity.RESULT_OK){
                 int idIng = Integer.parseInt(data.getStringExtra("idIng"));
                 if (idIng != 0) ingredientes.add(actualizaIngrediente(idIng));
             }
+        }
+        if (requestCode == REQUEST_TAKE_PHOTO) {
+            if(resultCode == RESULT_OK){
+                fotoUri = fotoUriTemp;
+                if (fotoUriOld != null) {
+                    try {
+                        borrarFoto(fotoUriOld);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                fotoPlato.setImageURI(fotoUri);
+            }else{
+
+                try {
+                    borrarFoto(fotoUriTemp);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
     }
 
@@ -126,6 +196,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
          Bundle datos = getIntent().getExtras();
          modifica = datos.getInt("modifica");
          ing = (ArrayList<IngPeso>) datos.getSerializable("ing");
+
         ingredientes = new ArrayList<Ingrediente>();
         ingAgregados = new ArrayList<Ingrediente>();
 
@@ -133,12 +204,19 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         txtNombre = (EditText) findViewById(R.id.txtPltNombre);
         //txtElaboracion = (EditText) findViewById(R.id.txtPltElaboracion);
         btnAgregar = (Button) findViewById(R.id.btnPltAgregar);
+        btnFoto = (Button) findViewById(R.id.btnFotoPlato);
         listaAgrega = (RecyclerView) findViewById(R.id.listaAgregaIngPlato);
         listaAgregado = (RecyclerView) findViewById(R.id.listaAgregadoIngPlato);
+        fotoPlato = (ImageView) findViewById(R.id.ivFotoPlato);
         //btnMostrarIngAgrega = (Button)  findViewById(R.id.btnMostrar);
         if (modifica != 0) btnAgregar.setText("Modificar plato");
         if (modifica != 0) txtNombre.setText(datos.getString("nombrePlato"));
-
+        if(modifica != 0) {
+            fotoUri = Uri.parse(datos.getString("fotoPlato"));
+            fotoUriTemp = Uri.parse(datos.getString("fotoPlato"));
+            fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            fotoPlato.setImageURI(fotoUri);
+        }
 
         //--------------ACTUALIZA LOS RECYCLERVIEW
         if (modifica == 0) actualizaListaAgrega();
@@ -217,6 +295,16 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
 
 
+        //-------------------------TOMA FOTO O IMAGEN DEL PLATO
+        btnFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hacerFotoIntent();
+            }
+        });
+
+
+        //TODO guardar imagen en el dispositivo y en la base de datos
 
 
 
@@ -248,6 +336,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         //----------------AGREGA EL PLATO
         ContentValues values = new ContentValues();
         values.put(TablaPlato.NOMBRE_COLUMNA_2,txtNombre.getText().toString());
+        values.put(TablaPlato.NOMBRE_COLUMNA_5, fotoUri.toString());
 
         if (modifica == 0) {
             nuevaId = db.insert(TablaPlato.NOMBRE_TABLA,null,values);
