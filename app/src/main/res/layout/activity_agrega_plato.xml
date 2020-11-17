@@ -36,11 +36,24 @@
                     android:layout_marginRight="20dp"
                     app:srcCompat="@drawable/alifu" />
 
-                <Button
-                    android:id="@+id/btnFotoPlato"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Foto / Imagen del plato" />
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnFotoPlato"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Foto del plato" />
+
+                    <Button
+                        android:id="@+id/btnGaleria"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Abrir galería" />
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout"
