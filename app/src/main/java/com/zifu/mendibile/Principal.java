@@ -3,7 +3,6 @@ package com.zifu.mendibile;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +10,7 @@ import android.widget.ImageButton;
 
 import com.zifu.mendibile.ListaIng.ListaIngredientes;
 import com.zifu.mendibile.ListaPlt.ListaPlatos;
+import com.zifu.mendibile.Proveedores.ListaProveedores;
 
 public class Principal extends AppCompatActivity {
 
@@ -26,6 +26,7 @@ public class Principal extends AppCompatActivity {
 
         ImageButton btnPlatos = (ImageButton)findViewById(R.id.btnPlatos);
         ImageButton btnIngrediente = (ImageButton)findViewById(R.id.btnIngredientes);
+        ImageButton btnProveedores = (ImageButton)findViewById(R.id.btnProveedores);
 
         btnPlatos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,13 +36,20 @@ public class Principal extends AppCompatActivity {
             }
         });
 
-    btnIngrediente.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(getApplicationContext(), ListaIngredientes.class);
-            startActivity(i);
-        }
-    });
+        btnIngrediente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaIngredientes.class);
+                startActivity(i);
+            }
+        });
+        btnProveedores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaProveedores.class);
+                startActivity(i);
+            }
+        });
 
 
     }

@@ -59,17 +59,6 @@ public class AdaptadorListaIng extends RecyclerView.Adapter<AdaptadorListaIng.in
             tvListaIngProveedor.setText("Proveedor: " + i.getProveedor());
             tvListaIngId.setText(""+i.getId());
 
-//            btnDeleteIngList.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    listaIng.borrarIngrediente(TablaIngrediente.NOMBRE_COLUMNA_1,tvListaIngId.getText().toString(),TablaIngrediente.NOMBRE_TABLA);
-//                    listaIng.borrarIngrediente(TablaPlatoIngredientePeso.NOMBRE_COLUMNA_3,tvListaIngId.getText().toString(),TablaPlatoIngredientePeso.NOMBRE_TABLA);
-//                }
-//            });
-
-
-
-
         }
 
         @Override

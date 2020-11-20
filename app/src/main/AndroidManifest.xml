@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zifu.mendibile">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,13 +17,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mendibile">
-
-        <activity android:name=".ListaPlt.AgregaPlato"></activity>
+        <activity android:name=".Proveedores.DetalleProveedores"></activity>
+        <activity android:name=".Proveedores.AgregaProveedor" />
+        <activity android:name=".Proveedores.ListaProveedores" />
+        <activity android:name=".ListaPlt.AgregaPlato" />
         <activity android:name=".ListaPlt.ListaPlatos" />
-        <activity android:name=".ListaIng.ListaIngredientes"/>
+        <activity android:name=".ListaIng.ListaIngredientes" />
         <activity android:name=".ListaIng.AgregaIngrediente" />
         <activity android:name=".Principal" />
-        <activity android:name=".DetallePlatos.DetallePlatos"/>
+        <activity android:name=".DetallePlatos.DetallePlatos" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,16 +41,8 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
-
     </application>
-
-    <uses-feature android:name="android.hardware.camera"
-        android:required="false" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-
 
 </manifest>

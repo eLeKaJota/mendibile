@@ -70,7 +70,6 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
     }
 
     //--------------METODO PARA USAR LA CAMARA
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int DEVUELVE_NUEVO_INGREDIENTE = 28;
     static final int REQUEST_TAKE_PHOTO = 27;
     static final int FOTO_GALERIA = 26;
@@ -312,9 +311,6 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
                 hacerFotoIntent();
             }
         });
-
-
-
 
 
 

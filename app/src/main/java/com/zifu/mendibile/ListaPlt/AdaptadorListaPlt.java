@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.zifu.mendibile.BBDDHelper;
 import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.R;
-import com.zifu.mendibile.tablas.TablaPlato;
-import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +43,9 @@ public class AdaptadorListaPlt extends RecyclerView.Adapter<AdaptadorListaPlt.pl
         public ImageButton btnDeletePltList;
         public pltViewHolder(View itemView){
               super(itemView);
-              tvListaPltNombre = itemView.findViewById(R.id.tvListaPlatoNombre);
-              tvListaPltCoste = itemView.findViewById(R.id.tvListaPlatoCoste);
-              tvListaPltId = itemView.findViewById(R.id.tvListaPlatoId);
+              tvListaPltNombre = itemView.findViewById(R.id.tvListaProveedorNombre);
+              tvListaPltCoste = itemView.findViewById(R.id.tvListaProveedorProducto);
+              tvListaPltId = itemView.findViewById(R.id.tvListaProveedorId);
               //btnDeletePltList = itemView.findViewById(R.id.btnDeleteListPlato);
               itemView.setOnClickListener(this);
         }

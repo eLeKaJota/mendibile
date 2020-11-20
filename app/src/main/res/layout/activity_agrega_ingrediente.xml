@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nombre del ingrediente"
-                android:id="@+id/txtPltNombre"/>
+                android:id="@+id/txtPltNombre" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Precio"
                     android:numeric="integer|decimal"
-                    android:id="@+id/txtIngPrecio"/>
+                    android:id="@+id/txtIngPrecio" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <Spinner
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Proveedor"
-                android:id="@+id/txtIngProveedor"/>
+                android:id="@+id/txtIngProveedor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -88,36 +88,36 @@
 
     </LinearLayout>
 
-<!--    <EditText-->
-<!--        android:id="@+id/txtPltNombre"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:ems="10"-->
-<!--        android:hint="Nombre"-->
-<!--        android:inputType="textPersonName"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        tools:layout_editor_absoluteY="465dp" />-->
+    <!--    <EditText-->
+    <!--        android:id="@+id/txtPltNombre"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:ems="10"-->
+    <!--        android:hint="Nombre"-->
+    <!--        android:inputType="textPersonName"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        tools:layout_editor_absoluteY="465dp" />-->
 
-<!--    <EditText-->
-<!--        android:id="@+id/txtIngPrecio"-->
-<!--        android:layout_width="90dp"-->
-<!--        android:layout_height="53dp"-->
-<!--        android:ems="10"-->
-<!--        android:hint="Precio"-->
-<!--        android:inputType="textPersonName"-->
-<!--        tools:layout_editor_absoluteX="244dp"-->
-<!--        tools:layout_editor_absoluteY="432dp" />-->
+    <!--    <EditText-->
+    <!--        android:id="@+id/txtIngPrecio"-->
+    <!--        android:layout_width="90dp"-->
+    <!--        android:layout_height="53dp"-->
+    <!--        android:ems="10"-->
+    <!--        android:hint="Precio"-->
+    <!--        android:inputType="textPersonName"-->
+    <!--        tools:layout_editor_absoluteX="244dp"-->
+    <!--        tools:layout_editor_absoluteY="432dp" />-->
 
-<!--    <EditText-->
-<!--        android:id="@+id/txtIngProveedor"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:ems="10"-->
-<!--        android:hint="Proveedor"-->
-<!--        android:inputType="textPersonName"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        tools:layout_editor_absoluteY="390dp" />-->
+    <!--    <EditText-->
+    <!--        android:id="@+id/txtIngProveedor"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="16dp"-->
+    <!--        android:ems="10"-->
+    <!--        android:hint="Proveedor"-->
+    <!--        android:inputType="textPersonName"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        tools:layout_editor_absoluteY="390dp" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

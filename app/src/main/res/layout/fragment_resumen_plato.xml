@@ -21,17 +21,20 @@
 
         <TextView
             android:id="@+id/tvDetallePltNombre"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Nombre:"
-            android:textSize="24sp" />
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvDetallePltCoste"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="20dp"
-            android:text="Coste:" />
+            android:text="Coste:"
+            android:textAlignment="center" />
     </LinearLayout>
 
 </FrameLayout>
