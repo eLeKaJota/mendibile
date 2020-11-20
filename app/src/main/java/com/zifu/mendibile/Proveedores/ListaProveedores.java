@@ -68,6 +68,15 @@ public class ListaProveedores extends AppCompatActivity {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        proveedores.clear();
+
+        actualizaLista();
+        adaptador.notifyDataSetChanged();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_proveedores);
@@ -81,7 +90,7 @@ public class ListaProveedores extends AppCompatActivity {
         //---------------DECLARACIONES
         layoutManager = new LinearLayoutManager(this);
         proveedores = new ArrayList<>();
-        actualizaLista();
+        //actualizaLista();
         setSupportActionBar(tlb);
         getSupportActionBar().setTitle("Proveedores");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
