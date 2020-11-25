@@ -27,6 +27,7 @@ public class Principal extends AppCompatActivity {
         ImageButton btnPlatos = (ImageButton)findViewById(R.id.btnPlatos);
         ImageButton btnIngrediente = (ImageButton)findViewById(R.id.btnIngredientes);
         ImageButton btnProveedores = (ImageButton)findViewById(R.id.btnProveedores);
+        ImageButton btnCompras = (ImageButton)findViewById(R.id.btnCompras);
 
         btnPlatos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +48,13 @@ public class Principal extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ListaProveedores.class);
+                startActivity(i);
+            }
+        });
+        btnCompras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), AgregaCompraGeneral.class);
                 startActivity(i);
             }
         });

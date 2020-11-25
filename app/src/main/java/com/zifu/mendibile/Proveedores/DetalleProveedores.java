@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,8 +20,11 @@ import android.widget.TextView;
 
 import com.xiaofeng.flowlayoutmanager.Alignment;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
+import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Proveedor;
 import com.zifu.mendibile.R;
+import com.zifu.mendibile.tablas.TablaProveedor;
+import com.zifu.mendibile.tablas.TablaProveedorTlf;
 
 public class DetalleProveedores extends AppCompatActivity {
 
@@ -32,7 +37,7 @@ public class DetalleProveedores extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_default,menu);
+        getMenuInflater().inflate(R.menu.menu_detalle_prov,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -40,6 +45,18 @@ public class DetalleProveedores extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             onBackPressed();
+        }
+        if(item.getItemId() == R.id.itmDetalleProvElimina){
+            borrarProveedor(TablaProveedor.NOMBRE_COLUMNA_1,String.valueOf(prov.getId()),TablaProveedor.NOMBRE_TABLA);
+            borrarProveedor(TablaProveedorTlf.NOMBRE_COLUMNA_2,String.valueOf(prov.getId()),TablaProveedorTlf.NOMBRE_TABLA);
+            finish();
+        }
+        if(item.getItemId() == R.id.itmDetalleProvEdita){
+
+            Intent i = new Intent(this,AgregaProveedor.class);
+            i.putExtra("modifica", prov.getId());
+            i.putExtra("prov", prov);
+            startActivity(i);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -151,6 +168,14 @@ public class DetalleProveedores extends AppCompatActivity {
         listaTlf.setAdapter(adaptadorTlf);
 
         //----------------------------------------------------------------------
+
+    }
+
+    public void borrarProveedor(String columna, String argumentos, String tabla){
+        SQLiteDatabase db = MainActivity.helper.getWritableDatabase();
+        String selection = columna + " LIKE ?";
+        String[] selectionArgs = { argumentos };
+        int deletedRows = db.delete(tabla, selection, selectionArgs);
 
     }
 }

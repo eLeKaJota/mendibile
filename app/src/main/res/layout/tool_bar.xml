@@ -5,4 +5,5 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#1D3557"
     app:titleTextColor="@color/white"
-    app:subtitleTextColor="@color/white" />
+    app:subtitleTextColor="@color/white"
+    android:theme="@style/ToolBarStyle"/>

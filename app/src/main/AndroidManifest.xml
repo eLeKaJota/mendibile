@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mendibile">
-        <activity android:name=".Proveedores.DetalleProveedores"></activity>
+        <activity android:name=".AgregaCompraGeneral"></activity>
+        <activity android:name=".Proveedores.DetalleProveedores" />
         <activity android:name=".Proveedores.AgregaProveedor" />
         <activity android:name=".Proveedores.ListaProveedores" />
         <activity android:name=".ListaPlt.AgregaPlato" />

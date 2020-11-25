@@ -61,7 +61,7 @@
                 app:srcCompat="@drawable/proveedores" />
 
             <ImageButton
-                android:id="@+id/imageButton5"
+                android:id="@+id/btnCompras"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginLeft="15dp"

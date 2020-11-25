@@ -38,13 +38,13 @@ public class ListaProveedores extends AppCompatActivity {
     private RecyclerView.Adapter adaptador;
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton floatAgregaProv;
-    private int clickItem;
+    private int clickItem, returnId;
 
 
     //----------------TOOLBAR
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_default,menu);
+        getMenuInflater().inflate(R.menu.menu_lista_prov,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -52,6 +52,10 @@ public class ListaProveedores extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home){
             onBackPressed();
+        }
+        if(item.getItemId() == R.id.itmAgregaProv){
+            Intent i = new Intent(getApplicationContext(),AgregaProveedor.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -70,16 +74,35 @@ public class ListaProveedores extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+
         proveedores.clear();
 
         actualizaLista();
         adaptador.notifyDataSetChanged();
+
+        if(returnId != 0){
+            for(Proveedor p : proveedores){
+                if(p.getId() == returnId){
+                    returnId = 0;
+                    Intent i = new Intent(this,DetalleProveedores.class);
+                    i.putExtra("Prov",p);
+                    startActivity(i);
+
+                }
+            }
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_proveedores);
+
+        Bundle datos = getIntent().getExtras();
+        if (datos != null){
+            returnId = datos.getInt("id");
+        }
 
 
         //---------------BINDEOS
