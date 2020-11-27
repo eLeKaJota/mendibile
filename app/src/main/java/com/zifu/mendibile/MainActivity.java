@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static Context context;
     public static BBDDHelper helper;
-    int prueba = 4;
+    
 
 
 
