@@ -3,21 +3,22 @@ package com.zifu.mendibile.Modelos;
 import java.io.Serializable;
 
 public class CompraIngrediente implements Serializable {
-    int id;
+    int id, idLista;
     String nombre,formmato;
-    Double cantidad;
+    String cantidad;
 
     public CompraIngrediente() {
     }
 
-    public CompraIngrediente(int id, String nombre, String formmato, Double cantidad) {
+    public CompraIngrediente(int id, int idLista, String nombre, String formmato, String cantidad) {
         this.id = id;
+        this.idLista = idLista;
         this.nombre = nombre;
         this.formmato = formmato;
         this.cantidad = cantidad;
     }
 
-    public CompraIngrediente(String nombre, String formmato, Double cantidad) {
+    public CompraIngrediente(String nombre, String formmato, String cantidad) {
         this.nombre = nombre;
         this.formmato = formmato;
         this.cantidad = cantidad;
@@ -29,6 +30,14 @@ public class CompraIngrediente implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getIdLista() {
+        return idLista;
+    }
+
+    public void setIdLista(int idLista) {
+        this.idLista = idLista;
     }
 
     public String getNombre() {
@@ -47,11 +56,11 @@ public class CompraIngrediente implements Serializable {
         this.formmato = formmato;
     }
 
-    public Double getCantidad() {
+    public String getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Double cantidad) {
+    public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
     }
 }

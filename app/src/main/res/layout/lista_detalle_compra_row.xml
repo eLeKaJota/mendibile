@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:background="@drawable/fondo_borde_listas"
+        android:elevation="3dp"
+        android:orientation="vertical"
+        android:padding="7dp">
+
+        <com.github.florent37.expansionpanel.ExpansionHeader
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_gravity="center_vertical"
+            app:expansion_headerIndicator="@id/headerIndicatorCompra"
+            app:expansion_layout="@id/expansionProv"
+            app:expansion_toggleOnClick="true">
+
+            <!-- HEADER -->
+            <TextView
+                android:id="@+id/tvDetalleCompraProv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Proveedor"
+                android:textStyle="bold" />
+            ...
+            <!-- HEADER INDICATOR -->
+            <ImageView
+                android:id="@+id/headerIndicatorCompra"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginLeft="16dp"
+                android:adjustViewBounds="true"
+                app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+
+
+        </com.github.florent37.expansionpanel.ExpansionHeader>
+
+        <com.github.florent37.expansionpanel.ExpansionLayout
+            android:id="@+id/expansionProv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:expansion_expanded="true">
+
+            <!-- CONTENT -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listaDetalleCompraProv"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
+        </com.github.florent37.expansionpanel.ExpansionLayout>
+    </LinearLayout>
+</FrameLayout>

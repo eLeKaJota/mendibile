@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.zifu.mendibile.Compra.AgregaCompraGeneral;
+import com.zifu.mendibile.Compra.ListaCompra;
 import com.zifu.mendibile.ListaIng.ListaIngredientes;
 import com.zifu.mendibile.ListaPlt.ListaPlatos;
 import com.zifu.mendibile.Proveedores.ListaProveedores;
@@ -54,7 +56,7 @@ public class Principal extends AppCompatActivity {
         btnCompras.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), AgregaCompraGeneral.class);
+                Intent i = new Intent(getApplicationContext(), ListaCompra.class);
                 startActivity(i);
             }
         });

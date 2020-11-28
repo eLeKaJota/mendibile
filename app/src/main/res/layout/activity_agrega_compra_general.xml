@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AgregaCompraGeneral">
+    tools:context=".Compra.AgregaCompraGeneral">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,6 +41,18 @@
                     android:layout_height="wrap_content"
                     android:text="Fecha: xxxxxx dd/mm/yy hh:mm"
                     android:textAlignment="center" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txtNotasCompraGeneral"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Notas para el pedido" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listaAgregaCompraGeneral"

@@ -1,4 +1,4 @@
-package com.zifu.mendibile;
+package com.zifu.mendibile.Compra;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,22 +6,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.CompraIngrediente;
+import com.zifu.mendibile.R;
+import com.zifu.mendibile.tablas.TablaListaCompra;
+import com.zifu.mendibile.tablas.TablaListaCompraIng;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 public class AgregaCompraGeneral extends AppCompatActivity {
@@ -32,6 +38,9 @@ public class AgregaCompraGeneral extends AppCompatActivity {
     ArrayList<CompraIngrediente> ings;
     SimpleDateFormat fecha;
     TextView tvFecha;
+    EditText notas;
+    Button btnAgregar;
+
 
 
     @Override
@@ -45,6 +54,8 @@ public class AgregaCompraGeneral extends AppCompatActivity {
         fecha = new SimpleDateFormat("EEEE, dd/MM/yyyy HH:mm:ss" );
         fecha.setTimeZone(TimeZone.getTimeZone("GMT+1"));
         tvFecha.setText(fecha.format(new Date()));
+        notas = (EditText) findViewById(R.id.txtNotasCompraGeneral);
+        btnAgregar = (Button) findViewById(R.id.btnAgregaCompraGeneral);
         listaCompra = (RecyclerView) findViewById(R.id.listaAgregaCompraGeneral);
 
         layoutManager = new LinearLayoutManager(this);
@@ -57,6 +68,7 @@ public class AgregaCompraGeneral extends AppCompatActivity {
             ImageButton mas;
             TextView confirmado;
             LinearLayout lyNuevo,lyConfirmado;
+            Boolean conf; //PARA CUANDO TOQUE MODIFICAR, USARLO COMO CONTROL.
             public ingsViewHolder(@NonNull View itemView) {
                 super(itemView);
                 nombre = (EditText) itemView.findViewById(R.id.etCompraGeneralIng);
@@ -74,10 +86,16 @@ public class AgregaCompraGeneral extends AppCompatActivity {
                         lyNuevo.setVisibility(View.GONE);
                         lyConfirmado.setVisibility(View.VISIBLE);
                         confirmado.setText(cantidad.getText() + " " +formato.getSelectedItem().toString() + " - " + nombre.getText());
+
+                        ings.get(getAdapterPosition()).setNombre(nombre.getText().toString());
+                        ings.get(getAdapterPosition()).setCantidad(cantidad.getText().toString());
+                        ings.get(getAdapterPosition()).setFormmato(formato.getSelectedItem().toString());
+
                         ings.add(new CompraIngrediente());
                         adaptador.notifyDataSetChanged();
                     }
                 });
+                
             }
         }
 
@@ -116,6 +134,47 @@ public class AgregaCompraGeneral extends AppCompatActivity {
         adaptador.setHasStableIds(true);
         listaCompra.setLayoutManager(layoutManager);
         listaCompra.setAdapter(adaptador);
+
+        btnAgregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                agregaListaCompra();
+            }
+        });
+
+    }
+
+
+
+
+    public void agregaListaCompra(){
+        SQLiteDatabase db = MainActivity.helper.getWritableDatabase();
+
+        ContentValues v = new ContentValues();
+        v.put(TablaListaCompra.NOMBRE_COLUMNA_2,tvFecha.getText().toString());
+        v.put(TablaListaCompra.NOMBRE_COLUMNA_3,notas.getText().toString());
+        long nuevaId = db.insert(TablaListaCompra.NOMBRE_TABLA,null,v);
+        agregaListaIng(Integer.parseInt(String.valueOf(nuevaId)));
+    }
+
+    public void agregaListaIng(int idLista){
+        SQLiteDatabase db = MainActivity.helper.getWritableDatabase();
+
+        for(CompraIngrediente c : ings){
+            if( c.getNombre() != null){
+                if(!c.getNombre().equals("")){
+                    ContentValues v = new ContentValues();
+                    v.put(TablaListaCompraIng.NOMBRE_COLUMNA_2,idLista);
+                    v.put(TablaListaCompraIng.NOMBRE_COLUMNA_3,c.getNombre());
+                    v.put(TablaListaCompraIng.NOMBRE_COLUMNA_4,c.getFormmato());
+                    v.put(TablaListaCompraIng.NOMBRE_COLUMNA_5,c.getCantidad());
+
+                    db.insert(TablaListaCompraIng.NOMBRE_TABLA,null,v);
+                }
+            }
+        }
+
+        finish();
 
     }
 
