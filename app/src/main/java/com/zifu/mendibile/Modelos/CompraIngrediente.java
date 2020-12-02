@@ -18,6 +18,13 @@ public class CompraIngrediente implements Serializable {
         this.cantidad = cantidad;
     }
 
+    public CompraIngrediente(int idLista, String nombre, String formmato, String cantidad) {
+        this.idLista = idLista;
+        this.nombre = nombre;
+        this.formmato = formmato;
+        this.cantidad = cantidad;
+    }
+
     public CompraIngrediente(String nombre, String formmato, String cantidad) {
         this.nombre = nombre;
         this.formmato = formmato;

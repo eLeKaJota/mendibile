@@ -12,6 +12,10 @@ public class CompraLista implements Serializable {
         this.notas = notas;
     }
 
+    public CompraLista(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }

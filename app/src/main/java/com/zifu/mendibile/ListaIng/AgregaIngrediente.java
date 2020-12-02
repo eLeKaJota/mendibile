@@ -8,25 +8,32 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.zifu.mendibile.BBDDHelper;
+import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Ingrediente;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
 import com.zifu.mendibile.tablas.TablaPlato;
 import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
+import com.zifu.mendibile.tablas.TablaProveedor;
 
-public class AgregaIngrediente extends AppCompatActivity implements DialogInterface {
-    EditText txtNombre, txtPrecio, txtProveedor;
+import java.util.ArrayList;
+
+public class AgregaIngrediente extends AppCompatActivity  {
+    EditText txtNombre, txtPrecio;
+    AutoCompleteTextView txtProveedor;
     //ListaIngredientes listaIng;
     Spinner spnFormato;
     Button btnAgregar,btnEliminarIng;
@@ -60,7 +67,7 @@ public class AgregaIngrediente extends AppCompatActivity implements DialogInterf
 
         txtNombre = (EditText) findViewById(R.id.txtPltNombre);
         txtPrecio = (EditText) findViewById(R.id.txtIngPrecio);
-        txtProveedor = (EditText) findViewById(R.id.txtIngProveedor);
+        txtProveedor = (AutoCompleteTextView) findViewById(R.id.txtIngProveedor);
         spnFormato = (Spinner) findViewById(R.id.spnFormato);
         btnEliminarIng = (Button) findViewById(R.id.btnEliminarIng);
         ArrayAdapter<CharSequence> adaptadorSpinner = ArrayAdapter.createFromResource(this,R.array.listaFormatoIng, android.R.layout.simple_spinner_dropdown_item);
@@ -69,6 +76,9 @@ public class AgregaIngrediente extends AppCompatActivity implements DialogInterf
         setSupportActionBar(tlb);
         getSupportActionBar().setTitle("Añadir ingrediente");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ArrayAdapter<String> adaptadorProv = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, actualizaProvs());
+        txtProveedor.setAdapter(adaptadorProv);
 
 
         btnAgregar = (Button) findViewById(R.id.btnPltAgregar);
@@ -133,14 +143,21 @@ public class AgregaIngrediente extends AppCompatActivity implements DialogInterf
         finish();
     }
 
+    public String[] actualizaProvs(){
+        SQLiteDatabase db = MainActivity.helper.getReadableDatabase();
+        ArrayList<String> prov = new ArrayList<>();
 
-    @Override
-    public void cancel() {
+        Cursor c = db.query(TablaProveedor.NOMBRE_TABLA,null,null,null,null,null,null);
+        while (c.moveToNext()) {
+            int id = c.getInt(0);
+            String nombre = c.getString(1);
+            prov.add(nombre);
+        }
+        c.close();
+        return prov.toArray(new String[0]);
 
     }
 
-    @Override
-    public void dismiss() {
 
-    }
+
 }

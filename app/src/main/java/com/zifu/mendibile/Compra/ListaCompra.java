@@ -47,7 +47,7 @@ public class ListaCompra extends AppCompatActivity {
             onBackPressed();
         }
         if(item.getItemId() == R.id.itmAgregaListaCompra){
-            Intent i = new Intent(this,AgregaCompraGeneral.class);
+            Intent i = new Intent(this,DetalleCompra.class);
             startActivity(i);
         }
         return super.onOptionsItemSelected(item);
@@ -55,11 +55,10 @@ public class ListaCompra extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
-
         compraListas.clear();
         actualizaLista();
         adaptador.notifyDataSetChanged();
+        super.onResume();
     }
 
     @Override

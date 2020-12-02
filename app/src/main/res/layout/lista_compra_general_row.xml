@@ -33,13 +33,14 @@
                     android:orientation="horizontal"
                     android:weightSum="10">
 
-                    <EditText
+                    <AutoCompleteTextView
                         android:id="@+id/etCompraGeneralIng"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="10"
                         android:ems="10"
                         android:hint="Ingrediente"
+                        android:completionThreshold="1"
                         android:inputType="textPersonName" />
 
                 </LinearLayout>
@@ -108,7 +109,7 @@
                         android:text="TextView" />
 
                     <ImageView
-                        android:id="@+id/imageView"
+                        android:id="@+id/ivBtnCompraEliminaIng"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
