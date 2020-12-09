@@ -28,7 +28,6 @@
         <activity android:name=".ListaPlt.ListaPlatos" />
         <activity android:name=".ListaIng.ListaIngredientes" />
         <activity android:name=".ListaIng.AgregaIngrediente" />
-        <activity android:name=".Principal" />
         <activity android:name=".DetallePlatos.DetallePlatos" />
         <activity android:name=".MainActivity">
             <intent-filter>

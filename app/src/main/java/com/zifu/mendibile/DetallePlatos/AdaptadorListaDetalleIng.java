@@ -86,7 +86,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
             tvNombre = itemView.findViewById(R.id.tvAgregadoIngNombre);
             tvCoste = itemView.findViewById(R.id.tvDetalleListaIngCoste);
             tvRacion = itemView.findViewById(R.id.tvAgregadoIngRacion);
-            btnMas = itemView.findViewById(R.id.btnAgregadoIngQuitar);
+            btnMas = itemView.findViewById(R.id.btnDetalleListaIngPesoMas);
             btnMenos = itemView.findViewById(R.id.btnDetalleListaIngPesoMenos);
             etPeso = itemView.findViewById(R.id.etAgregadoIngPeso);
             tvCosteTotal = detalle.findViewById(R.id.tvDetallePltCoste);

@@ -5,8 +5,9 @@
 
         <!-- View background color -->
         <solid
-            android:color="@color/fondo" >
+            android:color="@color/fondoTransparente">
         </solid>
+
 
         <!-- View border color and width -->
         <stroke

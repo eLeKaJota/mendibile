@@ -1,49 +1,101 @@
 package com.zifu.mendibile;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
+import com.zifu.mendibile.Compra.ListaCompra;
+import com.zifu.mendibile.ListaIng.ListaIngredientes;
+import com.zifu.mendibile.ListaPlt.ListaPlatos;
+import com.zifu.mendibile.Proveedores.ListaProveedores;
 
 public class MainActivity extends AppCompatActivity {
 
     public static Context context;
     public static BBDDHelper helper;
-    
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        System.out.println(checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE"));
-        shouldShowRequestPermissionRationale("android.permission.WRITE_EXTERNAL_STORAGE");
-
-
         context = getApplicationContext();
         helper = new BBDDHelper(MainActivity.context);
 
-    Button btn1 = (Button) findViewById(R.id.btn1);
-    btn1.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent i = new Intent(getApplicationContext(),Principal.class);
-            startActivity(i);
-        }
-    });
+        LinearLayout llbtnPlatos = (LinearLayout) findViewById(R.id.llbtnPlatos);
+        LinearLayout llbtnIngrediente = (LinearLayout) findViewById(R.id.llbtnIngrediente);
+        LinearLayout llbtnProveedores = (LinearLayout) findViewById(R.id.llbtnProveedores);
+        LinearLayout llbtnCompras = (LinearLayout) findViewById(R.id.llbtnCompras);
+        ImageButton btnPlatos = (ImageButton)findViewById(R.id.btnPlatos);
+        ImageButton btnIngrediente = (ImageButton)findViewById(R.id.btnIngredientes);
+        ImageButton btnProveedores = (ImageButton)findViewById(R.id.btnProveedores);
+        ImageButton btnCompras = (ImageButton)findViewById(R.id.btnCompras);
 
+        btnPlatos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaPlatos.class);
+                startActivity(i);
+            }
+        });
 
+        btnIngrediente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaIngredientes.class);
+                startActivity(i);
+            }
+        });
+        btnProveedores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaProveedores.class);
+                startActivity(i);
+            }
+        });
+        btnCompras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaCompra.class);
+                startActivity(i);
+            }
+        });
 
+        llbtnPlatos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaPlatos.class);
+                startActivity(i);
+            }
+        });
+
+        llbtnIngrediente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaIngredientes.class);
+                startActivity(i);
+            }
+        });
+        llbtnProveedores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaProveedores.class);
+                startActivity(i);
+            }
+        });
+        llbtnCompras.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ListaCompra.class);
+                startActivity(i);
+            }
+        });
 
 
     }

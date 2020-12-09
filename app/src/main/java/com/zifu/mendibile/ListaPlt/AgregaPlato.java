@@ -15,7 +15,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -259,7 +258,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             public AgregadoViewHolder(@NonNull View itemView) {
                 super(itemView);
                 tvNombre = itemView.findViewById(R.id.tvAgregadoIngNombre);
-                btnQuitar = itemView.findViewById(R.id.btnAgregadoIngQuitar);
+                btnQuitar = itemView.findViewById(R.id.btnDetalleListaIngPesoMas);
 
             }
         }

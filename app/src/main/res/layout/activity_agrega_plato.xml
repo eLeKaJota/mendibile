@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/fondo_borde"
+                    android:background="@drawable/fondo_transparente"
                     android:orientation="vertical">
 
                     <com.github.florent37.expansionpanel.ExpansionHeader
@@ -130,7 +130,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/fondo_borde"
+                    android:background="@drawable/fondo_transparente"
                     android:orientation="vertical">
 
                     <com.github.florent37.expansionpanel.ExpansionHeader

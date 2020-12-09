@@ -5,65 +5,122 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/tvAgregadoIngNombre"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:text="Nombre: "
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="top"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvAgregadoIngRacion"
-        android:layout_width="96dp"
-        android:layout_height="26dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="4dp"
-        android:text="Peso/Racion:"
-        app:layout_constraintEnd_toStartOf="@+id/btnAgregadoIngQuitar"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="9dp"
+            android:background="@drawable/fondo_borde_listas"
+            android:elevation="3dp"
+            android:orientation="horizontal"
+            android:padding="7dp"
+            android:weightSum="6">
 
-    <EditText
-        android:id="@+id/etAgregadoIngPeso"
-        android:layout_width="88dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="60dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4.5"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvDetalleListaIngCoste"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Coste:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAgregadoIngNombre" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/btnAgregadoIngQuitar"
-        android:layout_width="40dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_up_float" />
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Nombre: " />
 
-    <ImageButton
-        android:id="@+id/btnDetalleListaIngPesoMenos"
-        android:layout_width="40dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAgregadoIngQuitar"
-        app:srcCompat="@android:drawable/arrow_down_float" />
+                    <TextView
+                        android:id="@+id/tvAgregadoIngNombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nombre: " />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Coste: " />
+
+                    <TextView
+                        android:id="@+id/tvDetalleListaIngCoste"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Coste:" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Medida:" />
+
+                    <TextView
+                        android:id="@+id/tvAgregadoIngRacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Peso/Racion:" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:background="@drawable/fondo_transparente"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/btnDetalleListaIngPesoMas"
+                    android:layout_width="70dp"
+                    android:layout_height="35dp"
+                    app:srcCompat="@android:drawable/arrow_up_float" />
+
+                <EditText
+                    android:id="@+id/etAgregadoIngPeso"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:background="@null"
+                    android:inputType="number"
+                    android:numeric="decimal"
+                    android:text="Name"
+                    android:textAlignment="center" />
+
+                <ImageButton
+                    android:id="@+id/btnDetalleListaIngPesoMenos"
+                    android:layout_width="70dp"
+                    android:layout_height="35dp"
+                    app:srcCompat="@android:drawable/arrow_down_float" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
