@@ -2,31 +2,62 @@ package com.zifu.mendibile.DetallePlatos;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.zifu.mendibile.BBDDHelper;
 import com.zifu.mendibile.ListaPlt.AgregaPlato;
 import com.zifu.mendibile.MainActivity;
+import com.zifu.mendibile.Modelos.Ingrediente;
 import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.R;
+import com.zifu.mendibile.tablas.TablaIngrediente;
 import com.zifu.mendibile.tablas.TablaPlato;
 import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
 
+import java.util.ArrayList;
+
+import static com.zifu.mendibile.MainActivity.helper;
+
 public class DetallePlatos extends AppCompatActivity {
-    PlatosViewPageAdapter platosViewPageAdapter;
-    ViewPager2 viewPager;
+//    PlatosViewPageAdapter platosViewPageAdapter;
+//    ViewPager2 viewPager;
     private double costeTotal;
     Plato plato;
     private Toolbar tlb;
+    private ImageView fotoPlato;
+    private TextView nombrePlato;
+    private RecyclerView listaIng;
+    private RecyclerView.Adapter adaptador;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<Ingrediente> ings;
+    TextInputLayout tlEditarReceta;
+    TextInputEditText txtEditarReceta;
+    Button btnEditarReceta;
+    TextView receta;
+    DetallePlatos detalle;
+    int estadoReceta = 0;
 
 
     public double getCosteTotal() {
@@ -99,39 +130,152 @@ public class DetallePlatos extends AppCompatActivity {
         getSupportActionBar().setTitle("Detalles del plato");
 
 
-        viewPager = (ViewPager2) findViewById(R.id.pager);
-        platosViewPageAdapter = new PlatosViewPageAdapter(this);
-        viewPager.setOffscreenPageLimit(5);
+        fotoPlato = (ImageView) findViewById(R.id.ivFotoPlatoDetalle);
+        nombrePlato = (TextView) findViewById(R.id.tvDetallePltNombre);
+        nombrePlato.setText("Nombre: " + plato.getNombre());
 
-        viewPager.setAdapter(platosViewPageAdapter);
+        if(plato.getFoto() != null && !plato.getFoto().equals("null")){
+            fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            fotoPlato.setImageURI(Uri.parse(plato.getFoto()));
+        }
+        actualizaCoste();
+
+        listaIng = (RecyclerView) findViewById(R.id.listaDetalleIng);
+        listaIng.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        listaIng.setLayoutManager(layoutManager);
+
+        actualizaLista();
+
+        //---------BINDEO
+        tlEditarReceta = (TextInputLayout) findViewById(R.id.tlEditarReceta);
+        txtEditarReceta = (TextInputEditText) findViewById(R.id.txtEditarReceta);
+        btnEditarReceta = (Button) findViewById(R.id.btnEditarReceta);
+        receta = (TextView) findViewById(R.id.tvDetallePltElaboracion);
+
+        //-----------MOSTRAR/GUARDAR EDITAR RECETA
+        btnEditarReceta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (estadoReceta ==0) {
+                    receta.setVisibility(View.GONE);
+                    tlEditarReceta.setVisibility(View.VISIBLE);
+                    txtEditarReceta.setText(receta.getText());
+                    btnEditarReceta.setText("Guardar receta");
+                    estadoReceta = 1;
+                }else{
+                    receta.setVisibility(View.VISIBLE);
+                    tlEditarReceta.setVisibility(View.GONE);
+                    receta.setText(txtEditarReceta.getText());
+                    editaReceta(txtEditarReceta.getText().toString());
+                    btnEditarReceta.setText("Editar receta");
+                    estadoReceta = 0;
+                }
+            }
+        });
+
+        receta.setText("" + plato.getElaboracion());
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        new TabLayoutMediator(tabLayout, viewPager,
-                new TabLayoutMediator.TabConfigurationStrategy() {
-                    @Override
-                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-                        if (position == 0){
-                            tab.setText("Resumen");
-                            tab.setIcon(R.drawable.factura);
-                        }
-                        if (position == 1){
-                            tab.setText("Ingredientes");
-                            tab.setIcon(R.drawable.plato);
-                        }
-                        if (position == 2){
-                            tab.setText("Receta");
-                            tab.setIcon(R.drawable.receta);
-                        }
-                    }
-                }).attach();
+
+
+
+//        viewPager = (ViewPager2) findViewById(R.id.pager);
+//        platosViewPageAdapter = new PlatosViewPageAdapter(this);
+//        viewPager.setOffscreenPageLimit(5);
+//
+//        viewPager.setAdapter(platosViewPageAdapter);
+//
+//
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+//        new TabLayoutMediator(tabLayout, viewPager,
+//                new TabLayoutMediator.TabConfigurationStrategy() {
+//                    @Override
+//                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
+//                        if (position == 0){
+//                            tab.setText("Resumen");
+//                            tab.setIcon(R.drawable.factura);
+//                        }
+//                        if (position == 1){
+//                            tab.setText("Ingredientes");
+//                            tab.setIcon(R.drawable.plato);
+//                        }
+//                        if (position == 2){
+//                            tab.setText("Receta");
+//                            tab.setIcon(R.drawable.receta);
+//                        }
+//                    }
+//                }).attach();
     }
 
     public void borrarPlato(String columna, String argumentos, String tabla){
-        SQLiteDatabase db = MainActivity.helper.getWritableDatabase();
+        SQLiteDatabase db = helper.getWritableDatabase();
         String selection = columna + " LIKE ?";
         String[] selectionArgs = { argumentos };
         int deletedRows = db.delete(tabla, selection, selectionArgs);
 
+    }
+    public void actualizaCoste(){
+        ((TextView) findViewById(R.id.tvDetallePltCoste))
+                .setText("Coste: " +(double)Math.round( plato.getCoste()*100)/100 + "€");
+    }
+    public void actualizaLista(){
+        SQLiteDatabase db = helper.getReadableDatabase();
+        ings = new ArrayList<Ingrediente>();
+        for(String i: recuperaIng()){
+
+            String selection = TablaIngrediente.NOMBRE_COLUMNA_1 + " = ?";
+            String[] selectionArgs = { i };
+
+            Cursor cursor = db.query(TablaIngrediente.NOMBRE_TABLA,null,selection,selectionArgs,null,null,null);
+
+            cursor.moveToFirst();
+            int id = cursor.getInt(0);
+            String nombre = cursor.getString(1);
+            Double precio = cursor.getDouble(2);
+            String formato = cursor.getString(3);
+            String proveedor = cursor.getString(4);
+
+            Ingrediente ing = new Ingrediente(id,nombre,formato,proveedor,precio);
+            ings.add(ing);
+
+            cursor.close();
+
+        }
+        adaptador = new AdaptadorListaDetalleIng(ings,helper,this);
+        listaIng.setAdapter(adaptador);
+
+
+    }
+    //----------RECUPERA ARRAY DE INGREDIENTES
+    public String[] recuperaIng(){
+        ArrayList<String> in = new ArrayList<String>();
+        SQLiteDatabase db = MainActivity.helper.getReadableDatabase();
+        String selection = TablaPlatoIngredientePeso.NOMBRE_COLUMNA_2 + " = ?";
+        String[] selectionArgs = { String.valueOf(plato.getId()) };
+
+        Cursor cursor = db.query(TablaPlatoIngredientePeso.NOMBRE_TABLA,null,selection,selectionArgs,null,null,null);
+
+        while(cursor.moveToNext()){
+            String ingId = cursor.getString(2);
+            in.add(String.valueOf(ingId));
+        }
+        cursor.close();
+        String[] i = in.toArray(new String[0]);
+        return i;
+    }
+
+    //----------------------------------------
+
+    public void editaReceta(String receta){
+        SQLiteDatabase db = MainActivity.helper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TablaPlato.NOMBRE_COLUMNA_6,receta);
+
+        String selection = TablaPlato.NOMBRE_COLUMNA_1 + " LIKE ?";
+        String[] selectionArgs = { String.valueOf(plato.getId()) };
+
+        db.update(TablaPlato.NOMBRE_TABLA,values,selection,selectionArgs);
     }
 }

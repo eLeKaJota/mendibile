@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondomendibileapp"
     android:orientation="vertical">
 
     <include
@@ -10,18 +12,187 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/pager"
+    <ImageView
+        android:id="@+id/ivFotoPlatoDetalle"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/alifu" />
 
-    </androidx.viewpager2.widget.ViewPager2>
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
+    <TextView
+        android:id="@+id/tvDetallePltNombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F1FAEE" />
+        android:text="Nombre"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvDetallePltCoste"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Coste"
+        android:textSize="18sp" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/fondo_borde_listas"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <com.github.florent37.expansionpanel.ExpansionHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    app:expansion_headerIndicator="@id/headerIndicatorDetalleIng"
+                    app:expansion_layout="@id/expansionDetalleIng"
+                    app:expansion_toggleOnClick="true">
+
+                    <!-- HEADER -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Ingredientes"
+                        android:textSize="18sp" />
+                    ...
+                    <!-- HEADER INDICATOR -->
+                    <ImageView
+                        android:id="@+id/headerIndicatorDetalleIng"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginLeft="16dp"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+
+
+                </com.github.florent37.expansionpanel.ExpansionHeader>
+
+                <com.github.florent37.expansionpanel.ExpansionLayout
+                    android:id="@+id/expansionDetalleIng"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- CONTENT -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/listaDetalleIng"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.github.florent37.expansionpanel.ExpansionLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/fondo_borde_listas"
+                android:orientation="vertical"
+                android:padding="5dp">
+
+                <com.github.florent37.expansionpanel.ExpansionHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_vertical"
+                    app:expansion_headerIndicator="@id/headerIndicatorDetalleReceta"
+                    app:expansion_layout="@id/expansionDetalleReceta"
+                    app:expansion_toggleOnClick="true">
+
+                    <!-- HEADER -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="Receta"
+                        android:textSize="18sp" />
+                    ...
+                    <!-- HEADER INDICATOR -->
+                    <ImageView
+                        android:id="@+id/headerIndicatorDetalleReceta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginLeft="16dp"
+                        android:adjustViewBounds="true"
+                        app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+
+
+                </com.github.florent37.expansionpanel.ExpansionHeader>
+
+                <com.github.florent37.expansionpanel.ExpansionLayout
+                    android:id="@+id/expansionDetalleReceta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!-- CONTENT -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <Button
+                            android:id="@+id/btnEditarReceta"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="1dp"
+                            android:text="Editar receta" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tlEditarReceta"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/txtEditarReceta"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top|left"
+                                android:hint="Escribe aquí tu receta."
+                                android:minLines="15" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvDetallePltElaboracion"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp"
+                                    android:text='Pulsa en "Editar receta" para editar la elaboración de este plato.' />
+                            </LinearLayout>
+                        </ScrollView>
+
+                    </LinearLayout>
+
+                </com.github.florent37.expansionpanel.ExpansionLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

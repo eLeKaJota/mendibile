@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondomendibileapp"
     tools:context=".Compra.AgregaCompraGeneral">
 
     <LinearLayout
@@ -45,7 +46,8 @@
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@color/fondo">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/txtNotasCompraGeneral"

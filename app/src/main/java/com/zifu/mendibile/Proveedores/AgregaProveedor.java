@@ -1,19 +1,26 @@
 package com.zifu.mendibile.Proveedores;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +29,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Proveedor;
@@ -35,13 +44,16 @@ import java.util.ArrayList;
 
 public class AgregaProveedor extends AppCompatActivity {
 
+    final int AGREGAR_CONTACTO = 439;
+
     Toolbar tlb;
     RecyclerView listaTlf;
     RecyclerView.Adapter adaptador;
     LayoutManager layoutManager;
     ArrayList<ProveedorTlf> tlfs;
-    EditText nombre,productos,cif,notas;
+    EditText nombre,productos,cif,notas, nombretlf,telefonotlf;
     Button agregar;
+    ImageButton agregartlf,contactostlf;
     Proveedor prov;
     int modifica;
 
@@ -64,6 +76,37 @@ public class AgregaProveedor extends AppCompatActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case AGREGAR_CONTACTO :
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri datosContacto = data.getData();
+                    ContentResolver cr = getContentResolver();
+                    Cursor cur = cr.query(datosContacto, null, null, null, null);
+                    if (cur.getCount() > 0) {
+                        if(cur.moveToNext()) {
+                            String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                            String nombre = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                            if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
+                            {
+                                Cursor telefonos = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
+                                telefonos.moveToFirst();
+                                    String tlf = telefonos.getString(telefonos.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                    nombretlf.setText(nombre);
+                                    telefonotlf.setText(tlf);
+                                telefonos.close();
+                            }
+
+                        }
+                    }
+                    cur.close();
+                }
+                break;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agrega_proveedor);
@@ -75,6 +118,10 @@ public class AgregaProveedor extends AppCompatActivity {
         cif = (EditText) findViewById(R.id.txtProvCif);
         notas = (EditText) findViewById(R.id.txtProvNotas);
         agregar = (Button) findViewById(R.id.btnProvAgregar);
+        nombretlf = (EditText) findViewById(R.id.txtProvContactoNombre);
+        telefonotlf = (EditText) findViewById(R.id.txtProvContactoTlf);
+        agregartlf = (ImageButton) findViewById(R.id.ibProvAgregaTlf);
+        contactostlf = (ImageButton) findViewById(R.id.ibProvAgenda);
 
         Bundle datos = getIntent().getExtras();
         if(datos != null){
@@ -92,7 +139,7 @@ public class AgregaProveedor extends AppCompatActivity {
 
         }else{
             tlfs = new ArrayList<>();
-            tlfs.add(new ProveedorTlf(1,1,"",""));
+//            tlfs.add(new ProveedorTlf(1,1,"",""));
         }
 
         tlb.setTitle("Agregar proveedor");
@@ -102,17 +149,25 @@ public class AgregaProveedor extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         listaTlf.setLayoutManager(layoutManager);
 
+
+
+
         class TlfViewHolder extends RecyclerView.ViewHolder{
-            EditText nombre,telefono;
-            ImageButton agregar;
-            int borrar = 0;
+            TextView contacto;
+            ImageView borrarTlf;
 
             public TlfViewHolder(@NonNull View itemView) {
                 super(itemView);
+                contacto = (TextView) itemView.findViewById(R.id.tvDetalleCompraIngProv);
+                borrarTlf = (ImageView) itemView.findViewById(R.id.ivDetalleCompraIngElimina);
 
-                nombre = (EditText) itemView.findViewById(R.id.txtAgregaProvTlfNombre);
-                telefono = (EditText) itemView.findViewById(R.id.txtAgregaProvTlfTlf);
-                agregar = (ImageButton) itemView.findViewById(R.id.btnAgregaProvOtroTlf);
+                borrarTlf.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        tlfs.remove(getAdapterPosition());
+                        adaptador.notifyDataSetChanged();
+                    }
+                });
             }
         }
         adaptador = new RecyclerView.Adapter<TlfViewHolder>() {
@@ -121,69 +176,15 @@ public class AgregaProveedor extends AppCompatActivity {
             @Override
             public TlfViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_agrega_prov_tlf_row, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.lista_detalle_compra_ing_row, parent, false);
                 return new TlfViewHolder(view);
             }
 
             @Override
             public void onBindViewHolder(@NonNull TlfViewHolder holder, int position) {
 
-                if(modifica!=0){
-                    holder.nombre.setText(tlfs.get(position).getNombre());
-                    holder.telefono.setText(tlfs.get(position).getTelefono());
-                }
+                holder.contacto.setText(tlfs.get(position).getNombre() + " - " + tlfs.get(position).getTelefono());
 
-                holder.nombre.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        tlfs.get(position).setNombre(holder.nombre.getText().toString());
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-                holder.telefono.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        tlfs.get(position).setTelefono(holder.telefono.getText().toString());
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-                holder.agregar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-            //TODO Arreglar el cambio de botones y orden.
-                        if(holder.borrar == 0){
-                            tlfs.add(0,new ProveedorTlf(1,1,"",""));
-                            holder.agregar.setImageResource(android.R.drawable.ic_menu_delete);
-                            holder.borrar = 1;
-                            notifyItemInserted(tlfs.size());
-                        }else{
-                            holder.borrar = 0;
-                            holder.agregar.setImageResource(android.R.drawable.ic_input_add);
-                            tlfs.remove(position);
-                            notifyDataSetChanged();
-                        }
-
-
-                    }
-                });
             }
 
             @Override
@@ -203,9 +204,34 @@ public class AgregaProveedor extends AppCompatActivity {
         adaptador.setHasStableIds(true);
         listaTlf.setAdapter(adaptador);
 
+        agregartlf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tlfs.add(new ProveedorTlf(nombretlf.getText().toString(),telefonotlf.getText().toString()));
+                adaptador.notifyDataSetChanged();
+                nombretlf.setText("");
+                telefonotlf.setText("");
+                nombretlf.requestFocus();
+            }
+        });
+
+        contactostlf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                startActivityForResult(contactPickerIntent,AGREGAR_CONTACTO);
+            }
+        });
+
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(telefonotlf.getText() != null){
+                    if(!telefonotlf.getText().toString().equals("")){
+                    tlfs.add(new ProveedorTlf(nombretlf.getText().toString(),telefonotlf.getText().toString()));
+                    }
+                }
+
                 agregaProveedor();
             }
         });

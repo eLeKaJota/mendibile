@@ -123,6 +123,8 @@ public class AgregaCompraGeneral extends AppCompatActivity {
                 return new ingsViewHolder(view);
             }
 
+
+
             @Override
             public void onBindViewHolder(@NonNull ingsViewHolder holder, int position) {
 

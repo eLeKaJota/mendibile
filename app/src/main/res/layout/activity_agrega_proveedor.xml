@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fondomendibileapp"
     tools:context=".Proveedores.AgregaProveedor">
 
     <ScrollView
@@ -13,7 +14,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <include
                 android:id="@+id/tlbAgregaProv"
@@ -24,7 +25,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/fondo">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtProvNombre"
@@ -36,7 +38,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/fondo">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtProvProductos"
@@ -48,7 +51,8 @@
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/fondo">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtProvCif"
@@ -57,17 +61,90 @@
                     android:hint="cif" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="7dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Agrega tantos números de telefono como necesites:" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:boxBackgroundColor="@color/fondo">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/txtProvContactoNombre"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Nombre del contacto" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageButton
+                        android:id="@+id/ibProvAgenda"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:adjustViewBounds="false"
+                        android:background="@color/fondoTransparente"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/agenda" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        app:boxBackgroundColor="@color/fondo">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/txtProvContactoTlf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Numero de telefono del contacto" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageButton
+                        android:id="@+id/ibProvAgregaTlf"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@android:drawable/ic_input_add" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listaProvTlf"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
             </androidx.recyclerview.widget.RecyclerView>
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/fondo">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/txtProvNotas"

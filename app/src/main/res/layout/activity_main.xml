@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo1"
+    android:background="@drawable/fondomendibile"
     tools:context=".Principal">
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_width="127dp"
             android:layout_height="132dp"
             android:layout_marginTop="50dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="80dp"
             app:srcCompat="@drawable/logomend" />
 
         <androidx.core.widget.NestedScrollView
@@ -30,7 +30,7 @@
                 android:id="@+id/llbtnPlatos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"

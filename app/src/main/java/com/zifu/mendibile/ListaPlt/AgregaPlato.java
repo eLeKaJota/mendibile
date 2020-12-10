@@ -27,6 +27,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.xiaofeng.flowlayoutmanager.Alignment;
+import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 import com.zifu.mendibile.BBDDHelper;
 import com.zifu.mendibile.ListaIng.AgregaIngrediente;
 import com.zifu.mendibile.Modelos.IngPeso;
@@ -233,13 +236,13 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
         //--------------CONFIGURA LOS DOS RECYCLERVIEW
         layoutManagerAgrega = new GridLayoutManager(this,4);
-        layoutManagerAgregado = new GridLayoutManager(this,1);
+
+        FlexboxLayoutManager fl = new FlexboxLayoutManager(this);
+        layoutManagerAgregado = fl;
         listaAgrega.setHasFixedSize(true);
         listaAgrega.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         listaAgrega.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL));
         listaAgrega.setLayoutManager(layoutManagerAgrega);
-        //listaAgregado.setHasFixedSize(true);
-        listaAgregado.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         listaAgregado.setLayoutManager(layoutManagerAgregado);
 
         //---------------ABRE LA GALERÍA

@@ -13,6 +13,11 @@ public class ProveedorTlf implements Serializable {
         this.telefono = telefono;
     }
 
+    public ProveedorTlf(String nombre, String telefono) {
+        this.nombre = nombre;
+        this.telefono = telefono;
+    }
+
     public int getId() {
         return id;
     }

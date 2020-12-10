@@ -42,4 +42,5 @@ dependencies {
     implementation 'com.github.florent37:expansionpanel:1.2.4'
     compile 'com.xiaofeng.android:flowlayoutmanager:1.2.3.2'
     implementation 'com.github.sohe1l.arrownumberpicker:arrownumberpicker:0.1.2'
+    implementation 'com.google.android:flexbox:2.0.1'
 }

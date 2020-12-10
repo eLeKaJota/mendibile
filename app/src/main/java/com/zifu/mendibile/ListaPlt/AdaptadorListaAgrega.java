@@ -64,7 +64,7 @@ public class AdaptadorListaAgrega extends RecyclerView.Adapter<AdaptadorListaAgr
 
                     agregaPlato.adaptadorAgregado.notifyItemInserted(agregaPlato.ingAgregados.size() -1);
                     notifyDataSetChanged();
-
+                    //notifyItemRemoved(listaIndex -1 );
                 }
             });
 

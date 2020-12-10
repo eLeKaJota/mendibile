@@ -32,7 +32,6 @@ import java.util.List;
 public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorListaDetalleIng.ingViewHolder> {
 
     private List<Ingrediente> ing;
-    final private ListItemClick ingOnClickListener;
     final BBDDHelper helper;
     DetallePlatos detalle;
     private Handler handlerMas;
@@ -65,18 +64,15 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
         return ing.size();
     }
 
-    public interface ListItemClick{
-        void onListItemClick(int clickedItem);
-    }
 
-    public AdaptadorListaDetalleIng(ArrayList<Ingrediente> ing, ListItemClick listener, BBDDHelper helper, DetallePlatos detalle){
+
+    public AdaptadorListaDetalleIng(ArrayList<Ingrediente> ing, BBDDHelper helper, DetallePlatos detalle){
         this.ing = ing;
         this.helper = helper;
-        ingOnClickListener = listener;
         this.detalle = detalle;
     }
 
-    public class ingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ingViewHolder extends RecyclerView.ViewHolder{
         public TextView tvNombre, tvCoste, tvRacion, tvCosteTotal;
         public ImageButton btnMas,btnMenos;
         public EditText etPeso;
@@ -93,7 +89,6 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
             costeTotal = detalle.plato.getCoste();
 
 
-            itemView.setOnClickListener(this);
         }
 
         void sumaCoste(){
@@ -133,6 +128,8 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
                     int id = i.getId();
                     double costeTemp = Double.parseDouble(tvCoste.getText().toString());
                     double nuevoCoste = Double.parseDouble(etPeso.getText().toString()) * coste;
+
+
                     tvCoste.setText(String.valueOf((double)Math.round(nuevoCoste * 100)/100));
 
 
@@ -172,6 +169,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
                             handlerMas = new Handler();
                             handlerMas.postDelayed(accionMas, 400);
                             break;
+                        case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:
                             if (handlerMas == null) return true;
                             handlerMas.removeCallbacks(accionMas);
@@ -198,11 +196,13 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
                             handlerMenos = new Handler();
                             handlerMenos.postDelayed(accionMenos, 400);
                             break;
+                        case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_UP:
                             if (handlerMenos == null) return true;
                             handlerMenos.removeCallbacks(accionMenos);
                             handlerMenos = null;
                             break;
+
                     }
                     return false;
                 }
@@ -261,11 +261,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
             return ingPesos;
         }
 
-        @Override
-        public void onClick(View v) {
-            int clickedItem = getAdapterPosition();
-            ingOnClickListener.onListItemClick(clickedItem);
-        }
+
     }
 
 

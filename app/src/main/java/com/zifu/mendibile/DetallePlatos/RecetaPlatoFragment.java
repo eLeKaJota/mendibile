@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -20,7 +19,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaPlato;
-import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +31,7 @@ public class RecetaPlatoFragment extends Fragment {
     Button btnEditarReceta;
     TextView receta;
     DetallePlatos detalle;
-    int estado = 0;
+    int estadoReceta = 0;
 
 
     public RecetaPlatoFragment() {
@@ -61,19 +59,19 @@ public class RecetaPlatoFragment extends Fragment {
         btnEditarReceta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (estado ==0) {
+                if (estadoReceta ==0) {
                     receta.setVisibility(View.GONE);
                     tlEditarReceta.setVisibility(View.VISIBLE);
                     txtEditarReceta.setText(receta.getText());
                     btnEditarReceta.setText("Guardar receta");
-                    estado = 1;
+                    estadoReceta = 1;
                 }else{
                     receta.setVisibility(View.VISIBLE);
                     tlEditarReceta.setVisibility(View.GONE);
                     receta.setText(txtEditarReceta.getText());
                     editaReceta(txtEditarReceta.getText().toString());
                     btnEditarReceta.setText("Editar receta");
-                    estado = 0;
+                    estadoReceta = 0;
                 }
             }
         });

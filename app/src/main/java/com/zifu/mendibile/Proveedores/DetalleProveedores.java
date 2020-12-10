@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -108,6 +110,7 @@ public class DetalleProveedores extends AppCompatActivity {
                 nombre = itemView.findViewById(R.id.txtDetalleProvIng);
                 tlf = itemView.findViewById(R.id.txtDetalleProvTlfTlf);
                 llamar = itemView.findViewById(R.id.btnAgregaProvOtroTlf);
+
             }
         }
         class IngViewHolder extends RecyclerView.ViewHolder{
@@ -128,6 +131,8 @@ public class DetalleProveedores extends AppCompatActivity {
                 return new TlfViewHolder(tlf);
             }
 
+
+
             @Override
             public void onBindViewHolder(@NonNull TlfViewHolder holder, int position) {
                 holder.nombre.setText(prov.getTelefonos().get(position).getNombre());
@@ -135,7 +140,7 @@ public class DetalleProveedores extends AppCompatActivity {
                 holder.llamar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        System.out.println("Llamando a: " + holder.tlf.getText());
+                        startActivity(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", holder.tlf.getText().toString(), null)));
                     }
                 });
             }

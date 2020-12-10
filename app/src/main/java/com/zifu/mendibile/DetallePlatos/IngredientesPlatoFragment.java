@@ -31,7 +31,7 @@ import java.util.Map;
  *
  * A simple {@link Fragment} subclass.
  */
-public class IngredientesPlatoFragment extends Fragment implements AdaptadorListaDetalleIng.ListItemClick {
+public class IngredientesPlatoFragment extends Fragment  {
 
     private RecyclerView listaIng;
     private RecyclerView.Adapter adaptador;
@@ -62,7 +62,6 @@ public class IngredientesPlatoFragment extends Fragment implements AdaptadorList
         detalle = (DetallePlatos) getActivity();
         listaIng = view.findViewById(R.id.listaDetalleIng);
         listaIng.setHasFixedSize(true);
-        listaIng.addItemDecoration(new DividerItemDecoration(detalle,DividerItemDecoration.VERTICAL));
         layoutManager = new LinearLayoutManager(detalle);
         listaIng.setLayoutManager(layoutManager);
         vista = view.getContext();
@@ -114,19 +113,11 @@ public class IngredientesPlatoFragment extends Fragment implements AdaptadorList
             cursor.close();
 
         }
-        adaptador = new AdaptadorListaDetalleIng(ings, this,helper,detalle);
+        adaptador = new AdaptadorListaDetalleIng(ings,helper,detalle);
         listaIng.setAdapter(adaptador);
 
 
     }
 
-    @Override
-    public void onListItemClick(int clickedItem) {
-        if(mToast!= null){
-            mToast.cancel();
-        }
 
-        mToast = mToast.makeText(detalle, "Elemento pulsado: " + clickedItem, Toast.LENGTH_SHORT);
-        mToast.show();
-    }
 }
