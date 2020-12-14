@@ -10,17 +10,21 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zifu.mendibile.ListaIng.AdaptadorListaIng;
+import com.zifu.mendibile.ListaPlt.AdaptadorListaPlt;
 import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Ingrediente;
+import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.Modelos.Proveedor;
 import com.zifu.mendibile.Modelos.ProveedorTlf;
 import com.zifu.mendibile.R;
@@ -33,19 +37,84 @@ import java.util.ArrayList;
 public class ListaProveedores extends AppCompatActivity {
 
     private Toolbar tlb;
-    private ArrayList<Proveedor> proveedores;
+    private ArrayList<Proveedor> proveedores,listaFiltrada,listaTemp;
     private RecyclerView listaProv;
     private RecyclerView.Adapter adaptador;
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton floatAgregaProv;
     private int clickItem, returnId;
+    SearchView buscador;
+    boolean buscando;
+
 
 
     //----------------TOOLBAR
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_lista_prov,menu);
+
+        MenuItem buscar = menu.findItem(R.id.itmBuscarProv);
+        buscador = (SearchView) buscar.getActionView();
+        buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String busqueda) {
+                try{
+                    if(busqueda.length()>0) {
+                        buscando = true;
+                    }else{
+                        buscando = false;
+                    }
+                    ArrayList<Proveedor> listaFiltrada = filtro(listaTemp,busqueda);
+                    filtrado(listaFiltrada);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                Log.d("bucar",busqueda);
+                return false;
+            }
+        });
+
+        buscar.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                filtrado(listaTemp);
+                return true;
+            }
+        });
+
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void filtrado(ArrayList<Proveedor> p){
+        proveedores = new ArrayList<Proveedor>();
+        proveedores.addAll(p);
+        adaptador.notifyDataSetChanged();
+    }
+
+    private ArrayList<Proveedor> filtro(ArrayList<Proveedor> listaTemp, String busqueda){
+        listaFiltrada = new ArrayList<>();
+        try{
+            busqueda = busqueda.toLowerCase();
+            for (Proveedor p : listaTemp){
+                String pNombre = p.getNombre().toLowerCase();
+                if(pNombre.contains(busqueda)){
+                    listaFiltrada.add(p);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return listaFiltrada;
     }
 
     @Override
@@ -65,8 +134,14 @@ public class ListaProveedores extends AppCompatActivity {
     //-----------ON CLICK
     public void onClickProv(int position){
         Intent i = new Intent(this,DetalleProveedores.class);
-        i.putExtra("Prov",proveedores.get(position));
+        if(buscando) i.putExtra("Prov",listaFiltrada.get(position));
+        else i.putExtra("Prov",listaTemp.get(position));
+
         startActivity(i);
+
+        buscador.setQuery("",false);
+        buscador.onActionViewCollapsed();
+        buscador.clearFocus();
     }
     //------------------------
 
@@ -92,6 +167,8 @@ public class ListaProveedores extends AppCompatActivity {
                 }
             }
         }
+        listaTemp = new ArrayList<>();
+        listaTemp.addAll(proveedores);
     }
 
     @Override
@@ -134,6 +211,8 @@ public class ListaProveedores extends AppCompatActivity {
                 clickItem = getAdapterPosition();
                 onClickProv(clickItem);
             }
+
+
         }
         adaptador = new RecyclerView.Adapter<ProveedorViewHolder>() {
             @NonNull
@@ -153,6 +232,8 @@ public class ListaProveedores extends AppCompatActivity {
             public int getItemCount() {
                 return proveedores.size();
             }
+
+
         };
         listaProv.setAdapter(adaptador);
         //---------------------------------------------------------------------------

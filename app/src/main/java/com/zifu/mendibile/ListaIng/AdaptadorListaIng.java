@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.zifu.mendibile.BBDDHelper;
 import com.zifu.mendibile.Modelos.Ingrediente;
+import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
 import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
@@ -37,6 +38,11 @@ public class AdaptadorListaIng extends RecyclerView.Adapter<AdaptadorListaIng.in
         this.listaIng = listaIng;
     }
 
+    public void filtro(ArrayList<Ingrediente> p){
+        this.ing = new ArrayList<Ingrediente>();
+        this.ing.addAll(p);
+        notifyDataSetChanged();
+    }
 
 
 

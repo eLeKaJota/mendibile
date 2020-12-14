@@ -21,7 +21,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_weight="9"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/ivDetalleCompraIngElimina"

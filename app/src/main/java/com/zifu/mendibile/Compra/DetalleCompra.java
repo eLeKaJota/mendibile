@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +18,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -201,10 +204,10 @@ public class DetalleCompra extends AppCompatActivity{
 
         class ProvViewHolder extends RecyclerView.ViewHolder  {
             TextView prov;
-//            RecyclerView listaIngs;
-//            RecyclerView.Adapter adaptadorIngs;
             LayoutManager layoutIngs;
             ArrayList<CompraIngrediente> ingProv;
+            String listaCompra = "Pedido: \n";
+            ImageButton copiar,compartir;
 
 
 
@@ -214,18 +217,21 @@ public class DetalleCompra extends AppCompatActivity{
                 listaIngs = (RecyclerView) itemView.findViewById(R.id.listaDetalleCompraProv);
                 layoutIngs = new LinearLayoutManager(getApplicationContext());
                 ingProv = new ArrayList<>();
+                copiar = (ImageButton) itemView.findViewById(R.id.ibDetalleCompraCopiar);
+                compartir = (ImageButton) itemView.findViewById(R.id.ibDetalleCompraCompartir);
 
 
 
 
                 //ADAPTADOR DEL RECYCLERVIEW DE PROVEEDOR
-                class ingsViewHolder extends RecyclerView.ViewHolder{
+                class ingsViewHolder extends RecyclerView.ViewHolder  {
                     TextView ing;
                     ImageView elimina;
                     public ingsViewHolder(@NonNull View itemView) {
                         super(itemView);
                         ing = (TextView) itemView.findViewById(R.id.tvDetalleCompraIngProv);
                         elimina = (ImageView) itemView.findViewById(R.id.ivDetalleCompraIngElimina);
+
 
                         elimina.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -244,7 +250,36 @@ public class DetalleCompra extends AppCompatActivity{
 
                             }
                         });
+
+                        copiar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast copiado = Toast.makeText(getApplicationContext(),"Lista de compra copiada",Toast.LENGTH_SHORT);
+                                copiado.show();
+
+                                ClipboardManager portapapeles = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData datos = ClipData.newPlainText("ListaCompra", listaCompra);
+                                if (portapapeles == null || datos == null) return;
+                                portapapeles.setPrimaryClip(datos);
+                            }
+                        });
+
+                        compartir.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent compartirLista = new Intent();
+                                compartirLista.setAction(Intent.ACTION_SEND);
+                                compartirLista.putExtra(Intent.EXTRA_TEXT, listaCompra);
+                                compartirLista.setType("text/rtf");
+                                compartirLista.setPackage("com.whatsapp");
+
+                                Intent shareIntent = Intent.createChooser(compartirLista, null);
+                                startActivity(shareIntent);
+                            }
+                        });
+
                     }
+
 
                 }
                 adaptadorIngs = new RecyclerView.Adapter<ingsViewHolder>() {
@@ -262,9 +297,15 @@ public class DetalleCompra extends AppCompatActivity{
                     public void onBindViewHolder(@NonNull ingsViewHolder holder, int position) {
                         if (!ingProv.get(position).getCantidad().equals("")){
                             holder.ing.setText("[" + ingProv.get(position).getCantidad() + " " + ingProv.get(position).getFormmato() + "] " + ingProv.get(position).getNombre());
+                            listaCompra = listaCompra + "[" + ingProv.get(position).getCantidad() + " " + ingProv.get(position).getFormmato() + "] " + ingProv.get(position).getNombre();
                         }else{
                             holder.ing.setText("[ * ] " + ingProv.get(position).getNombre());
+                            listaCompra = listaCompra + "[ * ] " + ingProv.get(position).getNombre();
                         }
+                        if(position < getItemCount() -1){
+                            listaCompra = listaCompra  + "\n";
+                        }
+
 
                     }
 
@@ -295,6 +336,7 @@ public class DetalleCompra extends AppCompatActivity{
             }
 
 
+
         }
         adaptador = new RecyclerView.Adapter<ProvViewHolder>() {
 
@@ -316,6 +358,7 @@ public class DetalleCompra extends AppCompatActivity{
                     }
                 }
             }
+
 
 
             @Override
@@ -356,7 +399,6 @@ public class DetalleCompra extends AppCompatActivity{
                 ings.clear();
                 provs.clear();
                 listaProv.removeAllViews();
-                listaIngs.removeAllViews();
 
                 actualizaIngs();
 

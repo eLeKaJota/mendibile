@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ListaPlt.ListaPlatos">
 
-
+    <item android:title="Buscar"
+        android:icon="@android:drawable/ic_menu_search"
+        android:id="@+id/itmBuscarPlt"
+        app:showAsAction="always"
+        app:actionViewClass="android.widget.SearchView"></item>
 
     <item android:id="@+id/itmListaPlatosAgrega"
         android:title="Nuevo plato"

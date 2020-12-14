@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,15 +13,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.zifu.mendibile.BBDDHelper;
+import com.zifu.mendibile.ListaPlt.AdaptadorListaPlt;
 import com.zifu.mendibile.ListaPlt.AgregaPlato;
 import com.zifu.mendibile.Modelos.Ingrediente;
+import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
 
@@ -32,17 +37,73 @@ public class ListaIngredientes extends AppCompatActivity implements AdaptadorLis
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton floatAgregaIng;
     private Toast mToast;
-    ArrayList<Ingrediente> ingredientes;
+    ArrayList<Ingrediente> ingredientes, listaFiltrada;
     final BBDDHelper helper = new BBDDHelper(this);
     Toolbar tlb;
-
+    SearchView buscador;
+    boolean buscando;
 
 
     //-------------TOOLBAR
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_lista_ing,menu);
+        MenuItem buscar = menu.findItem(R.id.itmBuscarIng);
+        buscador = (SearchView) buscar.getActionView();
+        buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String busqueda) {
+                if(busqueda.length()>0){
+                    buscando = true;
+                } else{
+                    buscando = false;
+                }
+                try{
+                    listaFiltrada = filtro(ingredientes,busqueda);
+                    ((AdaptadorListaIng)listaIng.getAdapter()).filtro(listaFiltrada);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                Log.d("bucar",busqueda);
+                return false;
+            }
+        });
+
+        MenuItemCompat.setOnActionExpandListener(buscar, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                ((AdaptadorListaIng)listaIng.getAdapter()).filtro(ingredientes);
+                return true;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private ArrayList<Ingrediente> filtro(ArrayList<Ingrediente> platos, String busqueda){
+        ArrayList<Ingrediente> listaFiltrada = new ArrayList<>();
+        try{
+            busqueda = busqueda.toLowerCase();
+            for (Ingrediente p : platos){
+                String pNombre = p.getNombre().toLowerCase();
+                if(pNombre.contains(busqueda)){
+                    listaFiltrada.add(p);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return listaFiltrada;
     }
 
     @Override
@@ -88,6 +149,7 @@ public class ListaIngredientes extends AppCompatActivity implements AdaptadorLis
                 Intent i = new Intent(getApplicationContext(),AgregaIngrediente.class);
                 i.putExtra("modifica",0);
                 startActivity(i);
+
             }
         });
     }
@@ -117,10 +179,19 @@ public class ListaIngredientes extends AppCompatActivity implements AdaptadorLis
     @Override
     public void onListItemClick(int clickedItem) {
         Intent i = new Intent(this, AgregaIngrediente.class);
-        i.putExtra("modifica",ingredientes.get(clickedItem).getId());
-        i.putExtra("ing",ingredientes.get(clickedItem));
-
+        if(buscando){
+            i.putExtra("modifica",listaFiltrada.get(clickedItem).getId());
+            i.putExtra("ing",listaFiltrada.get(clickedItem));
+        }
+        else{
+            i.putExtra("modifica",ingredientes.get(clickedItem).getId());
+            i.putExtra("ing",ingredientes.get(clickedItem));
+        }
         startActivity(i);
+
+        buscador.setQuery("",false);
+        buscador.onActionViewCollapsed();
+        buscador.clearFocus();
     }
 
 

@@ -3,6 +3,7 @@ package com.zifu.mendibile.ListaPlt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +13,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
@@ -41,16 +44,73 @@ public class ListaPlatos extends AppCompatActivity implements AdaptadorListaPlt.
     private RecyclerView.LayoutManager layoutManager;
     private FloatingActionButton floatAgregaPlato;
     private Toast mToast;
-    ArrayList<Plato> platos;
+    ArrayList<Plato> platos,listaFiltrada;
     final BBDDHelper helper = new BBDDHelper(this);
     private Toolbar tlb;
     private int returnId = 0;
+    private boolean buscando = false;
+    SearchView buscador;
 
     //-----------------TOOLBAR
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_lista_platos,menu);
+        MenuItem buscar = menu.findItem(R.id.itmBuscarPlt);
+        buscador = (SearchView) buscar.getActionView();
+        buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String busqueda) {
+                try{
+                    if(busqueda.length()>0) {
+                        buscando = true;
+                    }else{
+                        buscando = false;
+                    }
+                    ArrayList<Plato> listaFiltrada = filtro(platos,busqueda);
+                    ((AdaptadorListaPlt)listaPlato.getAdapter()).filtro(listaFiltrada);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                Log.d("bucar",busqueda);
+                return false;
+            }
+        });
+
+        buscar.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                ((AdaptadorListaPlt)listaPlato.getAdapter()).filtro(platos);
+                return true;
+            }
+        });
+
         return true;
+    }
+
+    private ArrayList<Plato> filtro(ArrayList<Plato> platos, String busqueda){
+        listaFiltrada = new ArrayList<>();
+        try{
+            busqueda = busqueda.toLowerCase();
+            for (Plato p : platos){
+                String pNombre = p.getNombre().toLowerCase();
+                if(pNombre.contains(busqueda)){
+                    listaFiltrada.add(p);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return listaFiltrada;
     }
 
     @Override
@@ -78,6 +138,7 @@ public class ListaPlatos extends AppCompatActivity implements AdaptadorListaPlt.
         setSupportActionBar(tlb);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Lista de platos");
+
 
         //----------------RECUPERA DATOS DE AGREGAPLATO
         Bundle datos = getIntent().getExtras();
@@ -152,16 +213,14 @@ public class ListaPlatos extends AppCompatActivity implements AdaptadorListaPlt.
 
     @Override
     public void onListItemClick(int clickedItem) {
-        if(mToast!= null){
-            mToast.cancel();
-        }
-
-        mToast = mToast.makeText(this, "Elemento pulsado: " + clickedItem, Toast.LENGTH_SHORT);
-        mToast.show();
 
         Intent i = new Intent(this, DetallePlatos.class);
-        i.putExtra("plato",platos.get(clickedItem));
+        if(buscando) i.putExtra("plato",listaFiltrada.get(clickedItem));
+        else i.putExtra("plato",platos.get(clickedItem));
         startActivity(i);
+        buscador.setQuery("",false);
+        buscador.onActionViewCollapsed();
+        buscador.clearFocus();
     }
 
     public void borrarPlato(String columna, String argumentos, String tabla){
@@ -205,6 +264,7 @@ public class ListaPlatos extends AppCompatActivity implements AdaptadorListaPlt.
         }
         cursor.close();
         adaptador = new AdaptadorListaPlt(platos, this,helper, this);
+
         listaPlato.setAdapter(adaptador);
 
 

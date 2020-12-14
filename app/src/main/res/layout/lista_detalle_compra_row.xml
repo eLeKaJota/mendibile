@@ -33,6 +33,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:text="Proveedor"
+                android:textSize="18sp"
                 android:textStyle="bold" />
             ...
             <!-- HEADER INDICATOR -->
@@ -55,11 +56,47 @@
             app:expansion_expanded="true">
 
             <!-- CONTENT -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/listaDetalleCompraProv"
-                android:layout_width="match_parent"
-                android:layout_height="250dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/listaDetalleCompraProv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/ibDetalleCompraCopiar"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@android:color/transparent"
+                        android:padding="8dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/copiar" />
+
+                    <ImageButton
+                        android:id="@+id/ibDetalleCompraCompartir"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@android:color/transparent"
+                        android:padding="6dp"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/whatsapp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
         </com.github.florent37.expansionpanel.ExpansionLayout>
+
     </LinearLayout>
 </FrameLayout>

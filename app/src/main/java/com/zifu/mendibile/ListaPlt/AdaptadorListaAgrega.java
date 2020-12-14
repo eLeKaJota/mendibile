@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -18,11 +20,13 @@ import com.zifu.mendibile.tablas.TablaIngrediente;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdaptadorListaAgrega extends RecyclerView.Adapter<AdaptadorListaAgrega.ingViewHolder> {
+public class AdaptadorListaAgrega extends RecyclerView.Adapter<AdaptadorListaAgrega.ingViewHolder>  {
     public List<Ingrediente> ing;
     final private ListItemClick ingOnClickListener;
     final BBDDHelper helper;
     AgregaPlato agregaPlato;
+
+
 
     public interface ListItemClick{
         void onListItemClick(int clickedItem);

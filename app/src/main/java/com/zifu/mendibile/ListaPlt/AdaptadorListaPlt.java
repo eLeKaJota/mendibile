@@ -37,6 +37,13 @@ public class AdaptadorListaPlt extends RecyclerView.Adapter<AdaptadorListaPlt.pl
 
 
 
+    public void filtro(ArrayList<Plato> p){
+        this.plt = new ArrayList<Plato>();
+        this.plt.addAll(p);
+        notifyDataSetChanged();
+    }
+
+
 
     public class pltViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView tvListaPltNombre, tvListaPltCoste, tvListaPltId;
@@ -109,4 +116,6 @@ public class AdaptadorListaPlt extends RecyclerView.Adapter<AdaptadorListaPlt.pl
     public int getItemCount() {
         return plt.size();
     }
+
+
 }

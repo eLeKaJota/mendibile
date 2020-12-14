@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="Buscar"
+        android:icon="@android:drawable/ic_menu_search"
+        android:id="@+id/itmBuscarProv"
+        app:showAsAction="always"
+        app:actionViewClass="android.widget.SearchView"/>
+
     <item android:title="Añadir proveedor"
         android:id="@+id/itmAgregaProv"
         app:showAsAction="always"
