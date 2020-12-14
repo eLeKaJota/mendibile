@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondomendibileapp"
-    tools:context=".ListaIng.AgregaIngrediente">
+    tools:context=".ListaIng.AgregaIngrediente"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/tlbAgregaPlato"
+        layout="@layout/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,23 +30,25 @@
                 android:orientation="vertical"
                 android:weightSum="10">
 
-                <include
-                    android:id="@+id/tlbAgregaPlato"
-                    layout="@layout/tool_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/fondo_borde_listas"
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-                <ImageView
-                    android:id="@+id/ivFotoPlato"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    app:srcCompat="@drawable/alifu" />
+                    <ImageView
+                        android:id="@+id/ivFotoPlato"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        app:srcCompat="@drawable/camara" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <Button
@@ -52,7 +61,6 @@
                         android:id="@+id/btnGaleria"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Abrir galería" />
                 </LinearLayout>
 
@@ -210,4 +218,4 @@
         </LinearLayout>
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

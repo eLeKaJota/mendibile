@@ -15,7 +15,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <!-- >TODO -> Cambiar el color de la flecha de toolbar y cajas de TextEdit -->
         <item name="android:textColorSecondary">@color/black</item>
         <item name="android:textColorPrimary">@color/black</item>
 

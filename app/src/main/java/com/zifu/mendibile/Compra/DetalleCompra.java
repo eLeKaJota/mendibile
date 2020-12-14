@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -27,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.zifu.mendibile.MainActivity;
@@ -53,6 +55,8 @@ public class DetalleCompra extends AppCompatActivity{
     ImageButton agregar;
     RecyclerView listaProv;
     RecyclerView.Adapter adaptador;
+    RecyclerView listaIngs;
+    RecyclerView.Adapter adaptadorIngs;
     LayoutManager layoutManager;
     TextInputLayout ilNota;
     ArrayList<String> provs;
@@ -131,10 +135,6 @@ public class DetalleCompra extends AppCompatActivity{
 
 
 
-
-
-
-
         tlb = (Toolbar) findViewById(R.id.tlbDetalleCompra);
         fecha = (TextView) findViewById(R.id.tvDetalleCompraFecha);
         notas = (TextView) findViewById(R.id.tvDetalleCompraNotas);
@@ -201,8 +201,8 @@ public class DetalleCompra extends AppCompatActivity{
 
         class ProvViewHolder extends RecyclerView.ViewHolder  {
             TextView prov;
-            RecyclerView listaIngs;
-            RecyclerView.Adapter adaptadorIngs;
+//            RecyclerView listaIngs;
+//            RecyclerView.Adapter adaptadorIngs;
             LayoutManager layoutIngs;
             ArrayList<CompraIngrediente> ingProv;
 
@@ -260,17 +260,31 @@ public class DetalleCompra extends AppCompatActivity{
 
                     @Override
                     public void onBindViewHolder(@NonNull ingsViewHolder holder, int position) {
+                        if (!ingProv.get(position).getCantidad().equals("")){
+                            holder.ing.setText("[" + ingProv.get(position).getCantidad() + " " + ingProv.get(position).getFormmato() + "] " + ingProv.get(position).getNombre());
+                        }else{
+                            holder.ing.setText("[ * ] " + ingProv.get(position).getNombre());
+                        }
 
-                        holder.ing.setText("[" + ingProv.get(position).getCantidad() + " " + ingProv.get(position).getFormmato() + "] " + ingProv.get(position).getNombre());
                     }
 
                     @Override
                     public int getItemCount() {
                         return ingProv.size();
                     }
+                    @Override
+                    public int getItemViewType(int position) {
+                        return super.getItemViewType(position);
+                    }
+
+                    @Override
+                    public long getItemId(int position) {
+                        return super.getItemId(position);
+                    }
 
                 };
                 listaIngs.setLayoutManager(layoutIngs);
+                adaptadorIngs.setHasStableIds(true);
                 listaIngs.setAdapter(adaptadorIngs);
 
 
@@ -308,18 +322,41 @@ public class DetalleCompra extends AppCompatActivity{
             public int getItemCount() {
                 return provs.size();
             }
+
+            @Override
+            public int getItemViewType(int position) {
+                return super.getItemViewType(position);
+            }
+
+            @Override
+            public long getItemId(int position) {
+                return super.getItemId(position);
+            }
         };
+        adaptador.setHasStableIds(true);
         listaProv.setAdapter(adaptador);
 
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CompraIngrediente c = new CompraIngrediente(lista.getId(),nuevoIng.getText().toString(),formato.getSelectedItem().toString(),cantidad.getText().toString());
+                if ( c.getNombre().equals("")){
+                    Toast ingRepetido = Toast.makeText(getApplicationContext(),"El campo nuevo ingrediente no puede estar vacío",Toast.LENGTH_SHORT);
+                    ingRepetido.show();
+                    return;
+                }
+                for (CompraIngrediente ci : ings){
+                    if ( ci.getNombre().equals(c.getNombre())){
+                        Toast ingRepetido = Toast.makeText(getApplicationContext(),"Ya tienes un ingrediente con el mismo nombre",Toast.LENGTH_SHORT);
+                        ingRepetido.show();
+                        return;
+                    }
+                }
                 agregaListaIng(c);
                 ings.clear();
                 provs.clear();
                 listaProv.removeAllViews();
-                adaptador.notifyDataSetChanged();
+                listaIngs.removeAllViews();
 
                 actualizaIngs();
 

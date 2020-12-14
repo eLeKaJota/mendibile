@@ -15,6 +15,9 @@ public class Plato implements Serializable {
     private String foto;
     private String elaboracion;
     private String ingredientes;
+    private String tipoElaboracion;
+    private String numeroElaboracion;
+
 
     public ArrayList<IngPeso> getIngPeso() {
         return ingPeso;
@@ -27,14 +30,17 @@ public class Plato implements Serializable {
     private ArrayList<IngPeso> ingPeso;
 
 
-    public Plato(int id, String nombre, Double coste, String foto, String elaboracion, ArrayList<IngPeso> ingPeso) {
+    public Plato(int id, String nombre, String foto, String elaboracion, ArrayList<IngPeso> ingPeso, String tipoElaboracion, String numeroElaboracion) {
         this.id = id;
-        this.coste = coste;
         this.nombre = nombre;
         this.foto = foto;
         this.elaboracion = elaboracion;
         this.ingPeso = ingPeso;
+        this.tipoElaboracion = tipoElaboracion;
+        this.numeroElaboracion = numeroElaboracion;
     }
+
+
 
 
     public int getId() {
@@ -90,6 +96,22 @@ public class Plato implements Serializable {
 
     public void setElaboracion(String elaboracion) {
         this.elaboracion = elaboracion;
+    }
+
+    public String getTipoElaboracion() {
+        return tipoElaboracion;
+    }
+
+    public void setTipoElaboracion(String tipoElaboracion) {
+        this.tipoElaboracion = tipoElaboracion;
+    }
+
+    public String getNumeroElaboracion() {
+        return numeroElaboracion;
+    }
+
+    public void setNumeroElaboracion(String numeroElaboracion) {
+        this.numeroElaboracion = numeroElaboracion;
     }
 }
 

@@ -193,13 +193,14 @@ public class ListaPlatos extends AppCompatActivity implements AdaptadorListaPlt.
         while(cursor.moveToNext()){
             int id = cursor.getInt(0);
             String nombre = cursor.getString(1);
-            Double coste = cursor.getDouble(2);
-            String ingredientes = TextUtils.join(",",recuperaIng(id));
-            String foto = cursor.getString(4);
-            String elaboracion = cursor.getString(5);
+            String foto = cursor.getString(2);
+            String elaboracion = cursor.getString(3);
+            String tipoElaboracion = cursor.getString(4);
+            String numeroElaboracion = cursor.getString(5);
 
 
-            Plato plt = new Plato(id,nombre,coste,foto,elaboracion,ingredientesPeso(id));
+
+            Plato plt = new Plato(id,nombre,foto,elaboracion,ingredientesPeso(id),tipoElaboracion,numeroElaboracion);
             platos.add(plt);
         }
         cursor.close();

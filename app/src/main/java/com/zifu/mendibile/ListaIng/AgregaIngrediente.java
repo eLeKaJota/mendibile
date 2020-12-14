@@ -19,6 +19,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.zifu.mendibile.BBDDHelper;
 import com.zifu.mendibile.MainActivity;
@@ -96,6 +97,7 @@ public class AgregaIngrediente extends AppCompatActivity  {
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 agregaIng();
 
             }
@@ -112,6 +114,13 @@ public class AgregaIngrediente extends AppCompatActivity  {
 
     }
     public void agregaIng(){
+        if(txtNombre.getText().toString().equals("")){
+            Toast nombreVacio =
+                    Toast.makeText(getApplicationContext(),"El campo de nombre no puede estar vacío", Toast.LENGTH_SHORT);
+            nombreVacio.show();
+            return;
+        }
+
         SQLiteDatabase db = helper.getWritableDatabase();
 
         ContentValues values = new ContentValues();

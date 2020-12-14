@@ -12,12 +12,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -47,7 +52,7 @@ public class DetallePlatos extends AppCompatActivity {
     Plato plato;
     private Toolbar tlb;
     private ImageView fotoPlato;
-    private TextView nombrePlato;
+    private TextView nombrePlato,costeRacion;
     private RecyclerView listaIng;
     private RecyclerView.Adapter adaptador;
     private RecyclerView.LayoutManager layoutManager;
@@ -55,9 +60,15 @@ public class DetallePlatos extends AppCompatActivity {
     TextInputLayout tlEditarReceta;
     TextInputEditText txtEditarReceta;
     Button btnEditarReceta;
-    TextView receta;
+    TextView tvPlatoCosteTotal,receta;
     DetallePlatos detalle;
+    RadioGroup tipoElaboracion;
+    EditText numeroElaboracion;
     int estadoReceta = 0;
+    LinearLayout lyElaboracion;
+    LinearLayout lyCosteElaboracion;
+    TextView tvElaboracion;
+    TextView tvCosteElaboracion;
 
 
     public double getCosteTotal() {
@@ -132,7 +143,45 @@ public class DetallePlatos extends AppCompatActivity {
 
         fotoPlato = (ImageView) findViewById(R.id.ivFotoPlatoDetalle);
         nombrePlato = (TextView) findViewById(R.id.tvDetallePltNombre);
-        nombrePlato.setText("Nombre: " + plato.getNombre());
+        tipoElaboracion = (RadioGroup) findViewById(R.id.rgDetallePlatoElaboracion);
+        numeroElaboracion = (EditText) findViewById(R.id.etDetallePlatoNumeroRacion);
+        costeRacion = (TextView) findViewById(R.id.tvDetallePltCosteRacion);
+        nombrePlato.setText(plato.getNombre());
+        tvPlatoCosteTotal = (TextView) findViewById(R.id.tvDetallePltCoste);
+        lyElaboracion = (LinearLayout) findViewById(R.id.lyDetallePlatoElaboracion);
+        lyCosteElaboracion = (LinearLayout) findViewById(R.id.lyCosteRacion);
+        tvElaboracion = (TextView) findViewById(R.id.tvDetallePlatoElaboracion);
+        tvCosteElaboracion = (TextView) findViewById(R.id.tvCosteRacionElaboracion);
+        numeroElaboracion.setText(plato.getNumeroElaboracion());
+
+        //--------TIPO DE ELABORACION
+        switch (plato.getTipoElaboracion()){
+            case "0":
+                tipoElaboracion.check(R.id.rbElaboracionRacionUnica);
+                lyElaboracion.setVisibility(View.GONE);
+                lyCosteElaboracion.setVisibility(View.GONE);
+                break;
+            case "1":
+                tipoElaboracion.check(R.id.rbElaboracionRaciones);
+                tvElaboracion.setText("Raciones por elaboración: ");
+                lyElaboracion.setVisibility(View.VISIBLE);
+                lyCosteElaboracion.setVisibility(View.VISIBLE);
+                tvCosteElaboracion.setText("Coste por ración: ");
+                int racionNumero = Integer.parseInt(numeroElaboracion.getText().toString());
+                costeRacion.setText("" + (double)Math.round( (plato.getCoste()/racionNumero)*100)/100);
+                break;
+            case "2":
+                tipoElaboracion.check(R.id.rbElaboracionUnidades);
+                tvElaboracion.setText("Unidades por elaboración: ");
+                lyElaboracion.setVisibility(View.VISIBLE);
+                lyCosteElaboracion.setVisibility(View.VISIBLE);
+                tvCosteElaboracion.setText("Coste por unidad: ");
+                int racionNumero2 = Integer.parseInt(numeroElaboracion.getText().toString());
+                costeRacion.setText("" + (double)Math.round( (plato.getCoste()/racionNumero2)*100)/100);
+                break;
+            default:
+        }
+        //---------------------------
 
         if(plato.getFoto() != null && !plato.getFoto().equals("null")){
             fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -176,7 +225,105 @@ public class DetallePlatos extends AppCompatActivity {
 
         receta.setText("" + plato.getElaboracion());
 
+        tipoElaboracion.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                LinearLayout lyElaboracion = (LinearLayout) findViewById(R.id.lyDetallePlatoElaboracion);
+                LinearLayout lyCosteElaboracion = (LinearLayout) findViewById(R.id.lyCosteRacion);
+                TextView tvElaboracion = (TextView) findViewById(R.id.tvDetallePlatoElaboracion);
+                TextView tvCosteElaboracion = (TextView) findViewById(R.id.tvCosteRacionElaboracion);
+                String tipoElaboracion = "0";
 
+                switch (checkedId){
+                    case R.id.rbElaboracionRacionUnica:
+                        lyElaboracion.setVisibility(View.GONE);
+                        lyCosteElaboracion.setVisibility(View.GONE);
+                        tipoElaboracion = "0";
+                        break;
+                    case R.id.rbElaboracionRaciones:
+                        tvElaboracion.setText("Raciones por elaboración: ");
+                        lyElaboracion.setVisibility(View.VISIBLE);
+                        lyCosteElaboracion.setVisibility(View.VISIBLE);
+                        tvCosteElaboracion.setText("Coste por ración: ");
+                        tipoElaboracion = "1";
+                        break;
+                    case R.id.rbElaboracionUnidades:
+                        tvElaboracion.setText("Unidades por elaboración: ");
+                        lyElaboracion.setVisibility(View.VISIBLE);
+                        lyCosteElaboracion.setVisibility(View.VISIBLE);
+                        tvCosteElaboracion.setText("Coste por unidad: ");
+                        tipoElaboracion = "2";
+                        break;
+                    default:
+                }
+
+                plato.setTipoElaboracion(tipoElaboracion);
+
+                SQLiteDatabase db = helper.getWritableDatabase();
+                ContentValues v = new ContentValues();
+                v.put(TablaPlato.NOMBRE_COLUMNA_7,tipoElaboracion);
+                String selection = TablaPlato.NOMBRE_COLUMNA_1 + " LIKE ?";
+                String[] args = {String.valueOf(plato.getId())};
+                db.update(TablaPlato.NOMBRE_TABLA,v,selection,args);
+
+            }
+        });
+
+        numeroElaboracion.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(numeroElaboracion.getText().toString().equals("")){
+                    return;
+                }
+                int racionNumero = Integer.parseInt(numeroElaboracion.getText().toString());
+                if (racionNumero < 1){
+                    numeroElaboracion.setText("1");
+                }
+                costeRacion.setText("" + (double)Math.round( (plato.getCoste()/racionNumero)*100)/100);
+
+                plato.setNumeroElaboracion(numeroElaboracion.getText().toString());
+
+                SQLiteDatabase db = helper.getWritableDatabase();
+                ContentValues v = new ContentValues();
+                v.put(TablaPlato.NOMBRE_COLUMNA_8,plato.getNumeroElaboracion());
+                String selection = TablaPlato.NOMBRE_COLUMNA_1 + " LIKE ?";
+                String[] args = {String.valueOf(plato.getId())};
+                db.update(TablaPlato.NOMBRE_TABLA,v,selection,args);
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        tvPlatoCosteTotal.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int racionNumero = Integer.parseInt(numeroElaboracion.getText().toString());
+
+                costeRacion.setText("" + (double)Math.round( (plato.getCoste()/racionNumero)*100)/100);
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
 
@@ -216,8 +363,7 @@ public class DetallePlatos extends AppCompatActivity {
 
     }
     public void actualizaCoste(){
-        ((TextView) findViewById(R.id.tvDetallePltCoste))
-                .setText("Coste: " +(double)Math.round( plato.getCoste()*100)/100 + "€");
+        tvPlatoCosteTotal.setText("" +(double)Math.round( plato.getCoste()*100)/100);
     }
     public void actualizaLista(){
         SQLiteDatabase db = helper.getReadableDatabase();

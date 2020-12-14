@@ -31,6 +31,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Proveedor;
@@ -70,7 +71,6 @@ public class AgregaProveedor extends AppCompatActivity {
         }
         if(item.getItemId() == R.id.itmAgregaNuevoProv){
             agregaProveedor();
-            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -207,6 +207,12 @@ public class AgregaProveedor extends AppCompatActivity {
         agregartlf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(telefonotlf.getText().toString().equals("")){
+                    Toast tlfVacio =
+                            Toast.makeText(getApplicationContext(),"El campo de número de teléfono no puede estar vacío", Toast.LENGTH_SHORT);
+                    tlfVacio.show();
+                    return;
+                }
                 tlfs.add(new ProveedorTlf(nombretlf.getText().toString(),telefonotlf.getText().toString()));
                 adaptador.notifyDataSetChanged();
                 nombretlf.setText("");
@@ -226,11 +232,7 @@ public class AgregaProveedor extends AppCompatActivity {
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(telefonotlf.getText() != null){
-                    if(!telefonotlf.getText().toString().equals("")){
-                    tlfs.add(new ProveedorTlf(nombretlf.getText().toString(),telefonotlf.getText().toString()));
-                    }
-                }
+
 
                 agregaProveedor();
             }
@@ -238,6 +240,17 @@ public class AgregaProveedor extends AppCompatActivity {
     }
 
     public void agregaProveedor(){
+        if(nombre.getText().toString().equals("")){
+            Toast nombreVacio =
+                    Toast.makeText(getApplicationContext(),"El campo de nombre no puede estar vacío", Toast.LENGTH_SHORT);
+            nombreVacio.show();
+            return;
+        }
+        if(telefonotlf.getText() != null){
+            if(!telefonotlf.getText().toString().equals("")){
+                tlfs.add(new ProveedorTlf(nombretlf.getText().toString(),telefonotlf.getText().toString()));
+            }
+        }
         SQLiteDatabase db = MainActivity.helper.getWritableDatabase();
         ContentValues v = new ContentValues();
         v.put(TablaProveedor.NOMBRE_COLUMNA_2,nombre.getText().toString());

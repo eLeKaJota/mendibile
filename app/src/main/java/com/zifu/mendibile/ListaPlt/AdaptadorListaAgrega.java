@@ -40,21 +40,17 @@ public class AdaptadorListaAgrega extends RecyclerView.Adapter<AdaptadorListaAgr
 
 
     public class ingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView tvListaIngNombre, tvListaIngPrecio, tvListaIngId;
+        public TextView tvListaIngNombre;
         public ImageButton btnAgregaIngPlt;
         public ingViewHolder(View itemView){
             super(itemView);
             tvListaIngNombre = itemView.findViewById(R.id.tvAgregaIngNombre);
-            tvListaIngPrecio = itemView.findViewById(R.id.tvAgregaIngPrecio);
-            tvListaIngId = itemView.findViewById(R.id.tvAgregaIngId);
             btnAgregaIngPlt = itemView.findViewById(R.id.btnAgregaIngPlt);
             itemView.setOnClickListener(this);
         }
         void bind(int listaIndex){
             Ingrediente i = agregaPlato.ingredientes.get(listaIndex);
             tvListaIngNombre.setText(i.getNombre());
-            tvListaIngPrecio.setText("Precio: " + i.getPrecio() + "€ / " + i.getFormato());
-            tvListaIngId.setText(""+i.getId());
 
             btnAgregaIngPlt.setOnClickListener(new View.OnClickListener() {
                 @Override

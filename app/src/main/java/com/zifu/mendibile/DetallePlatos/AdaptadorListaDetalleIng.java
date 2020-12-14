@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +39,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
     private Handler handlerMenos;
     private double costeTotal = 0;
     private ArrayList<Double> sumaCostes = new ArrayList<Double>();
+    private boolean gr;
 
     @NonNull
     @Override
@@ -73,9 +75,10 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
     }
 
     public class ingViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvNombre, tvCoste, tvRacion, tvCosteTotal;
+        public TextView tvNombre, tvCoste, tvRacion, tvCosteTotal, tvPeso;
         public ImageButton btnMas,btnMenos;
         public EditText etPeso;
+        public String formato;
 
         public ingViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,6 +88,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
             btnMas = itemView.findViewById(R.id.btnDetalleListaIngPesoMas);
             btnMenos = itemView.findViewById(R.id.btnDetalleListaIngPesoMenos);
             etPeso = itemView.findViewById(R.id.etAgregadoIngPeso);
+            tvPeso = itemView.findViewById(R.id.tvPesoIng);
             tvCosteTotal = detalle.findViewById(R.id.tvDetallePltCoste);
             costeTotal = detalle.plato.getCoste();
 
@@ -94,25 +98,61 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
         void sumaCoste(){
 
 
-            tvCosteTotal.setText("Coste total: " + String.valueOf((double)Math.round(detalle.plato.getCoste()*100)/100) + "€");
+            tvCosteTotal.setText("Coste: " + String.valueOf((double)Math.round(detalle.plato.getCoste()*100)/100) + "€");
         }
 
+        //Muestra correctamente el peso si baja de 1
+        void imprimePeso(double peso){
+            switch (formato){
+                case "Kg.":
+                    if(peso < 1){
+                        gr = true;
+                        tvRacion.setText("gr./Ración");
+                        double p = peso*1000;
+                        tvPeso.setText(String.valueOf(p));
 
+                    }else{
+                        gr = false;
+                        tvRacion.setText("Kg./Ración");
+                        tvPeso.setText(String.valueOf(peso));
+                    }
+                    break;
+                case "Litro":
+                    if(peso < 1){
+                        gr = true;
+                        tvRacion.setText("ml./Ración");
+                        double p = peso*1000;
+                        tvPeso.setText(String.valueOf(p));
+
+                    }else{
+                        gr = false;
+                        tvRacion.setText("Litro/Ración");
+                        tvPeso.setText(String.valueOf(peso));
+                    }
+                    break;
+                default:
+                    tvPeso.setText(String.valueOf(peso));
+            }
+        }
 
         @SuppressLint("ClickableViewAccessibility")
         void bind(int listaIndex){
             Ingrediente i = ing.get(listaIndex);
             tvNombre.setText(i.getNombre());
 
+            formato = i.getFormato();
             double costeIng = i.getPrecio();
-            tvRacion.setText(i.getFormato() + " /Ración");
+            tvRacion.setText(i.getFormato() + "/Ración");
             for (IngPeso e : detalle.plato.getIngPeso()){
                 if (e.getIdIng() == i.getId()){
                     etPeso.setText(String.valueOf(e.getPeso()));
                 }
             }
+
             double coste = i.getPrecio() * Double.parseDouble(etPeso.getText().toString());
             tvCoste.setText(String.valueOf((double)Math.round(coste*100)/100));
+
+            imprimePeso(Double.parseDouble(etPeso.getText().toString()));
 
 
             //sumaCoste(coste);
@@ -124,9 +164,24 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    if (etPeso.getText().toString().equals("")){
+                        etPeso.setText("0.0");
+                        //return;
+                    }
+                    double peso = Double.parseDouble(etPeso.getText().toString());
+                    if (peso < 0){
+                        etPeso.setText("0.0");
+                        //tvPeso.setText("0.0");
+                    }
+//                    Log.e("CharSequence",s.toString());
+//                    Log.e("start",String.valueOf(start));
+//                    Log.e("before",String.valueOf(before));
+//                    Log.e("count",String.valueOf(count));
+
+
+
                     double coste = i.getPrecio();
-                    int id = i.getId();
-                    double costeTemp = Double.parseDouble(tvCoste.getText().toString());
                     double nuevoCoste = Double.parseDouble(etPeso.getText().toString()) * coste;
 
 
@@ -147,11 +202,23 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
 
                     //-------------------------------------------------
 
-                    //costeTotal -= costeTemp;
                     sumaCoste();
+                    imprimePeso(Double.parseDouble(etPeso.getText().toString()));
+//                    if(peso < 1){
+//                        gr = true;
+//                        tvRacion.setText("gr/Ración");
+//                        double p = Double.parseDouble(s.toString())*1000;
+//                        tvPeso.setText(String.valueOf(p));
+//
+//                    }else{
+//                        gr = false;
+//                        tvRacion.setText(i.getFormato() + " /Ración");
+//                        double p = Double.parseDouble(s.toString());
+//                        tvPeso.setText(String.valueOf(p));
+//                    }
+//                    Log.e("gr",String.valueOf(gr));
 
-                    //System.out.println("TV: " + tvCosteTotal.getText().toString() + "--- COSTE: " + detalle.plato.getCoste().toString());
-                    //tvCosteTotal.setText(detalle.plato.getCoste().toString());
+
                 }
 
                 @Override
@@ -180,9 +247,15 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
                 }
                 Runnable accionMas = new Runnable() {
                     @Override public void run() {
-                        double valor = Double.parseDouble(etPeso.getText().toString());
-                        valor += 0.05;
-                        etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                        if(formato.equals("Kg.") || formato.equals("Litro") || formato.equals("gr.") || formato.equals("ml.")){
+                            double valor = Double.parseDouble(etPeso.getText().toString());
+                            valor += 0.10;
+                            etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                        }else{
+                            double valor = Double.parseDouble(etPeso.getText().toString());
+                            valor += 0.5;
+                            etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                        }
                         handlerMas.postDelayed(this, 100);
                     }
                 };
@@ -208,9 +281,15 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
                 }
                 Runnable accionMenos = new Runnable() {
                     @Override public void run() {
-                        double valor = Double.parseDouble(etPeso.getText().toString());
-                        valor -= 0.05;
-                        etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                        if(formato.equals("Kg.") || formato.equals("Litro") || formato.equals("gr.") || formato.equals("ml.")){
+                            double valor = Double.parseDouble(etPeso.getText().toString());
+                            valor -= 0.10;
+                            etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                        }else{
+                            double valor = Double.parseDouble(etPeso.getText().toString());
+                            valor -= 0.5;
+                            etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                        }
                         handlerMenos.postDelayed(this, 100);
                     }
                 };
@@ -221,17 +300,29 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
             btnMas.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    double valor = Double.parseDouble(etPeso.getText().toString());
-                    valor += 0.01;
-                    etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                    if(formato.equals("Kg.") || formato.equals("Litro") || formato.equals("gr.") || formato.equals("ml.")){
+                        double valor = Double.parseDouble(etPeso.getText().toString());
+                        valor += 0.01;
+                        etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                    }else{
+                        double valor = Double.parseDouble(etPeso.getText().toString());
+                        valor += 0.25;
+                        etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                    }
                 }
             });
             btnMenos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    double valor = Double.parseDouble(etPeso.getText().toString());
-                    valor -= 0.01;
-                    etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                    if(formato.equals("Kg.") || formato.equals("Litro") || formato.equals("gr.") || formato.equals("ml.")){
+                        double valor = Double.parseDouble(etPeso.getText().toString());
+                        valor -= 0.01;
+                        etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                    }else{
+                        double valor = Double.parseDouble(etPeso.getText().toString());
+                        valor -= 0.25;
+                        etPeso.setText(String.valueOf((double)Math.round(valor * 100)/100));
+                    }
                 }
             });
 

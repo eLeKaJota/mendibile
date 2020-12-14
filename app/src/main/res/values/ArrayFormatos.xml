@@ -2,11 +2,12 @@
 <resources>
     <string-array name="listaFormatoIng">
         <item>Kg.</item>
-        <item>Gr.</item>
+        <item>gr.</item>
         <item>Ud.</item>
         <item>Litro</item>
         <item>ml.</item>
         <item>Bote/Botella</item>
+        <item>Bandeja</item>
         <item>Caja</item>
         <item>Lata</item>
         <item>Manojo</item>

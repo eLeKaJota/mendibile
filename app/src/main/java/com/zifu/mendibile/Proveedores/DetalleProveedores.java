@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.flexbox.FlexboxLayoutManager;
 import com.xiaofeng.flowlayoutmanager.Alignment;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 import com.zifu.mendibile.MainActivity;
@@ -82,10 +84,11 @@ public class DetalleProveedores extends AppCompatActivity {
         setSupportActionBar(tlb);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FlowLayoutManager fl = new FlowLayoutManager();
-        fl.removeItemPerLineLimit();
-        fl.setAutoMeasureEnabled(true);
-        fl.setAlignment(Alignment.LEFT);
+        FlexboxLayoutManager fl = new FlexboxLayoutManager(this);
+//        FlowLayoutManager fl = new FlowLayoutManager();
+//        fl.removeItemPerLineLimit();
+//        fl.setAutoMeasureEnabled(true);
+//        fl.setAlignment(Alignment.LEFT);
         layoutIng = fl;
         layoutTlf = new LinearLayoutManager(this);
 

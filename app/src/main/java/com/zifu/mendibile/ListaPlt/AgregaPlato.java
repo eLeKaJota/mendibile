@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.xiaofeng.flowlayoutmanager.Alignment;
@@ -43,6 +44,9 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgrega.ListItemClick {
@@ -156,6 +160,13 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             if(resultCode == AppCompatActivity.RESULT_OK){
                 int idIng = Integer.parseInt(data.getStringExtra("idIng"));
                 if (idIng != 0) ingredientes.add(actualizaIngrediente(idIng));
+                Collections.sort(ingredientes, new Comparator<Ingrediente>() {
+                    @Override
+                    public int compare(Ingrediente o1, Ingrediente o2) {
+                        return o1.getNombre().compareTo(o2.getNombre());
+                    }
+                });
+                adaptadorAgrega.notifyDataSetChanged();
             }
         }
         if(requestCode == FOTO_GALERIA){
@@ -223,10 +234,12 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         if (modifica != 0) btnAgregar.setText("Modificar plato");
         if (modifica != 0) txtNombre.setText(datos.getString("nombrePlato"));
         if(modifica != 0) {
-            fotoUri = Uri.parse(datos.getString("fotoPlato"));
-            fotoUriTemp = Uri.parse(datos.getString("fotoPlato"));
-            fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            fotoPlato.setImageURI(fotoUri);
+            if(fotoUri != null) {
+                fotoUri = Uri.parse(datos.getString("fotoPlato"));
+                fotoUriTemp = Uri.parse(datos.getString("fotoPlato"));
+                fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                fotoPlato.setImageURI(fotoUri);
+            }
         }
 
         //--------------ACTUALIZA LOS RECYCLERVIEW
@@ -235,13 +248,13 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
 
         //--------------CONFIGURA LOS DOS RECYCLERVIEW
-        layoutManagerAgrega = new GridLayoutManager(this,4);
+        //layoutManagerAgrega = new GridLayoutManager(this,4);
 
         FlexboxLayoutManager fl = new FlexboxLayoutManager(this);
+        FlexboxLayoutManager fl2 = new FlexboxLayoutManager(this);
         layoutManagerAgregado = fl;
-        listaAgrega.setHasFixedSize(true);
-        listaAgrega.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
-        listaAgrega.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL));
+        layoutManagerAgrega = fl2;
+        //listaAgrega.setHasFixedSize(true);
         listaAgrega.setLayoutManager(layoutManagerAgrega);
         listaAgregado.setLayoutManager(layoutManagerAgregado);
 
@@ -322,6 +335,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             @Override
             public void onClick(View v) {
 
+
                 agregaPlato();
             }
         });
@@ -331,6 +345,12 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
 
     public void agregaPlato(){
+        if(txtNombre.getText().toString().equals("")){
+            Toast nombreVacio =
+                    Toast.makeText(getApplicationContext(),"El campo de nombre no puede estar vacío", Toast.LENGTH_SHORT);
+            nombreVacio.show();
+            return;
+        }
         String[] ingArray = new String[ingAgregados.size()];
         long nuevaId;
 
@@ -343,7 +363,13 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         //----------------AGREGA EL PLATO
         ContentValues values = new ContentValues();
         values.put(TablaPlato.NOMBRE_COLUMNA_2,txtNombre.getText().toString());
-        values.put(TablaPlato.NOMBRE_COLUMNA_5, fotoUri.toString());
+        values.put(TablaPlato.NOMBRE_COLUMNA_6,"Añade aquí la elaboración.");
+        values.put(TablaPlato.NOMBRE_COLUMNA_7,"0");
+        values.put(TablaPlato.NOMBRE_COLUMNA_8,"1");
+        if(fotoUri != null){
+            values.put(TablaPlato.NOMBRE_COLUMNA_5, fotoUri.toString());
+        }
+
 
         if (modifica == 0) {
             nuevaId = db.insert(TablaPlato.NOMBRE_TABLA,null,values);
@@ -407,6 +433,12 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             ingredientes.add(ing);
         }
         cursor.close();
+        Collections.sort(ingredientes, new Comparator<Ingrediente>() {
+            @Override
+            public int compare(Ingrediente o1, Ingrediente o2) {
+                return o1.getNombre().compareTo(o2.getNombre());
+            }
+        });
         adaptadorAgrega = new AdaptadorListaAgrega(ingredientes,this,helper, this);
         listaAgrega.setAdapter(adaptadorAgrega);
     }
@@ -480,6 +512,12 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
         }
         cursor.close();
+        Collections.sort(ingredientes, new Comparator<Ingrediente>() {
+            @Override
+            public int compare(Ingrediente o1, Ingrediente o2) {
+                return o1.getNombre().compareTo(o2.getNombre());
+            }
+        });
         adaptadorAgrega = new AdaptadorListaAgrega(ingredientes,this,helper, this);
         listaAgrega.setAdapter(adaptadorAgrega);
     }
