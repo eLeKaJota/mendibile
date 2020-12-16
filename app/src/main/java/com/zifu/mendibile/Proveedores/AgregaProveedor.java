@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,10 +35,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zifu.mendibile.MainActivity;
+import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.Modelos.Proveedor;
 import com.zifu.mendibile.Modelos.ProveedorTlf;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
+import com.zifu.mendibile.tablas.TablaPlato;
 import com.zifu.mendibile.tablas.TablaProveedor;
 import com.zifu.mendibile.tablas.TablaProveedorTlf;
 
@@ -246,6 +249,11 @@ public class AgregaProveedor extends AppCompatActivity {
             nombreVacio.show();
             return;
         }
+        if(comprobarProv(nombre.getText().toString().toLowerCase())){
+            Toast repetido = Toast.makeText(this, "Ya existe un proveedor con el mismo nombre.", Toast.LENGTH_SHORT);
+            repetido.show();
+            return;
+        }
         if(telefonotlf.getText() != null){
             if(!telefonotlf.getText().toString().equals("")){
                 tlfs.add(new ProveedorTlf(nombretlf.getText().toString(),telefonotlf.getText().toString()));
@@ -285,5 +293,24 @@ public class AgregaProveedor extends AppCompatActivity {
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
         finish();
+    }
+
+    public boolean comprobarProv(String nuevo){
+        ArrayList<Proveedor> p = new ArrayList<>();
+        SQLiteDatabase db = MainActivity.helper.getReadableDatabase();
+        Cursor c = db.query(TablaProveedor.NOMBRE_TABLA, null, null, null, null, null, null);
+        while (c.moveToNext()){
+            int id = c.getInt(0);
+            String nombre = c.getString(1).toLowerCase();
+            p.add(new Proveedor(id,nombre));
+        }
+        c.close();
+
+        for(Proveedor prov : p){
+            if(prov.getNombre().equals(nuevo)){
+                return true;
+            }
+        }
+        return false;
     }
 }

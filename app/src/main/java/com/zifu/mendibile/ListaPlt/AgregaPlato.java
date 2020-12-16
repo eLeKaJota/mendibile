@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,8 +34,10 @@ import com.xiaofeng.flowlayoutmanager.Alignment;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 import com.zifu.mendibile.BBDDHelper;
 import com.zifu.mendibile.ListaIng.AgregaIngrediente;
+import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.IngPeso;
 import com.zifu.mendibile.Modelos.Ingrediente;
+import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
 import com.zifu.mendibile.tablas.TablaPlato;
@@ -234,7 +237,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         if (modifica != 0) btnAgregar.setText("Modificar plato");
         if (modifica != 0) txtNombre.setText(datos.getString("nombrePlato"));
         if(modifica != 0) {
-            if(fotoUri != null) {
+            if(fotoUri == null) {
                 fotoUri = Uri.parse(datos.getString("fotoPlato"));
                 fotoUriTemp = Uri.parse(datos.getString("fotoPlato"));
                 fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -249,11 +252,11 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
         //--------------CONFIGURA LOS DOS RECYCLERVIEW
         //layoutManagerAgrega = new GridLayoutManager(this,4);
-
+        GridLayoutManager gl = new GridLayoutManager(this, 2);
         FlexboxLayoutManager fl = new FlexboxLayoutManager(this);
         FlexboxLayoutManager fl2 = new FlexboxLayoutManager(this);
         layoutManagerAgregado = fl;
-        layoutManagerAgrega = fl2;
+        layoutManagerAgrega = gl;
         //listaAgrega.setHasFixedSize(true);
         listaAgrega.setLayoutManager(layoutManagerAgrega);
         listaAgregado.setLayoutManager(layoutManagerAgregado);
@@ -351,6 +354,12 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             nombreVacio.show();
             return;
         }
+        if(comprobarPlato(txtNombre.getText().toString().toLowerCase())){
+            Toast repetido = Toast.makeText(this,"Ya existe un plato con el mismo nombre.",Toast.LENGTH_SHORT);
+            repetido.show();
+            return;
+        }
+
         String[] ingArray = new String[ingAgregados.size()];
         long nuevaId;
 
@@ -526,5 +535,24 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
     @Override
     public void onListItemClick(int clickedItem) {
         System.out.println("Click: " +clickedItem);
+    }
+
+    public boolean comprobarPlato(String nuevo){
+        ArrayList<Plato> p = new ArrayList<>();
+        SQLiteDatabase db = MainActivity.helper.getReadableDatabase();
+        Cursor c = db.query(TablaPlato.NOMBRE_TABLA, null, null, null, null, null, null);
+        while (c.moveToNext()){
+            int id = c.getInt(0);
+            String nombre = c.getString(1).toLowerCase();
+            p.add(new Plato(id,nombre));
+        }
+        c.close();
+
+        for(Plato plt : p){
+            if(plt.getNombre().equals(nuevo)){
+                return true;
+            }
+        }
+        return false;
     }
 }

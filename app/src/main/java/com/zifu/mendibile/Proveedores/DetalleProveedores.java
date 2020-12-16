@@ -1,12 +1,14 @@
 package com.zifu.mendibile.Proveedores;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -24,9 +26,12 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.xiaofeng.flowlayoutmanager.Alignment;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
+import com.zifu.mendibile.ListaIng.AgregaIngrediente;
 import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Proveedor;
 import com.zifu.mendibile.R;
+import com.zifu.mendibile.tablas.TablaIngrediente;
+import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
 import com.zifu.mendibile.tablas.TablaProveedor;
 import com.zifu.mendibile.tablas.TablaProveedorTlf;
 
@@ -51,9 +56,26 @@ public class DetalleProveedores extends AppCompatActivity {
             onBackPressed();
         }
         if(item.getItemId() == R.id.itmDetalleProvElimina){
-            borrarProveedor(TablaProveedor.NOMBRE_COLUMNA_1,String.valueOf(prov.getId()),TablaProveedor.NOMBRE_TABLA);
-            borrarProveedor(TablaProveedorTlf.NOMBRE_COLUMNA_2,String.valueOf(prov.getId()),TablaProveedorTlf.NOMBRE_TABLA);
-            finish();
+            AlertDialog.Builder alertEliminar = new AlertDialog.Builder(this);
+            alertEliminar.setTitle("Eliminar Ingrediente");
+            alertEliminar.setMessage("¿Estás seguro de que quiere eliminar este ingrediente?");
+            alertEliminar.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    borrarProveedor(TablaProveedor.NOMBRE_COLUMNA_1,String.valueOf(prov.getId()),TablaProveedor.NOMBRE_TABLA);
+                    borrarProveedor(TablaProveedorTlf.NOMBRE_COLUMNA_2,String.valueOf(prov.getId()),TablaProveedorTlf.NOMBRE_TABLA);
+                    finish();
+                }
+            });
+            alertEliminar.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+            AlertDialog dialog = alertEliminar.create();
+            dialog.show();
+
         }
         if(item.getItemId() == R.id.itmDetalleProvEdita){
 

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.zifu.mendibile.Ajustes.AjustesGeneral;
 import com.zifu.mendibile.Compra.ListaCompra;
 import com.zifu.mendibile.ListaIng.ListaIngredientes;
 import com.zifu.mendibile.ListaPlt.ListaPlatos;
@@ -32,10 +33,12 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout llbtnIngrediente = (LinearLayout) findViewById(R.id.llbtnIngrediente);
         LinearLayout llbtnProveedores = (LinearLayout) findViewById(R.id.llbtnProveedores);
         LinearLayout llbtnCompras = (LinearLayout) findViewById(R.id.llbtnCompras);
+        LinearLayout llbtnAjustes = (LinearLayout) findViewById(R.id.llbtnAjustes);
         ImageButton btnPlatos = (ImageButton)findViewById(R.id.btnPlatos);
         ImageButton btnIngrediente = (ImageButton)findViewById(R.id.btnIngredientes);
         ImageButton btnProveedores = (ImageButton)findViewById(R.id.btnProveedores);
         ImageButton btnCompras = (ImageButton)findViewById(R.id.btnCompras);
+        ImageButton btnAjustes = (ImageButton)findViewById(R.id.btnAjustes);
 
         btnPlatos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +69,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        btnAjustes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), AjustesGeneral.class);
+                startActivity(i);
+            }
+        });
+
+
+
+
+
+
 
         llbtnPlatos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +109,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ListaCompra.class);
+                startActivity(i);
+            }
+        });
+        llbtnAjustes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), AjustesGeneral.class);
                 startActivity(i);
             }
         });

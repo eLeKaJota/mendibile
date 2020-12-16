@@ -8,6 +8,11 @@ public class Ingrediente implements Serializable {
     private String proveedor;
     private double precio;
 
+    public Ingrediente(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Ingrediente(int id, String nombre, String formato, double precio) {
         this.id = id;
         this.nombre = nombre;

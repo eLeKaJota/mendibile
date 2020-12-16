@@ -1,6 +1,7 @@
 package com.zifu.mendibile.ListaIng;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -106,8 +107,24 @@ public class AgregaIngrediente extends AppCompatActivity  {
         btnEliminarIng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                borrarIngrediente(TablaIngrediente.NOMBRE_COLUMNA_1,String.valueOf(modifica),TablaIngrediente.NOMBRE_TABLA);
-                borrarIngrediente(TablaPlatoIngredientePeso.NOMBRE_COLUMNA_3,String.valueOf(modifica),TablaPlatoIngredientePeso.NOMBRE_TABLA);
+                AlertDialog.Builder alertEliminar = new AlertDialog.Builder(AgregaIngrediente.this);
+                alertEliminar.setTitle("Eliminar Ingrediente");
+                alertEliminar.setMessage("¿Estás seguro de que quiere eliminar este ingrediente?");
+                alertEliminar.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        borrarIngrediente(TablaIngrediente.NOMBRE_COLUMNA_1,String.valueOf(modifica),TablaIngrediente.NOMBRE_TABLA);
+                        borrarIngrediente(TablaPlatoIngredientePeso.NOMBRE_COLUMNA_3,String.valueOf(modifica),TablaPlatoIngredientePeso.NOMBRE_TABLA);
+                    }
+                });
+                alertEliminar.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+                AlertDialog dialog = alertEliminar.create();
+                dialog.show();
             }
         });
 
@@ -119,6 +136,14 @@ public class AgregaIngrediente extends AppCompatActivity  {
                     Toast.makeText(getApplicationContext(),"El campo de nombre no puede estar vacío", Toast.LENGTH_SHORT);
             nombreVacio.show();
             return;
+        }
+        if(comprobarIng(txtNombre.getText().toString().toLowerCase())){
+            Toast repedito = Toast.makeText(this,"Ya existe un ingrediente con el mismo nombre.",Toast.LENGTH_SHORT);
+            repedito.show();
+            return;
+        }
+        if(txtPrecio.getText().toString().equals("")){
+            txtPrecio.setText("0");
         }
 
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -165,6 +190,25 @@ public class AgregaIngrediente extends AppCompatActivity  {
         c.close();
         return prov.toArray(new String[0]);
 
+    }
+
+    public boolean comprobarIng(String nuevoIng){
+        ArrayList<Ingrediente> i = new ArrayList<>();
+        SQLiteDatabase db = MainActivity.helper.getReadableDatabase();
+        Cursor c = db.query(TablaIngrediente.NOMBRE_TABLA, null, null, null, null, null, null);
+        while (c.moveToNext()){
+            int id = c.getInt(0);
+            String nombre = c.getString(1).toLowerCase();
+            i.add(new Ingrediente(id,nombre));
+        }
+        c.close();
+
+        for(Ingrediente ing : i){
+            if(ing.getNombre().equals(nuevoIng)){
+                return true;
+            }
+        }
+        return false;
     }
 
 

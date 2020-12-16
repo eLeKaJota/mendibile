@@ -1,12 +1,14 @@
 package com.zifu.mendibile.DetallePlatos;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -38,6 +40,8 @@ import com.zifu.mendibile.Modelos.Ingrediente;
 import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
+import com.zifu.mendibile.tablas.TablaListaCompra;
+import com.zifu.mendibile.tablas.TablaListaCompraIng;
 import com.zifu.mendibile.tablas.TablaPlato;
 import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
 
@@ -100,9 +104,26 @@ public class DetallePlatos extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if ( item.getItemId() == android.R.id.home) onBackPressed();
         if ( item.getItemId() == R.id.itmDetalleElimina) {
-            borrarPlato(TablaPlato.NOMBRE_COLUMNA_1,String.valueOf(plato.getId()),TablaPlato.NOMBRE_TABLA);
-            borrarPlato(TablaPlatoIngredientePeso.NOMBRE_COLUMNA_2,String.valueOf(plato.getId()),TablaPlatoIngredientePeso.NOMBRE_TABLA);
-            finish();
+            AlertDialog.Builder alertEliminar = new AlertDialog.Builder(this);
+            alertEliminar.setTitle("Eliminar Plato");
+            alertEliminar.setMessage("¿Estás seguro de que quiere eliminar este plato?");
+            alertEliminar.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    borrarPlato(TablaPlato.NOMBRE_COLUMNA_1,String.valueOf(plato.getId()),TablaPlato.NOMBRE_TABLA);
+                    borrarPlato(TablaPlatoIngredientePeso.NOMBRE_COLUMNA_2,String.valueOf(plato.getId()),TablaPlatoIngredientePeso.NOMBRE_TABLA);
+                    finish();
+                }
+            });
+            alertEliminar.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+            AlertDialog dialog = alertEliminar.create();
+            dialog.show();
+
         }
         if ( item.getItemId() == R.id.itmDetalleModifica) {
             Intent i = new Intent(this, AgregaPlato.class);

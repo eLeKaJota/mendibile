@@ -31,7 +31,9 @@
                 android:layout_height="16dp"
                 android:layout_marginLeft="10dp"
                 android:background="@android:color/transparent"
-                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/cancel" />
         </LinearLayout>
     </LinearLayout>
 

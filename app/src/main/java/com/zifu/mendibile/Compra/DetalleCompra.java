@@ -1,6 +1,7 @@
 package com.zifu.mendibile.Compra;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -104,13 +106,32 @@ public class DetalleCompra extends AppCompatActivity{
             notas.setVisibility(View.VISIBLE);
         }
         if(item.getItemId() == R.id.itmDetalleCompraElimina){
-            SQLiteDatabase db = MainActivity.helper.getWritableDatabase();
-            String selection = TablaListaCompra.NOMBRE_COLUMNA_1 + " LIKE ?";
-            String selectionIngs = TablaListaCompraIng.NOMBRE_COLUMNA_2 + " LIKE ?";
-            String[] selectionArgs = {String.valueOf(lista.getId())};
-            db.delete(TablaListaCompra.NOMBRE_TABLA,selection,selectionArgs);
-            db.delete(TablaListaCompraIng.NOMBRE_TABLA,selectionIngs,selectionArgs);
-            finish();
+            AlertDialog.Builder alertEliminar = new AlertDialog.Builder(this);
+            alertEliminar.setTitle("Eliminar lista");
+            alertEliminar.setMessage("¿Estás seguro de que quiere eliminar esta lista de la compra?");
+            alertEliminar.setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    SQLiteDatabase db = MainActivity.helper.getWritableDatabase();
+                    String selection = TablaListaCompra.NOMBRE_COLUMNA_1 + " LIKE ?";
+                    String selectionIngs = TablaListaCompraIng.NOMBRE_COLUMNA_2 + " LIKE ?";
+                    String[] selectionArgs = {String.valueOf(lista.getId())};
+                    db.delete(TablaListaCompra.NOMBRE_TABLA,selection,selectionArgs);
+                    db.delete(TablaListaCompraIng.NOMBRE_TABLA,selectionIngs,selectionArgs);
+                    finish();
+                }
+            });
+            alertEliminar.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    return;
+                }
+            });
+            AlertDialog dialog = alertEliminar.create();
+            dialog.show();
+
+
+
         }
         if(item.getItemId() == R.id.itmAgregaCompraGuardar){
             finish();
@@ -170,7 +191,7 @@ public class DetalleCompra extends AppCompatActivity{
             notas.setText(lista.getNotas());
         }else{
             SimpleDateFormat fechaT = new SimpleDateFormat("EEEE, dd/MM/yyyy HH:mm:ss" );
-            fechaT.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+            fechaT.setTimeZone(TimeZone.getDefault());
             fecha.setText(fechaT.format(new Date()));
             notas.setVisibility(View.GONE);
             ilNota.setVisibility(View.VISIBLE);

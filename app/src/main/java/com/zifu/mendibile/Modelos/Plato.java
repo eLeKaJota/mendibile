@@ -40,8 +40,10 @@ public class Plato implements Serializable {
         this.numeroElaboracion = numeroElaboracion;
     }
 
-
-
+    public Plato(int id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
 
     public int getId() {
         return id;
