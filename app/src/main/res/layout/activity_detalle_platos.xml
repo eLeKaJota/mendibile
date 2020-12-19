@@ -12,78 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <ImageView
-        android:id="@+id/ivFotoPlatoDetalle"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerInside"
-        app:srcCompat="@drawable/nocamara" />
-
-    <TextView
-        android:id="@+id/tvDetallePltNombre"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nombre"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Coste total: "
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tvDetallePltCoste"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Coste"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="€"
-            android:textSize="18sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lyCosteRacion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tvCosteRacionElaboracion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Coste por ración: "
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tvDetallePltCosteRacion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="€"
-            android:textSize="18sp" />
-    </LinearLayout>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -93,6 +21,78 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ivFotoPlatoDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/fotoDetallePlatoAlto"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/nocamara" />
+
+            <TextView
+                android:id="@+id/tvDetallePltNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nombre"
+                android:textSize="@dimen/textoGrandeMedio"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Coste total: "
+                    android:textSize="@dimen/textoMedio" />
+
+                <TextView
+                    android:id="@+id/tvDetallePltCoste"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Coste"
+                    android:textSize="@dimen/textoMedio" />
+
+                <TextView
+                    android:id="@+id/txtTotalMoneda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="€"
+                    android:textSize="@dimen/textoMedio" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyCosteRacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvCosteRacionElaboracion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Coste por ración: "
+                    android:textSize="@dimen/textoMedio" />
+
+                <TextView
+                    android:id="@+id/tvDetallePltCosteRacion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="@dimen/textoMedio" />
+
+                <TextView
+                    android:id="@+id/txtRacionMoneda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="€"
+                    android:textSize="@dimen/textoMedio" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,7 +116,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="Ingredientes"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/textoMedio" />
                     ...
                     <!-- HEADER INDICATOR -->
                     <ImageView
@@ -167,7 +167,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="Tipo de elaboración"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/textoMedio" />
                     ...
                     <!-- HEADER INDICATOR -->
                     <ImageView
@@ -191,6 +191,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
+                        <Switch
+                            android:id="@+id/swElaboracionIngrediente"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="5dp"
+                            android:text="Usar elaboración como ingrediente"
+                            android:textSize="18sp" />
 
                         <RadioGroup
                             android:id="@+id/rgDetallePlatoElaboracion"
@@ -274,7 +282,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:text="Receta"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/textoMedio" />
                     ...
                     <!-- HEADER INDICATOR -->
                     <ImageView

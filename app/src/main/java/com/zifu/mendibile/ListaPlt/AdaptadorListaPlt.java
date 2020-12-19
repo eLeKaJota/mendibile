@@ -1,6 +1,7 @@
 package com.zifu.mendibile.ListaPlt;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zifu.mendibile.BBDDHelper;
+import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.R;
 
@@ -22,6 +24,7 @@ public class AdaptadorListaPlt extends RecyclerView.Adapter<AdaptadorListaPlt.pl
     final private AdaptadorListaPlt.ListItemClick pltOnClickListener;
     final BBDDHelper helper;
     ListaPlatos listaPlt;
+    String moneda,monedaSimbolo;
 
     public interface ListItemClick{
         void onListItemClick(int clickedItem);
@@ -33,6 +36,27 @@ public class AdaptadorListaPlt extends RecyclerView.Adapter<AdaptadorListaPlt.pl
         this.helper = helper;
         pltOnClickListener = listener;
         this.listaPlt = listaPlt;
+        SharedPreferences ajustes = MainActivity.context.getSharedPreferences("com.zifu.mendibil", Context.MODE_PRIVATE);
+        moneda = ajustes.getString("moneda","euro");
+        switch (moneda){
+            case "euro":
+                monedaSimbolo = "€";
+                break;
+            case "dolar":
+                monedaSimbolo = "$";
+                break;
+            case "libra":
+                monedaSimbolo = "£";
+                break;
+            case "yen":
+                monedaSimbolo = "¥";
+                break;
+            case "yuan":
+                monedaSimbolo = "¥";
+                break;
+            default:
+                monedaSimbolo = "€";
+        }
     }
 
 
@@ -60,7 +84,7 @@ public class AdaptadorListaPlt extends RecyclerView.Adapter<AdaptadorListaPlt.pl
             Plato i = plt.get(listaIndex);
 
             tvListaPltNombre.setText(i.getNombre());
-            tvListaPltCoste.setText("Precio: " + (double)Math.round(i.getCoste()*100)/100 + "€");
+            tvListaPltCoste.setText("Precio: " + (double)Math.round(i.getCoste()*100)/100 + monedaSimbolo);
             tvListaPltId.setText(""+i.getId());
 
 //            btnDeletePltList.setOnClickListener(new View.OnClickListener() {

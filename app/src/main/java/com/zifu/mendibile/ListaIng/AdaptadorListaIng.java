@@ -1,6 +1,7 @@
 package com.zifu.mendibile.ListaIng;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.zifu.mendibile.BBDDHelper;
+import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Ingrediente;
 import com.zifu.mendibile.Modelos.Plato;
 import com.zifu.mendibile.R;
@@ -25,6 +27,7 @@ public class AdaptadorListaIng extends RecyclerView.Adapter<AdaptadorListaIng.in
     final private ListItemClick ingOnClickListener;
     final BBDDHelper helper;
     ListaIngredientes listaIng;
+    String moneda,monedaSimbolo;
 
     public interface ListItemClick{
         void onListItemClick(int clickedItem);
@@ -36,6 +39,27 @@ public class AdaptadorListaIng extends RecyclerView.Adapter<AdaptadorListaIng.in
         this.helper = helper;
         ingOnClickListener = listener;
         this.listaIng = listaIng;
+        SharedPreferences ajustes = MainActivity.context.getSharedPreferences("com.zifu.mendibil", Context.MODE_PRIVATE);
+        moneda = ajustes.getString("moneda","euro");
+        switch (moneda){
+            case "euro":
+                monedaSimbolo = "€";
+                break;
+            case "dolar":
+                monedaSimbolo = "$";
+                break;
+            case "libra":
+                monedaSimbolo = "£";
+                break;
+            case "yen":
+                monedaSimbolo = "¥";
+                break;
+            case "yuan":
+                monedaSimbolo = "¥";
+                break;
+            default:
+                monedaSimbolo = "€";
+        }
     }
 
     public void filtro(ArrayList<Ingrediente> p){
@@ -61,7 +85,7 @@ public class AdaptadorListaIng extends RecyclerView.Adapter<AdaptadorListaIng.in
         void bind(int listaIndex){
             Ingrediente i = ing.get(listaIndex);
             tvListaIngNombre.setText(i.getNombre());
-            tvListaIngPrecio.setText("Precio: " + i.getPrecio() + "€ / " + i.getFormato());
+            tvListaIngPrecio.setText("Precio: " + i.getPrecio() + monedaSimbolo +" / " + i.getFormato());
             tvListaIngProveedor.setText("Proveedor: " + i.getProveedor());
             tvListaIngId.setText(""+i.getId());
 

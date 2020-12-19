@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,18 +46,18 @@ public class AdaptadorListaAgrega extends RecyclerView.Adapter<AdaptadorListaAgr
 
     public class ingViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView tvListaIngNombre;
-        public ImageButton btnAgregaIngPlt;
+        public LinearLayout llAgregaIngPlt;
         public ingViewHolder(View itemView){
             super(itemView);
             tvListaIngNombre = itemView.findViewById(R.id.tvAgregaIngNombre);
-            btnAgregaIngPlt = itemView.findViewById(R.id.btnAgregaIngPlt);
+            llAgregaIngPlt = itemView.findViewById(R.id.llAgregaIngPlt);
             itemView.setOnClickListener(this);
         }
         void bind(int listaIndex){
             Ingrediente i = agregaPlato.ingredientes.get(listaIndex);
             tvListaIngNombre.setText(i.getNombre());
 
-            btnAgregaIngPlt.setOnClickListener(new View.OnClickListener() {
+            llAgregaIngPlt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     agregaPlato.ingAgregados.add(i);

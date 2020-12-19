@@ -12,11 +12,10 @@ public class Proveedor implements Serializable {
     private ArrayList<ProveedorTlf> telefonos;
     private ArrayList<Ingrediente> ingredientes;
 
-    public Proveedor(int id, String nombre, String producto, String cif, ArrayList<ProveedorTlf> telefonos, String notas, ArrayList<Ingrediente> ingredientes) {
+    public Proveedor(int id, String nombre, String producto, ArrayList<ProveedorTlf> telefonos, String notas, ArrayList<Ingrediente> ingredientes) {
         this.id = id;
         this.nombre = nombre;
         this.producto = producto;
-        this.cif = cif;
         this.telefonos = telefonos;
         this.notas = notas;
         this.ingredientes = ingredientes;

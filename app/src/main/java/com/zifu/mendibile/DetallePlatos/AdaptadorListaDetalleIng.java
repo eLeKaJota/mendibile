@@ -3,6 +3,7 @@ package com.zifu.mendibile.DetallePlatos;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
@@ -40,6 +41,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
     private double costeTotal = 0;
     private ArrayList<Double> sumaCostes = new ArrayList<Double>();
     private boolean gr;
+    String moneda,monedaSimbolo;
 
     @NonNull
     @Override
@@ -72,10 +74,31 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
         this.ing = ing;
         this.helper = helper;
         this.detalle = detalle;
+        SharedPreferences ajustes = MainActivity.context.getSharedPreferences("com.zifu.mendibil", Context.MODE_PRIVATE);
+        moneda = ajustes.getString("moneda","euro");
+        switch (moneda){
+            case "euro":
+                monedaSimbolo = "€";
+                break;
+            case "dolar":
+                monedaSimbolo = "$";
+                break;
+            case "libra":
+                monedaSimbolo = "£";
+                break;
+            case "yen":
+                monedaSimbolo = "¥";
+                break;
+            case "yuan":
+                monedaSimbolo = "¥";
+                break;
+            default:
+                monedaSimbolo = "€";
+        }
     }
 
     public class ingViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvNombre, tvCoste, tvRacion, tvCosteTotal, tvPeso;
+        public TextView tvNombre, tvCoste, tvRacion, tvCosteTotal, tvPeso, txtMoneda;
         public ImageButton btnMas,btnMenos;
         public EditText etPeso;
         public String formato;
@@ -89,6 +112,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
             btnMenos = itemView.findViewById(R.id.btnDetalleListaIngPesoMenos);
             etPeso = itemView.findViewById(R.id.etAgregadoIngPeso);
             tvPeso = itemView.findViewById(R.id.tvPesoIng);
+            txtMoneda = itemView.findViewById(R.id.txtDetalleIngMoneda);
             tvCosteTotal = detalle.findViewById(R.id.tvDetallePltCoste);
             costeTotal = detalle.plato.getCoste();
 
@@ -98,7 +122,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
         void sumaCoste(){
 
 
-            tvCosteTotal.setText("Coste: " + String.valueOf((double)Math.round(detalle.plato.getCoste()*100)/100) + "€");
+            tvCosteTotal.setText(String.valueOf((double)Math.round(detalle.plato.getCoste()*100)/100));
         }
 
         //Muestra correctamente el peso si baja de 1
@@ -139,7 +163,7 @@ public class AdaptadorListaDetalleIng extends RecyclerView.Adapter<AdaptadorList
         void bind(int listaIndex){
             Ingrediente i = ing.get(listaIndex);
             tvNombre.setText(i.getNombre());
-
+            txtMoneda.setText(monedaSimbolo);
             formato = i.getFormato();
             double costeIng = i.getPrecio();
             tvRacion.setText(i.getFormato() + "/Ración");

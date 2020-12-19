@@ -24,14 +24,15 @@
             android:layout_height="wrap_content"
             android:text="Fecha"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="@dimen/textoGrandeMedio" />
 
         <TextView
             android:id="@+id/tvDetalleCompraNotas"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Notas"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textSize="@dimen/textoPequeño" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ilDetalleCompraNuevaNota"
@@ -67,7 +68,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:completionThreshold="1"
-                    android:hint="Nuevo ingrediente a comprar" />
+                    android:hint="Nuevo ingrediente a comprar"
+                    android:textSize="@dimen/textoCajas" />
             </LinearLayout>
 
             <LinearLayout
@@ -81,9 +83,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="4"
-                    android:ems="10"
                     android:hint="Cantidad"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:textSize="@dimen/textoCajas" />
 
                 <Spinner
                     android:id="@+id/spnDetalleCompraNuevoFormato"
@@ -95,8 +97,9 @@
                 <ImageButton
                     android:id="@+id/ibDetalleCompraNuevoAgregar"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/botonGeneral"
                     android:layout_weight="2"
+                    android:background="@android:color/transparent"
                     app:srcCompat="@android:drawable/ic_input_add" />
             </LinearLayout>
 

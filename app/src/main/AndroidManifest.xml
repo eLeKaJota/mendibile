@@ -7,7 +7,6 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
@@ -18,19 +17,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mendibile">
-        <activity android:name=".Ajustes.AjustesGeneral"></activity>
-        <activity android:name=".Compra.DetalleCompra" />
-        <activity android:name=".Compra.ListaCompra" />
-        <activity android:name=".Compra.AgregaCompraGeneral" />
-        <activity android:name=".Proveedores.DetalleProveedores" />
-        <activity android:name=".Proveedores.AgregaProveedor" />
-        <activity android:name=".Proveedores.ListaProveedores" />
-        <activity android:name=".ListaPlt.AgregaPlato" />
-        <activity android:name=".ListaPlt.ListaPlatos" />
-        <activity android:name=".ListaIng.ListaIngredientes" />
-        <activity android:name=".ListaIng.AgregaIngrediente" />
-        <activity android:name=".DetallePlatos.DetallePlatos" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Ajustes.AjustesGeneral" android:screenOrientation="portrait"></activity>
+        <activity android:name=".Compra.DetalleCompra" android:screenOrientation="portrait"/>
+        <activity android:name=".Compra.ListaCompra" android:screenOrientation="portrait"/>
+        <activity android:name=".Compra.AgregaCompraGeneral" android:screenOrientation="portrait"/>
+        <activity android:name=".Proveedores.DetalleProveedores" android:screenOrientation="portrait"/>
+        <activity android:name=".Proveedores.AgregaProveedor" android:screenOrientation="portrait"/>
+        <activity android:name=".Proveedores.ListaProveedores" android:screenOrientation="portrait"/>
+        <activity android:name=".ListaPlt.AgregaPlato" android:screenOrientation="portrait"/>
+        <activity android:name=".ListaPlt.ListaPlatos" android:screenOrientation="portrait"/>
+        <activity android:name=".ListaIng.ListaIngredientes" android:screenOrientation="portrait"/>
+        <activity android:name=".ListaIng.AgregaIngrediente" android:screenOrientation="portrait"/>
+        <activity android:name=".DetallePlatos.DetallePlatos" android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

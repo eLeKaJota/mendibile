@@ -39,9 +39,12 @@
 
         <ImageButton
             android:id="@+id/btnAgregaProvOtroTlf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="65dp"
+            android:layout_height="45dp"
+            android:layout_margin="3dp"
             android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
             app:srcCompat="@android:drawable/sym_action_call" />
 
     </LinearLayout>

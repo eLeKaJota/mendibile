@@ -10,6 +10,7 @@ public class TablaPlato {
     public static final String NOMBRE_COLUMNA_6 = "elaboracion";
     public static final String NOMBRE_COLUMNA_7 = "tipoElaboracion";
     public static final String NOMBRE_COLUMNA_8 = "numeroElaboracion";
+    public static final String NOMBRE_COLUMNA_9 = "esIngredienteId";
 
     public static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TablaPlato.NOMBRE_TABLA + " (" +
@@ -18,7 +19,8 @@ public class TablaPlato {
                     TablaPlato.NOMBRE_COLUMNA_5 + " TEXT," +
                     TablaPlato.NOMBRE_COLUMNA_6 + " TEXT," +
                     TablaPlato.NOMBRE_COLUMNA_7 + " TEXT," +
-                    TablaPlato.NOMBRE_COLUMNA_8 + " TEXT)";
+                    TablaPlato.NOMBRE_COLUMNA_8 + " TEXT," +
+                    TablaPlato.NOMBRE_COLUMNA_9 + " INTEGER)";
 
     public static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + TablaPlato.NOMBRE_TABLA;

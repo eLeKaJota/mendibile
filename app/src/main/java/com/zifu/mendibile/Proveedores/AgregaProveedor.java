@@ -2,23 +2,30 @@ package com.zifu.mendibile.Proveedores;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -41,6 +48,7 @@ import com.zifu.mendibile.Modelos.ProveedorTlf;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
 import com.zifu.mendibile.tablas.TablaPlato;
+import com.zifu.mendibile.tablas.TablaPlatoIngredientePeso;
 import com.zifu.mendibile.tablas.TablaProveedor;
 import com.zifu.mendibile.tablas.TablaProveedorTlf;
 
@@ -55,11 +63,12 @@ public class AgregaProveedor extends AppCompatActivity {
     RecyclerView.Adapter adaptador;
     LayoutManager layoutManager;
     ArrayList<ProveedorTlf> tlfs;
-    EditText nombre,productos,cif,notas, nombretlf,telefonotlf;
+    EditText nombre,productos,notas, nombretlf,telefonotlf;
     Button agregar;
     ImageButton agregartlf,contactostlf;
     Proveedor prov;
     int modifica;
+    private static final int CODIGO_PERMISOS_CONTACTOS = 55645;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,7 +127,6 @@ public class AgregaProveedor extends AppCompatActivity {
         listaTlf = (RecyclerView) findViewById(R.id.listaProvTlf);
         nombre = (EditText) findViewById(R.id.txtProvNombre);
         productos = (EditText) findViewById(R.id.txtProvProductos);
-        cif = (EditText) findViewById(R.id.txtProvCif);
         notas = (EditText) findViewById(R.id.txtProvNotas);
         agregar = (Button) findViewById(R.id.btnProvAgregar);
         nombretlf = (EditText) findViewById(R.id.txtProvContactoNombre);
@@ -136,7 +144,6 @@ public class AgregaProveedor extends AppCompatActivity {
             tlfs = prov.getTelefonos();
             nombre.setText(prov.getNombre());
             productos.setText(prov.getProducto());
-            cif.setText(prov.getCif());
             notas.setText(prov.getNotas());
             agregar.setText("Modificar proveedor");
 
@@ -227,8 +234,20 @@ public class AgregaProveedor extends AppCompatActivity {
         contactostlf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(contactPickerIntent,AGREGAR_CONTACTO);
+
+
+
+                int estadoDePermiso = ContextCompat.checkSelfPermission(AgregaProveedor.this, Manifest.permission.READ_CONTACTS);
+                if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
+                    Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(contactPickerIntent,AGREGAR_CONTACTO);
+                } else {
+                    ActivityCompat.requestPermissions(AgregaProveedor.this,
+                            new String[]{Manifest.permission.READ_CONTACTS},
+                            CODIGO_PERMISOS_CONTACTOS);
+                }
+
+
             }
         });
 
@@ -242,6 +261,37 @@ public class AgregaProveedor extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CODIGO_PERMISOS_CONTACTOS:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent contactPickerIntent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+                    startActivityForResult(contactPickerIntent,AGREGAR_CONTACTO);
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                    alertDialogBuilder.setTitle("Cambiar los permisos en configuración");
+                    alertDialogBuilder.setMessage("Para acceder a la lista de contactos Haz click en 'Configuración -> Permisos -> Contactos -> Permitir'");
+                    alertDialogBuilder.setPositiveButton("Configuracón", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package", getPackageName(), null);
+                                    intent.setData(uri);
+                                    startActivity(intent);
+                                }
+                            });
+                    alertDialogBuilder.show();
+
+//                    Toast permisoContactos = Toast.makeText(AgregaProveedor.this, "Necesitas conceder permisos para leer la lista de contactos.",Toast.LENGTH_LONG );
+//                    //Toast permisoContactos = Toast.makeText(AgregaProveedor.this, "bla bla bal",Toast.LENGTH_LONG );
+//                    permisoContactos.show();
+                }
+                break;
+            // Aquí más casos dependiendo de los permisos
+            // case OTRO_CODIGO_DE_PERMISOS...
+        }
+    }
+
     public void agregaProveedor(){
         if(nombre.getText().toString().equals("")){
             Toast nombreVacio =
@@ -249,7 +299,7 @@ public class AgregaProveedor extends AppCompatActivity {
             nombreVacio.show();
             return;
         }
-        if(comprobarProv(nombre.getText().toString().toLowerCase())){
+        if(comprobarProv(nombre.getText().toString().toLowerCase()) && modifica == 0){
             Toast repetido = Toast.makeText(this, "Ya existe un proveedor con el mismo nombre.", Toast.LENGTH_SHORT);
             repetido.show();
             return;
@@ -263,7 +313,6 @@ public class AgregaProveedor extends AppCompatActivity {
         ContentValues v = new ContentValues();
         v.put(TablaProveedor.NOMBRE_COLUMNA_2,nombre.getText().toString());
         v.put(TablaProveedor.NOMBRE_COLUMNA_3,productos.getText().toString());
-        v.put(TablaProveedor.NOMBRE_COLUMNA_4,cif.getText().toString());
         v.put(TablaProveedor.NOMBRE_COLUMNA_5,notas.getText().toString());
 
         if(modifica!=0){

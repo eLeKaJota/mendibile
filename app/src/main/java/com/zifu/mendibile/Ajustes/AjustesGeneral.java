@@ -4,16 +4,36 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zifu.mendibile.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
+
 public class AjustesGeneral extends AppCompatActivity {
     Toolbar tlb;
-    TextView acercaDe;
+    EditText cabecera;
+    TextView acercaDe,backup,restore;
+    String moneda;
+    Spinner ajustesMoneda;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -41,8 +61,152 @@ public class AjustesGeneral extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         acercaDe = findViewById(R.id.txtAcercaDe);
+        backup = findViewById(R.id.txtAjustesBackup);
+        restore = findViewById(R.id.txtAjustesRestore);
+        cabecera = (EditText) findViewById(R.id.txtCabeceraPersonalizada);
+        ajustesMoneda = (Spinner) findViewById(R.id.spnAjustesMoneda);
+
+
+        SharedPreferences ajustes = this.getSharedPreferences("com.zifu.mendibil", Context.MODE_PRIVATE);
+        cabecera.setText(ajustes.getString("cabecera","Pedido:"));
+        moneda = ajustes.getString("moneda","euro");
+
+        switch (moneda){
+            case "euro":
+                ajustesMoneda.setSelection(0);
+                break;
+            case "dolar":
+                ajustesMoneda.setSelection(1);
+                break;
+            case "libra":
+                ajustesMoneda.setSelection(2);
+                break;
+            case "yen":
+                ajustesMoneda.setSelection(3);
+                break;
+            case "yuan":
+                ajustesMoneda.setSelection(4);
+                break;
+            default:
+                ajustesMoneda.setSelection(0);
+        }
+
+        ajustesMoneda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        ajustes.edit().putString("moneda","euro").apply();
+                        break;
+                    case 1:
+                        ajustes.edit().putString("moneda","dolar").apply();
+                        break;
+                    case 2:
+                        ajustes.edit().putString("moneda","libra").apply();
+                        break;
+                    case 3:
+                        ajustes.edit().putString("moneda","yen").apply();
+                        break;
+                    case 4:
+                        ajustes.edit().putString("moneda","yuan").apply();
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
 
+        cabecera.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ajustes.edit().putString("cabecera",s.toString()).apply();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        backup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backUp();
+            }
+        });
+        restore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restore();
+            }
+        });
+
+
+
+    }
+
+    public void backUp() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String currentDBPath = "/data/com.zifu.mendibile/databases/Mendibile.db";
+                String backupDBPath = "Mendibile.db";
+
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                Log.d("DB path", "" + currentDB.getAbsolutePath());
+                Log.d("backupDB path", "" + backupDB.getAbsolutePath());
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(currentDB).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                    Toast.makeText(getApplicationContext(), "Respaldo guardado en la tarjeta SD", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                Toast.makeText(getApplicationContext(), "No se puede acceder a la tarjeta SD", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void restore() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String currentDBPath = "/data/com.zifu.mendibile/databases/Mendibile.db";
+                String backupDBPath = "Mendibile.db";
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(backupDB).getChannel();
+                    FileChannel dst = new FileOutputStream(currentDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                    Toast.makeText(getApplicationContext(), "Base de datos restaurada correctamente", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

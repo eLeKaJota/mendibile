@@ -2,21 +2,28 @@ package com.zifu.mendibile.ListaPlt;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +33,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +41,7 @@ import com.google.android.flexbox.FlexboxLayoutManager;
 import com.xiaofeng.flowlayoutmanager.Alignment;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
 import com.zifu.mendibile.BBDDHelper;
+import com.zifu.mendibile.DetallePlatos.DetallePlatos;
 import com.zifu.mendibile.ListaIng.AgregaIngrediente;
 import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.IngPeso;
@@ -70,6 +79,9 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
     Uri fotoUriTemp;
     Uri fotoUriOld;
     Uri fotoUri;
+
+    private static final int CODIGO_PERMISOS_LECTURA_GALERIA = 985;
+    private static final int CODIGO_PERMISOS_LECTURA_FOTO = 545;
 
 
     //------------------MOSTRAR LISTA DE INGREDIENTES
@@ -237,12 +249,17 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         if (modifica != 0) btnAgregar.setText("Modificar plato");
         if (modifica != 0) txtNombre.setText(datos.getString("nombrePlato"));
         if(modifica != 0) {
-            if(fotoUri == null) {
-                fotoUri = Uri.parse(datos.getString("fotoPlato"));
-                fotoUriTemp = Uri.parse(datos.getString("fotoPlato"));
+            if(datos.getString("fotoPlato") != null){
+                if(!datos.getString("fotoPlato").equals("")){
+                    fotoUri = Uri.parse(datos.getString("fotoPlato"));
+                    fotoUriTemp = Uri.parse(datos.getString("fotoPlato"));
+                }
+            }
+            if(fotoUri != null) {
                 fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 fotoPlato.setImageURI(fotoUri);
             }
+
         }
 
         //--------------ACTUALIZA LOS RECYCLERVIEW
@@ -265,7 +282,16 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         btnGaleria.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                abrirGaleria();
+
+                int estadoDePermiso = ContextCompat.checkSelfPermission(AgregaPlato.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
+                    abrirGaleria();
+                } else {
+                    ActivityCompat.requestPermissions(AgregaPlato.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            CODIGO_PERMISOS_LECTURA_GALERIA);
+                }
+
             }
         });
 
@@ -273,11 +299,11 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         //---------------ADAPTADOR AGREGADOS
         class AgregadoViewHolder extends RecyclerView.ViewHolder{
             TextView tvNombre;
-            ImageButton btnQuitar;
+            LinearLayout llQuitar;
             public AgregadoViewHolder(@NonNull View itemView) {
                 super(itemView);
                 tvNombre = itemView.findViewById(R.id.tvAgregadoIngNombre);
-                btnQuitar = itemView.findViewById(R.id.btnDetalleListaIngPesoMas);
+                llQuitar = itemView.findViewById(R.id.llDetalleListaIngPesoMas);
 
             }
         }
@@ -293,7 +319,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             @Override
             public void onBindViewHolder(@NonNull AgregadoViewHolder holder, int position) {
                 holder.tvNombre.setText(ingAgregados.get(position).getNombre());
-                holder.btnQuitar.setOnClickListener(new View.OnClickListener() {
+                holder.llQuitar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (ingredientes.size() >= ingAgregados.get(position).getId()) {
@@ -326,7 +352,16 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         btnFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hacerFotoIntent();
+
+                int estadoDePermiso = ContextCompat.checkSelfPermission(AgregaPlato.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+                if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
+                    hacerFotoIntent();
+                } else {
+                    ActivityCompat.requestPermissions(AgregaPlato.this,
+                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            CODIGO_PERMISOS_LECTURA_FOTO);
+                }
+
             }
         });
 
@@ -354,7 +389,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
             nombreVacio.show();
             return;
         }
-        if(comprobarPlato(txtNombre.getText().toString().toLowerCase())){
+        if(comprobarPlato(txtNombre.getText().toString().toLowerCase()) && modifica == 0){
             Toast repetido = Toast.makeText(this,"Ya existe un plato con el mismo nombre.",Toast.LENGTH_SHORT);
             repetido.show();
             return;
@@ -531,6 +566,49 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         listaAgrega.setAdapter(adaptadorAgrega);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CODIGO_PERMISOS_LECTURA_GALERIA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    abrirGaleria();
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                    alertDialogBuilder.setTitle("Cambiar los permisos en configuración");
+                    alertDialogBuilder.setMessage("Para poder usar la galería Haz click en 'Configuración -> Permisos -> Almacén -> Permitir'");
+                    alertDialogBuilder.setPositiveButton("Configuracón", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    });
+                    alertDialogBuilder.show();
+
+                }
+                break;
+            case CODIGO_PERMISOS_LECTURA_FOTO:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    hacerFotoIntent();
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                    alertDialogBuilder.setTitle("Cambiar los permisos en configuración");
+                    alertDialogBuilder.setMessage("Para poder usar la camara correctamente Haz click en 'Configuración -> Permisos -> Almacén -> Permitir'");
+                    alertDialogBuilder.setPositiveButton("Configuracón", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    });
+                    alertDialogBuilder.show();
+
+                }
+                break;
+        }
+    }
 
     @Override
     public void onListItemClick(int clickedItem) {

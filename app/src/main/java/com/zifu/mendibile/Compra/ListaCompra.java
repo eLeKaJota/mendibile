@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.zifu.mendibile.ListaIng.AgregaIngrediente;
 import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.CompraLista;
 import com.zifu.mendibile.R;
@@ -34,6 +36,8 @@ public class ListaCompra extends AppCompatActivity {
     RecyclerView.Adapter adaptador;
     LayoutManager layoutManager;
     ArrayList<CompraLista> compraListas;
+
+    private FloatingActionButton floatAgregaCompra;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,6 +74,15 @@ public class ListaCompra extends AppCompatActivity {
         tlb.setTitle("Listas de compra");
         setSupportActionBar(tlb);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        floatAgregaCompra = (FloatingActionButton) findViewById(R.id.floatAgregaCompra);
+        floatAgregaCompra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(),DetalleCompra.class);
+                startActivity(i);
+            }
+        });
 
         compraListas = new ArrayList<>();
         listaCompra = (RecyclerView) findViewById(R.id.listaListaCompra);

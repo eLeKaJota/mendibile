@@ -40,8 +40,8 @@
 
                     <ImageView
                         android:id="@+id/ivFotoPlato"
-                        android:layout_width="150dp"
-                        android:layout_height="150dp"
+                        android:layout_width="@dimen/fotoAgregaPlato"
+                        android:layout_height="@dimen/fotoAgregaPlato"
                         app:srcCompat="@drawable/camara" />
                 </LinearLayout>
 
@@ -76,7 +76,8 @@
                         android:id="@+id/txtPltNombre"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nombre del plato" />
+                        android:hint="Nombre del plato"
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout

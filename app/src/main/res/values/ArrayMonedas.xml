@@ -4,5 +4,7 @@
         <item>€ - Euros</item>
         <item>$ - Dolares</item>
         <item>£ - Libras</item>
+        <item>¥ - Yen</item>
+        <item>¥ - Yuan</item>
     </string-array>
 </resources>

@@ -38,7 +38,7 @@ import com.zifu.mendibile.tablas.TablaProveedorTlf;
 public class DetalleProveedores extends AppCompatActivity {
 
     Toolbar tlb;
-    TextView txtNombre,txtProducto,txtCif,txtNotas;
+    TextView txtNombre,txtProducto,txtNotas;
     RecyclerView listaTlf,listaIng;
     RecyclerView.Adapter adaptadorTlf,adaptadorIng;
     LayoutManager layoutTlf, layoutIng;
@@ -97,7 +97,6 @@ public class DetalleProveedores extends AppCompatActivity {
         tlb = (Toolbar) findViewById(R.id.tlbDetalleProv);
         txtNombre = (TextView) findViewById(R.id.txtDetalleProvNombre);
         txtProducto = (TextView) findViewById(R.id.txtDetalleProvProductos);
-        txtCif = (TextView) findViewById(R.id.txtDetalleProvCif);
         txtNotas = (TextView) findViewById(R.id.txtDetalleProvNotas);
         listaTlf = (RecyclerView) findViewById(R.id.listaDetalleProvTlf);
         listaIng = (RecyclerView) findViewById(R.id.listaDetalleProvIng);
@@ -120,7 +119,6 @@ public class DetalleProveedores extends AppCompatActivity {
 
         txtNombre.setText(prov.getNombre());
         txtProducto.setText(prov.getProducto());
-        txtCif.setText("cif: " + prov.getCif());
         txtNotas.setText(prov.getNotas());
 
 

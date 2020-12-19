@@ -8,5 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="fondo">#f1faee</color>
+    <color name="rojo">#e63946</color>
+    <color name="azulClaro">#a8dadc</color>
+    <color name="azul">#457b9d</color>
+    <color name="azulOscuro">#1d3557</color>
     <color name="fondoTransparente">#E6f1faee</color>
 </resources>

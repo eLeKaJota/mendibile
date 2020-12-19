@@ -17,6 +17,7 @@ public class Plato implements Serializable {
     private String ingredientes;
     private String tipoElaboracion;
     private String numeroElaboracion;
+    private int esIngrediente;
 
 
     public ArrayList<IngPeso> getIngPeso() {
@@ -30,7 +31,7 @@ public class Plato implements Serializable {
     private ArrayList<IngPeso> ingPeso;
 
 
-    public Plato(int id, String nombre, String foto, String elaboracion, ArrayList<IngPeso> ingPeso, String tipoElaboracion, String numeroElaboracion) {
+    public Plato(int id, String nombre, String foto, String elaboracion, ArrayList<IngPeso> ingPeso, String tipoElaboracion, String numeroElaboracion, int esIngrediente) {
         this.id = id;
         this.nombre = nombre;
         this.foto = foto;
@@ -38,6 +39,7 @@ public class Plato implements Serializable {
         this.ingPeso = ingPeso;
         this.tipoElaboracion = tipoElaboracion;
         this.numeroElaboracion = numeroElaboracion;
+        this.esIngrediente = esIngrediente;
     }
 
     public Plato(int id, String nombre) {
@@ -53,7 +55,15 @@ public class Plato implements Serializable {
         this.id = id;
     }
 
-//-----------CALCULA EL COSTE TOTAL CON LA SUMA DE LOS INGREDIENTES
+    public int getEsIngrediente() {
+        return esIngrediente;
+    }
+
+    public void setEsIngrediente(int esIngrediente) {
+        this.esIngrediente = esIngrediente;
+    }
+
+    //-----------CALCULA EL COSTE TOTAL CON LA SUMA DE LOS INGREDIENTES
     public Double getCoste() {
 
         coste = 0.0;

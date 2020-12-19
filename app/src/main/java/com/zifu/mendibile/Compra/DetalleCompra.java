@@ -14,6 +14,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -158,7 +159,7 @@ public class DetalleCompra extends AppCompatActivity{
         setContentView(R.layout.activity_detalle_compra);
 
 
-
+        SharedPreferences ajustes = this.getSharedPreferences("com.zifu.mendibil", Context.MODE_PRIVATE);
         tlb = (Toolbar) findViewById(R.id.tlbDetalleCompra);
         fecha = (TextView) findViewById(R.id.tvDetalleCompraFecha);
         notas = (TextView) findViewById(R.id.tvDetalleCompraNotas);
@@ -175,7 +176,7 @@ public class DetalleCompra extends AppCompatActivity{
         listaProv.setLayoutManager(layoutManager);
 
         setSupportActionBar(tlb);
-        tlb.setTitle("Lista de la compra");
+        getSupportActionBar().setTitle("Lista de la compra");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ArrayAdapter<String> adaptadorAutoCompleteIngs = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, actualizaIngsArray());
@@ -227,8 +228,8 @@ public class DetalleCompra extends AppCompatActivity{
             TextView prov;
             LayoutManager layoutIngs;
             ArrayList<CompraIngrediente> ingProv;
-            String listaCompra = "Pedido: \n";
-            ImageButton copiar,compartir;
+            String listaCompra = ajustes.getString("cabecera","Pedido:") + "\n";
+            ImageButton copiar,compartir,compartirTodo;
 
 
 
@@ -240,6 +241,7 @@ public class DetalleCompra extends AppCompatActivity{
                 ingProv = new ArrayList<>();
                 copiar = (ImageButton) itemView.findViewById(R.id.ibDetalleCompraCopiar);
                 compartir = (ImageButton) itemView.findViewById(R.id.ibDetalleCompraCompartir);
+                compartirTodo = (ImageButton) itemView.findViewById(R.id.ibDetalleCompraCompartirTodo);
 
 
 
@@ -293,6 +295,18 @@ public class DetalleCompra extends AppCompatActivity{
                                 compartirLista.putExtra(Intent.EXTRA_TEXT, listaCompra);
                                 compartirLista.setType("text/rtf");
                                 compartirLista.setPackage("com.whatsapp");
+
+                                Intent shareIntent = Intent.createChooser(compartirLista, null);
+                                startActivity(shareIntent);
+                            }
+                        });
+                        compartirTodo.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent compartirLista = new Intent();
+                                compartirLista.setAction(Intent.ACTION_SEND);
+                                compartirLista.putExtra(Intent.EXTRA_TEXT, listaCompra);
+                                compartirLista.setType("text/rtf");
 
                                 Intent shareIntent = Intent.createChooser(compartirLista, null);
                                 startActivity(shareIntent);

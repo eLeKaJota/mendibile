@@ -33,7 +33,8 @@
                     android:id="@+id/txtProvNombre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre" />
+                    android:hint="Nombre"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -46,20 +47,8 @@
                     android:id="@+id/txtProvProductos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Productos" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxBackgroundColor="@color/fondo">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txtProvCif"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="cif" />
+                    android:hint="Productos"
+                    android:singleLine="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -90,7 +79,8 @@
                             android:id="@+id/txtProvContactoNombre"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Nombre del contacto" />
+                            android:hint="Nombre del contacto"
+                            android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageButton
@@ -120,7 +110,8 @@
                             android:id="@+id/txtProvContactoTlf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Numero de telefono del contacto" />
+                            android:hint="Numero de telefono del contacto"
+                            android:singleLine="true" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <ImageButton

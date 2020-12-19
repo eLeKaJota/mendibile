@@ -34,7 +34,7 @@
                     android:layout_height="wrap_content"
                     android:text="Nombre proveedor:"
                     android:textAlignment="center"
-                    android:textSize="30sp"
+                    android:textSize="@dimen/textoGrande"
                     android:textStyle="bold" />
 
                 <TextView
@@ -42,21 +42,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Productos:"
-                    android:textAlignment="center" />
-
-                <TextView
-                    android:id="@+id/txtDetalleProvCif"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Cif:"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="@dimen/textoPequeño" />
 
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
                     android:text="Telefono/s:"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/textoMedio"
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -71,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Ingredientes:"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/textoMedio"
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -86,14 +81,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Notas:"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/textoMedio"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/txtDetalleProvNotas"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Notas:" />
+                    android:text="Notas:"
+                    android:textSize="@dimen/textoPequeño" />
 
             </LinearLayout>
         </ScrollView>

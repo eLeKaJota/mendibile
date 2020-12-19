@@ -38,7 +38,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Nombre: "
-                        android:textSize="18sp"
+                        android:textSize="@dimen/textoMedio"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -52,19 +52,22 @@
                         android:id="@+id/textView5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Coste: " />
+                        android:text="Coste: "
+                        android:textSize="@dimen/textoPequeño" />
 
                     <TextView
                         android:id="@+id/tvDetalleListaIngCoste"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Coste" />
+                        android:text="Coste"
+                        android:textSize="@dimen/textoPequeño" />
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/txtDetalleIngMoneda"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="€" />
+                        android:text="€"
+                        android:textSize="@dimen/textoPequeño" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -78,7 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="TextView"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/textoMedio"
                         android:textStyle="bold" />
 
                     <EditText
@@ -96,7 +99,8 @@
                         android:id="@+id/tvAgregadoIngRacion"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Peso/Racion" />
+                        android:text="Peso/Racion"
+                        android:textSize="@dimen/textoPequeño" />
                 </LinearLayout>
 
             </LinearLayout>

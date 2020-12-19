@@ -11,6 +11,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/llAgregaIngPlt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -23,18 +24,16 @@
                 android:id="@+id/tvAgregaIngNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Nombre: "
                 android:textAlignment="viewStart" />
 
-            <ImageButton
-                android:id="@+id/btnAgregaIngPlt"
+            <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:scaleType="fitEnd"
                 app:srcCompat="@drawable/plus" />
+
         </LinearLayout>
     </LinearLayout>
 

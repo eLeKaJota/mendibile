@@ -3,17 +3,27 @@ package com.zifu.mendibile.DetallePlatos;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,11 +31,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 
@@ -38,6 +51,7 @@ import com.zifu.mendibile.ListaPlt.AgregaPlato;
 import com.zifu.mendibile.MainActivity;
 import com.zifu.mendibile.Modelos.Ingrediente;
 import com.zifu.mendibile.Modelos.Plato;
+import com.zifu.mendibile.Proveedores.AgregaProveedor;
 import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
 import com.zifu.mendibile.tablas.TablaListaCompra;
@@ -73,6 +87,10 @@ public class DetallePlatos extends AppCompatActivity {
     LinearLayout lyCosteElaboracion;
     TextView tvElaboracion;
     TextView tvCosteElaboracion;
+    Switch elaboracionIngrediente;
+    String moneda,monedaSimbolo;
+    TextView simboloMonedaTotal,simboloMonedaRacion;
+    private static final int CODIGO_PERMISOS_LECTURA = 745;
 
 
     public double getCosteTotal() {
@@ -161,6 +179,28 @@ public class DetallePlatos extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Detalles del plato");
 
+        SharedPreferences ajustes = this.getSharedPreferences("com.zifu.mendibil", Context.MODE_PRIVATE);
+        moneda = ajustes.getString("moneda","euro");
+        switch (moneda){
+            case "euro":
+                monedaSimbolo = "€";
+                break;
+            case "dolar":
+                monedaSimbolo = "$";
+                break;
+            case "libra":
+                monedaSimbolo = "£";
+                break;
+            case "yen":
+                monedaSimbolo = "¥";
+                break;
+            case "yuan":
+                monedaSimbolo = "¥";
+                break;
+            default:
+                monedaSimbolo = "€";
+        }
+
 
         fotoPlato = (ImageView) findViewById(R.id.ivFotoPlatoDetalle);
         nombrePlato = (TextView) findViewById(R.id.tvDetallePltNombre);
@@ -173,7 +213,23 @@ public class DetallePlatos extends AppCompatActivity {
         lyCosteElaboracion = (LinearLayout) findViewById(R.id.lyCosteRacion);
         tvElaboracion = (TextView) findViewById(R.id.tvDetallePlatoElaboracion);
         tvCosteElaboracion = (TextView) findViewById(R.id.tvCosteRacionElaboracion);
+        elaboracionIngrediente = (Switch) findViewById(R.id.swElaboracionIngrediente);
         numeroElaboracion.setText(plato.getNumeroElaboracion());
+        simboloMonedaTotal = (TextView) findViewById(R.id.txtTotalMoneda);
+        simboloMonedaRacion = (TextView) findViewById(R.id.txtRacionMoneda);
+
+        simboloMonedaTotal.setText(monedaSimbolo);
+        simboloMonedaRacion.setText(monedaSimbolo);
+
+
+
+        //--------COMPRUEBA SI LA ELABORACIÖN ES UN INGREDIENTE
+        if(comprobarIng(plato.getNombre().toLowerCase())){
+            elaboracionIngrediente.setChecked(true);
+        }else{
+            elaboracionIngrediente.setChecked(false);
+        }
+        //----------------------------------------------------
 
         //--------TIPO DE ELABORACION
         switch (plato.getTipoElaboracion()){
@@ -205,8 +261,16 @@ public class DetallePlatos extends AppCompatActivity {
         //---------------------------
 
         if(plato.getFoto() != null && !plato.getFoto().equals("null")){
-            fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            fotoPlato.setImageURI(Uri.parse(plato.getFoto()));
+            int estadoDePermiso = ContextCompat.checkSelfPermission(DetallePlatos.this, Manifest.permission.READ_EXTERNAL_STORAGE);
+            if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
+                fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                fotoPlato.setImageURI(Uri.parse(plato.getFoto()));
+            } else {
+                ActivityCompat.requestPermissions(DetallePlatos.this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        CODIGO_PERMISOS_LECTURA);
+            }
+
         }
         actualizaCoste();
 
@@ -337,6 +401,34 @@ public class DetallePlatos extends AppCompatActivity {
 
                 costeRacion.setText("" + (double)Math.round( (plato.getCoste()/racionNumero)*100)/100);
 
+                if(comprobarIng(plato.getNombre().toLowerCase())){
+                    String precio;
+                    switch (tipoElaboracion.getCheckedRadioButtonId()){
+                        case R.id.rbElaboracionRacionUnica:
+                            precio = tvPlatoCosteTotal.getText().toString();
+                            break;
+                        case R.id.rbElaboracionRaciones:
+                            precio = costeRacion.getText().toString();
+                            break;
+                        case R.id.rbElaboracionUnidades:
+                            precio = costeRacion.getText().toString();
+                            break;
+                        default:
+                            precio = "";
+                    }
+
+                    SQLiteDatabase db = helper.getWritableDatabase();
+                    ContentValues v = new ContentValues();
+                    v.put(TablaIngrediente.NOMBRE_COLUMNA_3,precio);
+                    String selection = TablaIngrediente.NOMBRE_COLUMNA_1 + " LIKE ?";
+                    String[] args = {String.valueOf(plato.getEsIngrediente())};
+                    db.update(TablaIngrediente.NOMBRE_TABLA,v,selection,args);
+                }
+
+
+
+
+
 
             }
 
@@ -346,34 +438,134 @@ public class DetallePlatos extends AppCompatActivity {
             }
         });
 
+        //------------SWITCH PARA HACERLO INGREDIENTE
+        elaboracionIngrediente.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    if(comprobarIng(plato.getNombre().toLowerCase())){
+                        Toast repedito = Toast.makeText(getApplicationContext(),"Ya existe un ingrediente con el mismo nombre.",Toast.LENGTH_SHORT);
+                        repedito.show();
+                        isChecked = false;
+                        return;
+                    }
+
+                    agregaIng();
+
+                    Toast elabIng = Toast.makeText(getApplicationContext(), "Elaboración añadida a la lista de ingredientes",Toast.LENGTH_SHORT );
+                    elabIng.show();
+                }else{
+                    borrarIngrediente(TablaIngrediente.NOMBRE_COLUMNA_1,String.valueOf(plato.getEsIngrediente()),TablaIngrediente.NOMBRE_TABLA);
+                    borrarIngrediente(TablaPlatoIngredientePeso.NOMBRE_COLUMNA_3,String.valueOf(plato.getEsIngrediente()),TablaPlatoIngredientePeso.NOMBRE_TABLA);
+
+                    Toast elabIng = Toast.makeText(getApplicationContext(), "Elaboración eliminada de la lista de ingredientes",Toast.LENGTH_SHORT );
+                    elabIng.show();
+                }
+            }
+        });
+        //------------------------------------------
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CODIGO_PERMISOS_LECTURA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    fotoPlato.setImageURI(Uri.parse(plato.getFoto()));
+                } else {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                    alertDialogBuilder.setTitle("Cambiar los permisos en configuración");
+                    alertDialogBuilder.setMessage("Para poder ver la foto Haz click en 'Configuración -> Permisos -> Almacén -> Permitir'");
+                    alertDialogBuilder.setPositiveButton("Configuracón", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            Uri uri = Uri.fromParts("package", getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    });
+                    alertDialogBuilder.show();
+
+                }
+                break;
+        }
+    }
+
+    public void agregaIng(){
+
+        //TODO Comprobar si es racion, raciones o unidad
+        String precio = "";
+        String formato = "";
+        switch (tipoElaboracion.getCheckedRadioButtonId()){
+            case R.id.rbElaboracionRacionUnica:
+                precio = tvPlatoCosteTotal.getText().toString();
+                formato = "Ud.";
+                break;
+            case R.id.rbElaboracionRaciones:
+                precio = costeRacion.getText().toString();
+                formato = "Ración";
+                break;
+            case R.id.rbElaboracionUnidades:
+                precio = costeRacion.getText().toString();
+                formato = "Ud.";
+                break;
+
+        }
 
 
-//        viewPager = (ViewPager2) findViewById(R.id.pager);
-//        platosViewPageAdapter = new PlatosViewPageAdapter(this);
-//        viewPager.setOffscreenPageLimit(5);
-//
-//        viewPager.setAdapter(platosViewPageAdapter);
-//
-//
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-//        new TabLayoutMediator(tabLayout, viewPager,
-//                new TabLayoutMediator.TabConfigurationStrategy() {
-//                    @Override
-//                    public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-//                        if (position == 0){
-//                            tab.setText("Resumen");
-//                            tab.setIcon(R.drawable.factura);
-//                        }
-//                        if (position == 1){
-//                            tab.setText("Ingredientes");
-//                            tab.setIcon(R.drawable.plato);
-//                        }
-//                        if (position == 2){
-//                            tab.setText("Receta");
-//                            tab.setIcon(R.drawable.receta);
-//                        }
-//                    }
-//                }).attach();
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TablaIngrediente.NOMBRE_COLUMNA_2,plato.getNombre());
+        values.put(TablaIngrediente.NOMBRE_COLUMNA_3,precio);
+        values.put(TablaIngrediente.NOMBRE_COLUMNA_4,formato);
+        values.put(TablaIngrediente.NOMBRE_COLUMNA_5,"Elaboración propia");
+
+//        if (modifica ==0){
+            long nuevaId = db.insert(TablaIngrediente.NOMBRE_TABLA,null,values);
+
+            ContentValues vPlato = new ContentValues();
+            int idI = Integer.parseInt(String.valueOf(nuevaId));
+            vPlato.put(TablaPlato.NOMBRE_COLUMNA_9,String.valueOf(idI));
+            String[] args = {String.valueOf(plato.getId())};
+
+            db.update(TablaPlato.NOMBRE_TABLA,vPlato,TablaPlato.NOMBRE_COLUMNA_1 + " LIKE ?",args);
+            plato.setEsIngrediente(idI);
+//        }else{
+//            String selection = TablaIngrediente.NOMBRE_COLUMNA_1 + " LIKE ?";
+//            String[] selectionArgs = { String.valueOf(modifica) };
+//            db.update(TablaIngrediente.NOMBRE_TABLA,values,selection,selectionArgs);
+//        }
+
+    }
+
+    public void borrarIngrediente(String columna, String argumentos, String tabla){
+
+        SQLiteDatabase db = helper.getWritableDatabase();
+        String selection = columna + " LIKE ?";
+        String[] selectionArgs = { argumentos };
+        int deletedRows = db.delete(tabla, selection, selectionArgs);
+    }
+
+    public boolean comprobarIng(String nuevoIng){
+        ArrayList<Ingrediente> i = new ArrayList<>();
+        SQLiteDatabase db = MainActivity.helper.getReadableDatabase();
+        Cursor c = db.query(TablaIngrediente.NOMBRE_TABLA, null, null, null, null, null, null);
+        while (c.moveToNext()){
+            int id = c.getInt(0);
+            String nombre = c.getString(1).toLowerCase();
+            i.add(new Ingrediente(id,nombre));
+        }
+        c.close();
+
+        for(Ingrediente ing : i){
+            if(ing.getNombre().equals(nuevoIng)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void borrarPlato(String columna, String argumentos, String tabla){

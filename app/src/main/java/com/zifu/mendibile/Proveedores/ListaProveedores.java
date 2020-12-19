@@ -259,9 +259,8 @@ public class ListaProveedores extends AppCompatActivity {
             int id = c.getInt(0);
             String nombre = c.getString(1);
             String producto = c.getString(2);
-            String cif = c.getString(3);
             String notas = c.getString(4);
-            proveedores.add(new Proveedor(id,nombre,producto,cif,actualizaTlf(id),notas,actualizaIng(nombre)));
+            proveedores.add(new Proveedor(id,nombre,producto,actualizaTlf(id),notas,actualizaIng(nombre)));
         }
         c.close();
     }

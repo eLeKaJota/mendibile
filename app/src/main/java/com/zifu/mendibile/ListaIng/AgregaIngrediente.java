@@ -83,13 +83,14 @@ public class AgregaIngrediente extends AppCompatActivity  {
         txtProveedor.setAdapter(adaptadorProv);
 
 
+
         btnAgregar = (Button) findViewById(R.id.btnPltAgregar);
         if(modifica!=0){
             btnAgregar.setText("Modificar ingrediente");
             btnEliminarIng.setVisibility(View.VISIBLE);
             txtNombre.setText(ing.getNombre());
             txtPrecio.setText(String.valueOf(ing.getPrecio()));
-            spnFormato.setSelection(0);
+            spnFormato.setSelection(adaptadorSpinner.getPosition(ing.getFormato()));
             txtProveedor.setText(ing.getProveedor());
         }
 
@@ -137,7 +138,7 @@ public class AgregaIngrediente extends AppCompatActivity  {
             nombreVacio.show();
             return;
         }
-        if(comprobarIng(txtNombre.getText().toString().toLowerCase())){
+        if(comprobarIng(txtNombre.getText().toString().toLowerCase()) && modifica == 0){
             Toast repedito = Toast.makeText(this,"Ya existe un ingrediente con el mismo nombre.",Toast.LENGTH_SHORT);
             repedito.show();
             return;

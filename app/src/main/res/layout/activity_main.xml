@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="127dp"
-            android:layout_height="132dp"
+            android:layout_width="@dimen/logoMainAncho"
+            android:layout_height="@dimen/logoMainAlto"
             android:layout_marginTop="50dp"
             app:srcCompat="@drawable/logomend" />
 
@@ -29,7 +29,7 @@
             android:text="Gestión de cocina"
             android:textAlignment="center"
             android:textColor="#a8dadc"
-            android:textSize="30sp" />
+            android:textSize="@dimen/textoBotonesMain" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -59,8 +59,8 @@
 
                         <ImageButton
                             android:id="@+id/btnPlatos"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
+                            android:layout_width="@dimen/botonesMainAncho"
+                            android:layout_height="@dimen/botonesMainAlto"
                             android:background="@android:color/transparent"
                             android:padding="5dp"
                             android:scaleType="fitCenter"
@@ -77,7 +77,7 @@
                                 android:layout_weight="1"
                                 android:text="Platos"
                                 android:textColor="#000000"
-                                android:textSize="30sp"
+                                android:textSize="@dimen/textoBotonesMain"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -108,8 +108,8 @@
 
                         <ImageButton
                             android:id="@+id/btnIngredientes"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
+                            android:layout_width="@dimen/botonesMainAncho"
+                            android:layout_height="@dimen/botonesMainAlto"
                             android:background="@android:color/transparent"
                             android:padding="5dp"
                             android:scaleType="fitCenter"
@@ -126,7 +126,7 @@
                                 android:layout_weight="1"
                                 android:text="Ingredientes"
                                 android:textColor="#000000"
-                                android:textSize="30sp"
+                                android:textSize="@dimen/textoBotonesMain"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -157,8 +157,8 @@
 
                         <ImageButton
                             android:id="@+id/btnCompras"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
+                            android:layout_width="@dimen/botonesMainAncho"
+                            android:layout_height="@dimen/botonesMainAlto"
                             android:background="@android:color/transparent"
                             android:padding="5dp"
                             android:scaleType="fitCenter"
@@ -175,7 +175,7 @@
                                 android:layout_weight="1"
                                 android:text="Lista de la compra"
                                 android:textColor="#000000"
-                                android:textSize="30sp"
+                                android:textSize="@dimen/textoBotonesMain"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -206,8 +206,8 @@
 
                         <ImageButton
                             android:id="@+id/btnProveedores"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
+                            android:layout_width="@dimen/botonesMainAncho"
+                            android:layout_height="@dimen/botonesMainAlto"
                             android:background="@android:color/transparent"
                             android:padding="5dp"
                             android:scaleType="fitCenter"
@@ -224,7 +224,7 @@
                                 android:layout_weight="1"
                                 android:text="Proveedores"
                                 android:textColor="#000000"
-                                android:textSize="30sp"
+                                android:textSize="@dimen/textoBotonesMain"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -256,8 +256,8 @@
 
                         <ImageButton
                             android:id="@+id/btnInfo"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
+                            android:layout_width="@dimen/botonesMainAncho"
+                            android:layout_height="@dimen/botonesMainAlto"
                             android:background="@android:color/transparent"
                             android:padding="5dp"
                             android:scaleType="fitCenter"
@@ -274,7 +274,7 @@
                                 android:layout_weight="1"
                                 android:text="Ayuda"
                                 android:textColor="#000000"
-                                android:textSize="30sp"
+                                android:textSize="@dimen/textoBotonesMain"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -305,8 +305,8 @@
 
                         <ImageButton
                             android:id="@+id/btnAjustes"
-                            android:layout_width="85dp"
-                            android:layout_height="85dp"
+                            android:layout_width="@dimen/botonesMainAncho"
+                            android:layout_height="@dimen/botonesMainAlto"
                             android:background="@android:color/transparent"
                             android:padding="5dp"
                             android:scaleType="fitCenter"
