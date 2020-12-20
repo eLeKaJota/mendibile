@@ -14,7 +14,8 @@ import com.zifu.mendibile.tablas.TablaProveedorTlf;
 
 public class BBDDHelper extends SQLiteOpenHelper {
     public static final int borronYCuentaNueva = 16;
-    public static final int versionDB = borronYCuentaNueva;
+    public static final int columnaProvCompra = 17;
+    public static final int versionDB = columnaProvCompra;
     public static String nombreDB = "Mendibile.db";
 
 
@@ -51,20 +52,24 @@ public class BBDDHelper extends SQLiteOpenHelper {
 
             switch (version){
                 case 15:
-            db.execSQL(TablaPlato.SQL_DELETE_ENTRIES);
+                    db.execSQL(TablaPlato.SQL_DELETE_ENTRIES);
 
-            db.execSQL(TablaIngrediente.SQL_DELETE_ENTRIES);
+                    db.execSQL(TablaIngrediente.SQL_DELETE_ENTRIES);
 
-            db.execSQL(TablaPlatoIngredientePeso.SQL_DELETE_ENTRIES);
+                    db.execSQL(TablaPlatoIngredientePeso.SQL_DELETE_ENTRIES);
 
-            db.execSQL(TablaProveedor.SQL_DELETE_ENTRIES);
+                    db.execSQL(TablaProveedor.SQL_DELETE_ENTRIES);
 
-            db.execSQL(TablaProveedorTlf.SQL_DELETE_ENTRIES);
+                    db.execSQL(TablaProveedorTlf.SQL_DELETE_ENTRIES);
 
-            db.execSQL(TablaListaCompra.SQL_DELETE_ENTRIES);
+                    db.execSQL(TablaListaCompra.SQL_DELETE_ENTRIES);
 
-            db.execSQL(TablaListaCompraIng.SQL_DELETE_ENTRIES);
-            version = borronYCuentaNueva;
+                    db.execSQL(TablaListaCompraIng.SQL_DELETE_ENTRIES);
+                    version = borronYCuentaNueva;
+
+                case borronYCuentaNueva:
+                    db.execSQL("ALTER TABLE "+ TablaListaCompraIng.NOMBRE_TABLA +" ADD COLUMN "+ TablaListaCompraIng.NOMBRE_COLUMNA_6 +" TEXT");
+                    version = columnaProvCompra;
 
             }
 

@@ -45,6 +45,7 @@ import com.zifu.mendibile.R;
 import com.zifu.mendibile.tablas.TablaIngrediente;
 import com.zifu.mendibile.tablas.TablaListaCompra;
 import com.zifu.mendibile.tablas.TablaListaCompraIng;
+import com.zifu.mendibile.tablas.TablaProveedor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -69,6 +70,7 @@ public class DetalleCompra extends AppCompatActivity{
     ArrayList<CompraIngrediente> ings;
     CompraLista lista;
     MenuItem guardar,editar;
+    String sinProv;
 
 
 
@@ -386,7 +388,9 @@ public class DetalleCompra extends AppCompatActivity{
             public void onBindViewHolder(@NonNull ProvViewHolder holder, int position) {
                 holder.prov.setText(provs.get(position));
                 for (CompraIngrediente c : ings){
-                    String iProv = actualizaProvs(c.getNombre());
+
+                    //String iProv = actualizaProvs(c.getNombre());
+                    String iProv = c.getProveedor();
                     String lProv = provs.get(position);
                     if(iProv.equals(lProv)){
                         holder.ingProv.add(c);
@@ -417,30 +421,83 @@ public class DetalleCompra extends AppCompatActivity{
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CompraIngrediente c = new CompraIngrediente(lista.getId(),nuevoIng.getText().toString(),formato.getSelectedItem().toString(),cantidad.getText().toString());
-                if ( c.getNombre().equals("")){
+                if ( nuevoIng.getText().toString().equals("")){
                     Toast ingRepetido = Toast.makeText(getApplicationContext(),"El campo nuevo ingrediente no puede estar vacío",Toast.LENGTH_SHORT);
                     ingRepetido.show();
                     return;
                 }
                 for (CompraIngrediente ci : ings){
-                    if ( ci.getNombre().equals(c.getNombre())){
+                    if ( ci.getNombre().equals(nuevoIng.getText().toString())){
                         Toast ingRepetido = Toast.makeText(getApplicationContext(),"Ya tienes un ingrediente con el mismo nombre",Toast.LENGTH_SHORT);
                         ingRepetido.show();
                         return;
                     }
                 }
-                agregaListaIng(c);
-                ings.clear();
-                provs.clear();
-                listaProv.removeAllViews();
 
-                actualizaIngs();
+                if(actualizaProvs(nuevoIng.getText().toString()) == "Sin proveedor"){
+                    //--------PROVS
+                    AutoCompleteTextView txtProv = new AutoCompleteTextView(getApplicationContext());
+                    txtProv.setThreshold(1);
+                    txtProv.setHint("Nombre del proveedor");
+                    ArrayAdapter<String> adaptadorAutoCompleteProv = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, actualizaProvsArray());
+                    txtProv.setAdapter(adaptadorAutoCompleteProv);
+                    //----------------
+                    AlertDialog.Builder alertProv = new AlertDialog.Builder(DetalleCompra.this);
+                    alertProv.setTitle("Proveedor");
+                    alertProv.setMessage("Este ingrediente no tiene asignado ningún proveedor.\n¿Quieres asignar uno manualmente?:");
+                    alertProv.setView(txtProv);
+                    alertProv.setPositiveButton("Añadir", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            String prov = "Sin proveedor";
+                            if (!txtProv.getText().toString().equals("")) prov = txtProv.getText().toString();
+                            CompraIngrediente c = new CompraIngrediente(lista.getId(),nuevoIng.getText().toString(),formato.getSelectedItem().toString(),cantidad.getText().toString(),prov);
 
-                nuevoIng.setText("");
-                cantidad.setText("");
-                formato.setSelection(0);
-                nuevoIng.requestFocus();
+                            agregaListaIng(c);
+                            ings.clear();
+                            provs.clear();
+                            listaProv.removeAllViews();
+
+                            actualizaIngs();
+
+                            nuevoIng.setText("");
+                            cantidad.setText("");
+                            formato.setSelection(0);
+                            nuevoIng.requestFocus();
+                        }
+                    });
+                    alertProv.setNegativeButton("Sin proveedor", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            CompraIngrediente c = new CompraIngrediente(lista.getId(),nuevoIng.getText().toString(),formato.getSelectedItem().toString(),cantidad.getText().toString(),"Sin proveedor");
+
+                            agregaListaIng(c);
+                            ings.clear();
+                            provs.clear();
+                            listaProv.removeAllViews();
+
+                            actualizaIngs();
+
+                            nuevoIng.setText("");
+                            cantidad.setText("");
+                            formato.setSelection(0);
+                            nuevoIng.requestFocus();
+                        }
+                    });
+                    alertProv.show();
+                }else{
+                    CompraIngrediente c = new CompraIngrediente(lista.getId(),nuevoIng.getText().toString(),formato.getSelectedItem().toString(),cantidad.getText().toString(),actualizaProvs(nuevoIng.getText().toString()));
+
+                    agregaListaIng(c);
+                    ings.clear();
+                    provs.clear();
+                    listaProv.removeAllViews();
+
+                    actualizaIngs();
+
+                    nuevoIng.setText("");
+                    cantidad.setText("");
+                    formato.setSelection(0);
+                    nuevoIng.requestFocus();
+                }
             }
         });
 
@@ -459,9 +516,10 @@ public class DetalleCompra extends AppCompatActivity{
             String ing = c.getString(2);
             String formato = c.getString(3);
             String cantidad = c.getString(4);
-            String proveedor = actualizaProvs(ing);
-
-            ings.add(new CompraIngrediente(id,idLista,ing,formato,cantidad));
+            String proveedor;
+            if(c.getString(5) != null) proveedor = c.getString(5);
+            else proveedor = actualizaProvs(ing);
+            ings.add(new CompraIngrediente(id,idLista,ing,formato,cantidad,proveedor));
             actualizaListaProvs(proveedor);
         }
         c.close();
@@ -509,6 +567,7 @@ public class DetalleCompra extends AppCompatActivity{
                     v.put(TablaListaCompraIng.NOMBRE_COLUMNA_3,c.getNombre());
                     v.put(TablaListaCompraIng.NOMBRE_COLUMNA_4,c.getFormmato());
                     v.put(TablaListaCompraIng.NOMBRE_COLUMNA_5,c.getCantidad());
+                    v.put(TablaListaCompraIng.NOMBRE_COLUMNA_6,c.getProveedor());
 
                     db.insert(TablaListaCompraIng.NOMBRE_TABLA,null,v);
                 }
@@ -529,6 +588,20 @@ public class DetalleCompra extends AppCompatActivity{
         }
         c.close();
         return ing.toArray(new String[0]);
+
+    }
+    public String[] actualizaProvsArray(){
+        SQLiteDatabase db = MainActivity.helper.getReadableDatabase();
+        ArrayList<String> p = new ArrayList<>();
+
+        Cursor c = db.query(TablaProveedor.NOMBRE_TABLA,null,null,null,null,null,null);
+        while (c.moveToNext()) {
+            int id = c.getInt(0);
+            String nombre = c.getString(1);
+            p.add(nombre);
+        }
+        c.close();
+        return p.toArray(new String[0]);
 
     }
     public int agregaListaCompra(){

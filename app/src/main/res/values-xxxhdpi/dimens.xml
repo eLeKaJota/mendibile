@@ -16,7 +16,7 @@
 
     <dimen name="textoGrande">30sp</dimen>
     <dimen name="textoGrandeMedio">26sp</dimen>
-    <dimen name="textoMedio">24sp</dimen>
+    <dimen name="textoMedio">22sp</dimen>
     <dimen name="textoCajas">18sp</dimen>
     <dimen name="textoPequeño">18sp</dimen>
 

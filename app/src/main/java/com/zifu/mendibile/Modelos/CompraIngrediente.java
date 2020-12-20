@@ -5,9 +5,18 @@ import java.io.Serializable;
 public class CompraIngrediente implements Serializable {
     int id, idLista;
     String nombre,formmato;
-    String cantidad;
+    String cantidad, proveedor;
 
     public CompraIngrediente() {
+    }
+
+    public CompraIngrediente(int id, int idLista, String nombre, String formmato, String cantidad, String proveedor) {
+        this.id = id;
+        this.idLista = idLista;
+        this.nombre = nombre;
+        this.formmato = formmato;
+        this.cantidad = cantidad;
+        this.proveedor = proveedor;
     }
 
     public CompraIngrediente(int id, int idLista, String nombre, String formmato, String cantidad) {
@@ -18,11 +27,12 @@ public class CompraIngrediente implements Serializable {
         this.cantidad = cantidad;
     }
 
-    public CompraIngrediente(int idLista, String nombre, String formmato, String cantidad) {
+    public CompraIngrediente(int idLista, String nombre, String formmato, String cantidad, String proveedor) {
         this.idLista = idLista;
         this.nombre = nombre;
         this.formmato = formmato;
         this.cantidad = cantidad;
+        this.proveedor = proveedor;
     }
 
     public CompraIngrediente(String nombre, String formmato, String cantidad) {
@@ -69,5 +79,13 @@ public class CompraIngrediente implements Serializable {
 
     public void setCantidad(String cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public String getProveedor() {
+        return proveedor;
+    }
+
+    public void setProveedor(String proveedor) {
+        this.proveedor = proveedor;
     }
 }

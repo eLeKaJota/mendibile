@@ -16,7 +16,7 @@
 
     <dimen name="textoGrande">28sp</dimen>
     <dimen name="textoGrandeMedio">24sp</dimen>
-    <dimen name="textoMedio">22sp</dimen>
+    <dimen name="textoMedio">18sp</dimen>
     <dimen name="textoCajas">16sp</dimen>
     <dimen name="textoPequeño">16sp</dimen>
 
@@ -24,5 +24,5 @@
 
     <dimen name="fotoDetallePlatoAlto">180dp</dimen>
 
-    <dimen name="botonGeneral">40dp</dimen>
+    <dimen name="botonGeneral">45dp</dimen>
 </resources>

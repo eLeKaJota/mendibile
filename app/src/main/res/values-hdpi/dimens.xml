@@ -24,5 +24,5 @@
 
     <dimen name="fotoDetallePlatoAlto">130dp</dimen>
 
-    <dimen name="botonGeneral">30dp</dimen>
+    <dimen name="botonGeneral">37dp</dimen>
 </resources>

@@ -18,93 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <TextView
-            android:id="@+id/tvDetalleCompraFecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Fecha"
-            android:textAlignment="center"
-            android:textSize="@dimen/textoGrandeMedio" />
-
-        <TextView
-            android:id="@+id/tvDetalleCompraNotas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Notas"
-            android:textAlignment="center"
-            android:textSize="@dimen/textoPequeño" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ilDetalleCompraNuevaNota"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtDetalleCompraNuevaNota"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Notas del pedido" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:background="@drawable/fondo_borde_listas"
-            android:elevation="3dp"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <AutoCompleteTextView
-                    android:id="@+id/txtDetalleCompraNuevoIng"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:completionThreshold="1"
-                    android:hint="Nuevo ingrediente a comprar"
-                    android:textSize="@dimen/textoCajas" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="10">
-
-                <EditText
-                    android:id="@+id/txtDetalleCompraNuevoCantidad"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:hint="Cantidad"
-                    android:inputType="numberDecimal"
-                    android:textSize="@dimen/textoCajas" />
-
-                <Spinner
-                    android:id="@+id/spnDetalleCompraNuevoFormato"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="4"
-                    android:entries="@array/listaFormatoIng" />
-
-                <ImageButton
-                    android:id="@+id/ibDetalleCompraNuevoAgregar"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/botonGeneral"
-                    android:layout_weight="2"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@android:drawable/ic_input_add" />
-            </LinearLayout>
-
-        </LinearLayout>
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -114,6 +27,94 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tvDetalleCompraFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Fecha"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/textoGrandeMedio" />
+
+                <TextView
+                    android:id="@+id/tvDetalleCompraNotas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Notas"
+                    android:textAlignment="center"
+                    android:textSize="@dimen/textoPequeño" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/ilDetalleCompraNuevaNota"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txtDetalleCompraNuevaNota"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Notas del pedido" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/fondo_borde_listas"
+                    android:elevation="3dp"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/txtDetalleCompraNuevoIng"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:completionThreshold="1"
+                            android:hint="Nuevo ingrediente a comprar"
+                            android:textSize="@dimen/textoCajas" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:weightSum="10">
+
+                        <EditText
+                            android:id="@+id/txtDetalleCompraNuevoCantidad"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:hint="Cantidad"
+                            android:inputType="numberDecimal"
+                            android:textSize="@dimen/textoCajas" />
+
+                        <Spinner
+                            android:id="@+id/spnDetalleCompraNuevoFormato"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="4"
+                            android:entries="@array/listaFormatoIng" />
+
+                        <ImageButton
+                            android:id="@+id/ibDetalleCompraNuevoAgregar"
+                            android:layout_width="0dp"
+                            android:layout_height="@dimen/botonGeneral"
+                            android:layout_weight="2"
+                            android:background="@android:color/transparent"
+                            app:srcCompat="@android:drawable/ic_input_add" />
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/listaDetalleCompra"
