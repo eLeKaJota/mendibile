@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        keystore {
+            storeFile file('D:\\1.-Desarrollo\\COMPLETO\\Keystores\\claves.jks')
+            storePassword 'Joder639!'
+            keyAlias 'mendibil'
+            keyPassword 'Joder639!'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
@@ -10,16 +18,23 @@ android {
         applicationId "com.zifu.mendibile"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 3
-        versionName "0.3"
+        versionCode 6
+        versionName "0.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.keystore
     }
 
     buildTypes {
         release {
-            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            signingConfig signingConfigs.keystore
+        }
+        debug {
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            signingConfig signingConfigs.keystore
         }
     }
     compileOptions {
@@ -43,4 +58,5 @@ dependencies {
     compile 'com.xiaofeng.android:flowlayoutmanager:1.2.3.2'
     implementation 'com.github.sohe1l.arrownumberpicker:arrownumberpicker:0.1.2'
     implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.github.yalantis:ucrop:2.2.6-native'
 }

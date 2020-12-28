@@ -34,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout llbtnProveedores = (LinearLayout) findViewById(R.id.llbtnProveedores);
         LinearLayout llbtnCompras = (LinearLayout) findViewById(R.id.llbtnCompras);
         LinearLayout llbtnAjustes = (LinearLayout) findViewById(R.id.llbtnAjustes);
+        LinearLayout llbtnAyuda = (LinearLayout) findViewById(R.id.llbtnAyuda);
         ImageButton btnPlatos = (ImageButton)findViewById(R.id.btnPlatos);
         ImageButton btnIngrediente = (ImageButton)findViewById(R.id.btnIngredientes);
         ImageButton btnProveedores = (ImageButton)findViewById(R.id.btnProveedores);
         ImageButton btnCompras = (ImageButton)findViewById(R.id.btnCompras);
         ImageButton btnAjustes = (ImageButton)findViewById(R.id.btnAjustes);
+        ImageButton btnAyuda = (ImageButton)findViewById(R.id.btnAyuda);
 
         btnPlatos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), AjustesGeneral.class);
+                startActivity(i);
+            }
+        });
+        btnAyuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Ayuda.class);
                 startActivity(i);
             }
         });
@@ -116,6 +125,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), AjustesGeneral.class);
+                startActivity(i);
+            }
+        });
+        llbtnAyuda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), Ayuda.class);
                 startActivity(i);
             }
         });

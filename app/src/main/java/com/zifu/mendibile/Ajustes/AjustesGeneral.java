@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -31,7 +33,7 @@ import java.nio.channels.FileChannel;
 public class AjustesGeneral extends AppCompatActivity {
     Toolbar tlb;
     EditText cabecera;
-    TextView acercaDe,backup,restore;
+    TextView acercaDe,backup,restore,recomendar,politicaPrivacidad;
     String moneda;
     Spinner ajustesMoneda;
 
@@ -60,6 +62,7 @@ public class AjustesGeneral extends AppCompatActivity {
         getSupportActionBar().setTitle("Ajustes");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        recomendar = findViewById(R.id.txtRecomendarApp);
         acercaDe = findViewById(R.id.txtAcercaDe);
         backup = findViewById(R.id.txtAjustesBackup);
         restore = findViewById(R.id.txtAjustesRestore);
@@ -141,13 +144,57 @@ public class AjustesGeneral extends AppCompatActivity {
         backup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backUp();
+                AlertDialog.Builder alertBackup = new AlertDialog.Builder(AjustesGeneral.this);
+                alertBackup.setTitle("Respaldo");
+                alertBackup.setMessage("La función para respaldar datos estará disponible pronto.");
+                alertBackup.setPositiveButton("Vale", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alertBackup.show();
+                //backUp();
             }
         });
         restore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                restore();
+                AlertDialog.Builder alertBackup = new AlertDialog.Builder(AjustesGeneral.this);
+                alertBackup.setTitle("Restaurar");
+                alertBackup.setMessage("La función para restaurar datos estará disponible pronto.");
+                alertBackup.setPositiveButton("Vale", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alertBackup.show();
+                //restore();
+            }
+        });
+
+        recomendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertProximamente = new AlertDialog.Builder(AjustesGeneral.this);
+                alertProximamente.setTitle("Recomendar");
+                alertProximamente.setMessage("La función recomendar estará disponible pronto.");
+                alertProximamente.setPositiveButton("Vale", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alertProximamente.show();
+            }
+        });
+
+        acercaDe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(AjustesGeneral.this,AcercaDe.class);
+                startActivity(i);
             }
         });
 

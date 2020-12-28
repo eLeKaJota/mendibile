@@ -17,26 +17,54 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mendibile">
-        <activity android:name=".Ajustes.AjustesGeneral" android:screenOrientation="portrait"></activity>
-        <activity android:name=".Compra.DetalleCompra" android:screenOrientation="portrait"/>
-        <activity android:name=".Compra.ListaCompra" android:screenOrientation="portrait"/>
-        <activity android:name=".Compra.AgregaCompraGeneral" android:screenOrientation="portrait"/>
-        <activity android:name=".Proveedores.DetalleProveedores" android:screenOrientation="portrait"/>
-        <activity android:name=".Proveedores.AgregaProveedor" android:screenOrientation="portrait"/>
-        <activity android:name=".Proveedores.ListaProveedores" android:screenOrientation="portrait"/>
-        <activity android:name=".ListaPlt.AgregaPlato" android:screenOrientation="portrait"/>
-        <activity android:name=".ListaPlt.ListaPlatos" android:screenOrientation="portrait"/>
-        <activity android:name=".ListaIng.ListaIngredientes" android:screenOrientation="portrait"/>
-        <activity android:name=".ListaIng.AgregaIngrediente" android:screenOrientation="portrait"/>
-        <activity android:name=".DetallePlatos.DetallePlatos" android:screenOrientation="portrait"/>
-        <activity android:name=".MainActivity" android:screenOrientation="portrait">
+        <activity android:name=".Ayuda"></activity>
+        <activity android:name=".Ajustes.AcercaDe" />
+        <activity
+            android:name=".Ajustes.AjustesGeneral"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Compra.DetalleCompra"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Compra.ListaCompra"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Proveedores.DetalleProveedores"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Proveedores.AgregaProveedor"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Proveedores.ListaProveedores"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ListaPlt.AgregaPlato"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ListaPlt.ListaPlatos"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ListaIng.ListaIngredientes"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ListaIng.AgregaIngrediente"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DetallePlatos.DetallePlatos"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.zifu.mendibile"

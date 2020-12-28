@@ -64,8 +64,6 @@ import java.util.ArrayList;
 import static com.zifu.mendibile.MainActivity.helper;
 
 public class DetallePlatos extends AppCompatActivity {
-//    PlatosViewPageAdapter platosViewPageAdapter;
-//    ViewPager2 viewPager;
     private double costeTotal;
     Plato plato;
     private Toolbar tlb;

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +42,7 @@ import android.widget.Toast;
 import com.google.android.flexbox.FlexboxLayoutManager;
 import com.xiaofeng.flowlayoutmanager.Alignment;
 import com.xiaofeng.flowlayoutmanager.FlowLayoutManager;
+import com.yalantis.ucrop.UCrop;
 import com.zifu.mendibile.BBDDHelper;
 import com.zifu.mendibile.DetallePlatos.DetallePlatos;
 import com.zifu.mendibile.ListaIng.AgregaIngrediente;
@@ -120,6 +123,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
                 fotoUriTemp = FileProvider.getUriForFile(this,"com.zifu.mendibile",archivoFoto);
                 i.putExtra(MediaStore.EXTRA_OUTPUT, fotoUriTemp);
                 startActivityForResult(i,REQUEST_TAKE_PHOTO);
+
             }
         }
     }
@@ -165,12 +169,43 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
     //----------------------------------------------------
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("fotoUri", fotoUri);
+        outState.putParcelable("fotoUriTemp",fotoUriTemp);
+        outState.putParcelable("fotoUriOld",fotoUriOld);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState){
+        super.onRestoreInstanceState(savedInstanceState);
+        fotoUri = savedInstanceState.getParcelable("fotoUri");
+        fotoUriTemp = savedInstanceState.getParcelable("fotoUriTemp");
+        fotoUriOld = savedInstanceState.getParcelable("fotoUriOld");
+    }
 
 
     //-----------------SI AÑADES UN NUEVO INGREDIENTE DESDE ESTA ACTIVITY, SE ACTUALIZA EN LA LISTA
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            final Uri resultUri = UCrop.getOutput(data);
+
+            try {
+                borrarFoto(fotoUri);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            fotoUri = resultUri;
+            fotoPlato.setImageURI(fotoUri);
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+        }
+
+
         if(requestCode == DEVUELVE_NUEVO_INGREDIENTE){
             if(resultCode == AppCompatActivity.RESULT_OK){
                 int idIng = Integer.parseInt(data.getStringExtra("idIng"));
@@ -186,10 +221,27 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
         }
         if(requestCode == FOTO_GALERIA){
             if(resultCode == RESULT_OK){
-                //TODO es posible que queden fotos viejas sin borrar
+                //TODO Terminar de implementar uCrop
                 fotoUri = data.getData();
-                fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                fotoPlato.setImageURI(fotoUri);
+                if (fotoUriOld != null) {
+                    try {
+                        borrarFoto(fotoUriOld);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try{
+                    File archivoFoto = crearArchivoImagen();
+                    Uri u = Uri.fromFile(archivoFoto);
+                    UCrop.of(fotoUri, u)
+                            .withAspectRatio(16, 9)
+                            .withMaxResultSize(1366, 768)
+                            .start(AgregaPlato.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+//                fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                fotoPlato.setImageURI(fotoUri);
             }
         }
 
@@ -204,8 +256,19 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
                         e.printStackTrace();
                     }
                 }
-                fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                fotoPlato.setImageURI(fotoUri);
+                try{
+                    File archivoFoto = crearArchivoImagen();
+                    Uri u = Uri.fromFile(archivoFoto);
+                    UCrop.of(fotoUri, u)
+                            .withAspectRatio(16, 9)
+                            .withMaxResultSize(1024, 800)
+                            .start(AgregaPlato.this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+//                fotoPlato.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                fotoPlato.setImageURI(fotoUri);
             }else{
 
                 try {
@@ -355,6 +418,7 @@ public class AgregaPlato extends AppCompatActivity implements AdaptadorListaAgre
 
                 int estadoDePermiso = ContextCompat.checkSelfPermission(AgregaPlato.this, Manifest.permission.READ_EXTERNAL_STORAGE);
                 if (estadoDePermiso == PackageManager.PERMISSION_GRANTED) {
+
                     hacerFotoIntent();
                 } else {
                     ActivityCompat.requestPermissions(AgregaPlato.this,

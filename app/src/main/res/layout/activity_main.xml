@@ -239,7 +239,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/llbtnInfo"
+                    android:id="@+id/llbtnAyuda"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
@@ -255,7 +255,7 @@
                         android:padding="4dp">
 
                         <ImageButton
-                            android:id="@+id/btnInfo"
+                            android:id="@+id/btnAyuda"
                             android:layout_width="@dimen/botonesMainAncho"
                             android:layout_height="@dimen/botonesMainAlto"
                             android:background="@android:color/transparent"
